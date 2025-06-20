@@ -6,6 +6,8 @@ operationID: `getMe`
 
 自分の情報を取得する。NeoShowcaseの機能を使ってtraQ IDを取得する。
 
+ローカル環境では、クエリパラメータ `debugUserName` を指定することで、そのユーザーの`name` と `iconUrl` を取得できる。指定しなかった場合は `traP` が返る。
+
 ### Response
 
 成功 200
