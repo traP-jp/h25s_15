@@ -41,3 +41,17 @@ package by feature の考え方を採用している。
 ```
 
 games ディレクトリを例示したが、他の機能に関するディレクトリも同様の構成になっている。
+
+## WebSocketの動作確認方法
+
+### Postman を使う
+
+Postmanを開いて、左上のハンバーガーバーから「新規」を選択すると、いろいろなのを選べるので、そこからWebSocketを選択する。
+
+### CLI を使う
+
+[websocat](https://github.com/vi/websocat) などを使うことで、ターミナルから動作確認ができる。
+
+```bash
+websocat ws://localhost:8080/games/ws
+```
