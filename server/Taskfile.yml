@@ -1,0 +1,26 @@
+# https://taskfile.dev
+
+version: "3"
+
+tasks:
+  up:
+    cmd: docker compose up --detach
+    desc: 開発環境を起動する。（ホットリロード）
+    aliases:
+      - dev
+
+  down:
+    cmd: docker compose down
+    desc: 開発環境を停止する。
+
+  logs:
+    cmd: docker compose logs -f {{ .CLI_ARGS }}
+    desc: 開発環境のログを表示する。task logs -- server でアプリのログだけになる
+
+  clean:
+    cmd: docker compose down --volumes --remove-orphans
+    desc: 開発環境を停止し、ボリュームと孤立したコンテナを削除する。
+
+  lint:
+    cmd: golangci-lint run --fix ./...
+    desc: Goコードの静的解析を実行する。

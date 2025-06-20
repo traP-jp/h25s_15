@@ -1,0 +1,8 @@
+version: "2"
+linters:
+  enable:
+    - wrapcheck
+  settings:
+    wrapcheck:
+      extra-ignore-sigs:
+        - (github.com/labstack/echo/v4.Context).
