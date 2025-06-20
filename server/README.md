@@ -6,6 +6,13 @@
 - Docker
 - [golangci-lint](https://golangci-lint.run/welcome/install/#local-installation) (静的解析)
 
+### VSCode の場合
+
+golangci-lint v2に対応するために、以下の手順が必要です。
+
+- [Go 拡張](https://marketplace.visualstudio.com/items?itemName=golang.Go) の **プレリリースバージョン** をインストールする。
+- [{リポジトリルート}/.vscode/settings.template.json](../.vscode/settings.template.json) を `{リポジトリルート}/.vscode/settings.json` としてコピーする。
+
 ## ローカルで動かすだけの場合に必要なもの
 
 - Docker
