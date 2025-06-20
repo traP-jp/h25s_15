@@ -1,0 +1,68 @@
+name: Client Format & Lint & Type Check
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "client/**"
+      - ".github/workflows/client-ci.yml"
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: client
+
+jobs:
+  format-check:
+    name: Format Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      
+      - name: Install
+        run: bun install --frozen-lockfile
+      - name: Check Format
+        run: bun run format:ci
+
+  lint-check:
+    name: Lint Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      
+      - name: Install
+        run: bun install --frozen-lockfile
+      - name: Check Lint
+        run: bun run lint:ci
+  
+  type-check:
+    name: Type Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      
+      - name: Install
+        run: bun install --frozen-lockfile
+      - name: Check Type
+        run: bun run type-check
