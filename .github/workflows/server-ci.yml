@@ -1,0 +1,58 @@
+name: Server Lint and Format Check
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "server/**"
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  format-check:
+    name: Go Format Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: server/go.mod
+          cache-dependency-path: server/go.sum
+
+      - name: Check Go formatting
+        working-directory: ./server
+        run: |
+          unformatted=$(gofmt -l .)
+          if [ -n "$unformatted" ]; then
+            echo "The following files are not formatted:"
+            echo "$unformatted"
+            echo "Please run 'go fmt ./...' to format your code."
+            exit 1
+          fi
+
+  lint-check:
+    name: Go Lint Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: server/go.mod
+          cache-dependency-path: server/go.sum
+
+      - name: Run golangci-lint
+        uses: golangci/golangci-lint-action@v8
+        with:
+          version: latest
+          working-directory: ./server
+          args: --timeout=5m
