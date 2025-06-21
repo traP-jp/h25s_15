@@ -74,7 +74,7 @@ PK(1,2) = 複合主キー (game_id, player_index)
 | 列名        | 型            | 制約                                    | 既定値 | 説明               |
 | ----------- | ------------- | --------------------------------------- | ------ | ------------------ |
 | game_id     | `VARCHAR(36)` | **PK**, **FK → games.id**, **NOT NULL** | ―      | ゲーム UUID        |
-| player_id   | `TINYINT`     | **PK**, **NOT NULL**                    | ―      | スロット番号 (0/1) |
-| turn_number | `INT`         | **NOT NULL**                            | ―      | ターン番号         |
+| player_id   | `TINYINT`     | **NOT NULL**                    | ―      | スロット番号 (0/1) |
+| turn_number | `INT`         | **PK**, **NOT NULL**                            | ―      | ターン番号         |
 | start_at    | `DATETIME`    | **NOT NULL**                            | ―      | 開始時刻           |
 | end_at      | `DATETIME`    | **NOT NULL**                            | ―      | 終了時刻           |

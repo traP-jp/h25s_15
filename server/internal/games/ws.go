@@ -78,6 +78,12 @@ func (h *Handler) GameWS(c echo.Context) error {
 			return echo.NewHTTPError(http.StatusInternalServerError)
 		}
 
+		err = h.RunTurns(ctx, gameID)
+		if err != nil {
+			c.Logger().Errorf("failed to run turns for game %s: %v", gameID, err)
+			return echo.NewHTTPError(http.StatusInternalServerError)
+		}
+
 		return nil
 	})
 

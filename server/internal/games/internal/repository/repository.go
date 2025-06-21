@@ -47,6 +47,9 @@ type Repo interface {
 
 	// StartGame は、指定されたゲームIDのゲームを開始する。
 	StartGame(ctx context.Context, gameID uuid.UUID, startAt time.Time) error
+
+	// CreateTurn は、指定されたゲームIDのターンを作成する。
+	CreateTurn(ctx context.Context, gameID uuid.UUID, turn int, playerID int, startAt time.Time, endAt time.Time) error
 }
 
 type CreatePlayersArg struct {
