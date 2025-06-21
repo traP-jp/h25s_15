@@ -1,15 +1,27 @@
+<script setup lang="ts">
+type User = {
+  name: string
+  score: number
+}
+
+const props = defineProps<{
+  user1: User
+  user2: User
+}>()
+</script>
+
 <template>
   <div class="score-display">
     <div class="user-panel user1">
-      <div class="avatar"></div>
-      <span class="username">user1</span>
-      <span class="score">20</span>
+      <img :src="`https://q.trap.jp/api/v3/public/icon/${user1.name}`" class="avatar" />
+      <span class="username">{{ user1.name }}</span>
+      <span class="score">{{ user1.score }}</span>
     </div>
     <div class="vs-separator">VS</div>
     <div class="user-panel user2">
-      <span class="score">10</span>
-      <span class="username">user2</span>
-      <div class="avatar"></div>
+      <span class="score">{{ user2.score }}</span>
+      <span class="username">{{ user2.name }}</span>
+      <img :src="`https://q.trap.jp/api/v3/public/icon/${user2.name}`" class="avatar" />
     </div>
   </div>
 </template>

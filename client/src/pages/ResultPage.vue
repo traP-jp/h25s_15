@@ -50,7 +50,7 @@ import PointResult from '@/components/PointResult.vue'
 <template>
   <div class="isJugded">VICTORY</div>
 
-  <PointResult />
+  <PointResult :user1="{name: 'Ponjuice', score: 20}" :user2="{name: 'ikura-hamu', score: 30}" />
 
   <div class="button-container">
     <CommonButton size="large" theme="primary" variant="filled">traQでシェア</CommonButton>
