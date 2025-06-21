@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 	"slices"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
@@ -66,6 +67,12 @@ func (h *Handler) GameWS(c echo.Context) error {
 		}
 
 		err := h.PrepareGame(ctx, gameID)
+		if err != nil {
+			c.Logger().Errorf("failed to start game %s: %v", gameID, err)
+			return echo.NewHTTPError(http.StatusInternalServerError)
+		}
+
+		err = h.StartGame(ctx, gameID, time.Now().Add(time.Second*5))
 		if err != nil {
 			c.Logger().Errorf("failed to start game %s: %v", gameID, err)
 			return echo.NewHTTPError(http.StatusInternalServerError)

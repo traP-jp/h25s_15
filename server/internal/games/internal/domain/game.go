@@ -18,7 +18,7 @@ type GameStatus string
 
 const (
 	GameStatusWaiting  GameStatus = "waiting"
-	GameStatusStarted  GameStatus = "running"
+	GameStatusRunning  GameStatus = "running"
 	GameStatusFinished GameStatus = "finished"
 	GameStatusCanceled GameStatus = "canceled"
 )

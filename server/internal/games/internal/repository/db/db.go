@@ -220,3 +220,15 @@ func (r *Repo) InitializeHandLimit(ctx context.Context, gameID uuid.UUID) error 
 
 	return nil
 }
+
+func (r *Repo) StartGame(ctx context.Context, gameID uuid.UUID, startAt time.Time) error {
+	_, err := r.db.DB(ctx).ExecContext(ctx,
+		"UPDATE games SET status = ?, started_at = ? WHERE id = ?",
+		domain.GameStatusRunning, sql.NullTime{Time: startAt, Valid: true}, gameID,
+	)
+	if err != nil {
+		return fmt.Errorf("start game: %w", err)
+	}
+
+	return nil
+}
