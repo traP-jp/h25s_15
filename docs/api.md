@@ -81,6 +81,7 @@ operationID: `gameWS`
       "value": 5
     }
   ],
+  "playerId": 1,
   "player0": [],
   "player0HandsLimit": 10,
   "player1": [],
