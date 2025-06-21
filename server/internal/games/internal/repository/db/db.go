@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/go-sql-driver/mysql"
 	"github.com/google/uuid"
 	"github.com/traP-jp/h25s_15/internal/core/coredb"
 	"github.com/traP-jp/h25s_15/internal/games/internal/domain"
@@ -69,4 +70,17 @@ func (r *Repo) GetPlayers(ctx context.Context, gameID uuid.UUID) ([]domain.Playe
 	}
 
 	return result, nil
+}
+
+func (r *Repo) CreateWaitingPlayer(ctx context.Context, userName string) error {
+	_, err := r.db.DB(ctx).ExecContext(ctx, "INSERT INTO waiting_players (user_name, created_at) VALUES (?, ?)", userName, time.Now())
+	if err != nil {
+		var mysqlErr *mysql.MySQLError
+		if errors.As(err, &mysqlErr) && mysqlErr.Number == 1062 { // unique key 制約違反
+			return coredb.ErrDuplicateKey
+		}
+		return fmt.Errorf("create waiting player: %w", err)
+	}
+
+	return nil
 }
