@@ -34,6 +34,7 @@ func main() {
 	userApi.GET("/me", user.GetMe)
 
 	gameApi := e.Group("/games")
+	gameApi.POST("", game.CreateGame)
 	gameApi.GET("/:gameID/ws", game.GameWS)
 
 	e.POST("/games/:gameID/clear", card.ClearHandCards,
