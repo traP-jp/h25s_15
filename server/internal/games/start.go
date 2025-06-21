@@ -22,6 +22,7 @@ func (h *Handler) StartGame(ctx context.Context, gameID uuid.UUID, startAt time.
 			Type:            "gameStarted",
 			CurrentPlayerID: 0,
 			Turn:            1,
+			TurnTotal:       turnsCount,
 		})
 		if err != nil {
 			return fmt.Errorf("send game started event: %w", err)
