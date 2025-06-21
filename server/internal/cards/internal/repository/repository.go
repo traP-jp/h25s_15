@@ -11,4 +11,11 @@ type Repo interface {
 	ClearHandCards(ctx context.Context, gameID uuid.UUID, playerID int) error
 	GetPlayer(ctx context.Context, gameID uuid.UUID, userName string) (domain.GamePlayer, error)
 	UpdateScore(ctx context.Context, gameID uuid.UUID, playerID int, score int) error
+	// GetActiveCardsは、ゲームのhand cardsとfield cardsを取得する。
+	// 該当するgame IDが存在しなかった場合は、 coredb.ErrRecordNotFound を返す。
+	GetActiveCards(ctx context.Context, gameID uuid.UUID) ([]domain.Card, error)
+	// GetGameHandLimitは、ゲームのhand cardsの制限を取得する。
+	// playerID 0、playerID 1の順で、各プレイヤーのhand cardsの制限を返す。
+	// 該当するgame IDが存在しなかった場合は、 coredb.ErrRecordNotFound を返す。
+	GetGameHandLimit(ctx context.Context, gameID uuid.UUID) ([2]int, error)
 }

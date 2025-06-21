@@ -1,13 +1,18 @@
 package ws
 
-import "github.com/olahol/melody"
+import (
+	"github.com/olahol/melody"
+	"github.com/traP-jp/h25s_15/internal/cards/internal/repository"
+)
 
 type Event struct {
-	m *melody.Melody
+	m    *melody.Melody
+	repo repository.Repo
 }
 
-func New(m *melody.Melody) *Event {
+func New(m *melody.Melody, repo repository.Repo) *Event {
 	return &Event{
-		m: m,
+		m:    m,
+		repo: repo,
 	}
 }
