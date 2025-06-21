@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/traP-jp/h25s_15/internal/games/internal/domain"
 	"github.com/traP-jp/h25s_15/internal/games/internal/repository"
 )
 
@@ -38,17 +39,36 @@ func (h *Handler) gameMatch(ctx context.Context) {
 		if err != nil {
 			return fmt.Errorf("get waiting players: %w", err)
 		}
-		if len(waitingPlayers) < 2 {
+
+		connectedUsers, err := h.events.GetConnectedWaitingUsers(ctx)
+		if err != nil {
+			return fmt.Errorf("get connected users: %w", err)
+		}
+
+		connectedMap := make(map[string]struct{}, len(connectedUsers))
+		for _, user := range connectedUsers {
+			connectedMap[user] = struct{}{}
+		}
+
+		connectedWaitingPlayers := make([]domain.WaitingPlayer, 0, len(waitingPlayers))
+		for _, player := range waitingPlayers {
+			if _, ok := connectedMap[player.UserName]; ok {
+				connectedWaitingPlayers = append(connectedWaitingPlayers, player)
+			}
+		}
+
+		matchCount := len(connectedWaitingPlayers) / 2
+		gameIDs := make([]uuid.UUID, 0, matchCount)
+		matches := make([]repository.CreatePlayersArg, 0, matchCount)
+		matchedUserNames := make([]string, 0, len(connectedWaitingPlayers))
+
+		if matchCount == 0 {
 			return nil
 		}
 
-		matchCount := len(waitingPlayers) / 2
-		gameIDs := make([]uuid.UUID, 0, matchCount)
-		matches := make([]repository.CreatePlayersArg, 0, matchCount)
-		userNames := make([]string, 0, len(waitingPlayers))
-		for i := 0; i < matchCount; i++ {
-			player0 := waitingPlayers[i*2]
-			player1 := waitingPlayers[i*2+1]
+		for i := range matchCount {
+			player0 := connectedWaitingPlayers[i*2]
+			player1 := connectedWaitingPlayers[i*2+1]
 
 			gameID := uuid.New()
 			gameIDs = append(gameIDs, gameID)
@@ -58,7 +78,7 @@ func (h *Handler) gameMatch(ctx context.Context) {
 				UserName0: player0.UserName,
 				UserName1: player1.UserName,
 			})
-			userNames = append(userNames, player0.UserName, player1.UserName)
+			matchedUserNames = append(matchedUserNames, player0.UserName, player1.UserName)
 		}
 
 		if err := h.repo.CreateGames(ctx, gameIDs); err != nil {
@@ -67,10 +87,10 @@ func (h *Handler) gameMatch(ctx context.Context) {
 		if err := h.repo.CreatePlayers(ctx, matches); err != nil {
 			return fmt.Errorf("create players: %w", err)
 		}
-		if err := h.repo.DeleteWaitingPlayers(ctx, userNames); err != nil {
+		if err := h.repo.DeleteWaitingPlayers(ctx, matchedUserNames); err != nil {
 			return fmt.Errorf("delete waiting players: %w", err)
 		}
-		log.Printf("matched %d games with %d players", matchCount, len(userNames))
+		log.Printf("matched %d games with %d players", matchCount, len(matchedUserNames))
 
 		errorList := []error{}
 		for _, match := range matches {

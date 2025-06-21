@@ -38,6 +38,7 @@ func (h *Handler) WaitGameWS(c echo.Context) error {
 
 	h.events.HandleRequestWithKeys(c.Response().Writer, c.Request(), map[string]any{
 		corews.SessionKeyUserName: userName,
+		corews.SessionKeyWaiting:  struct{}{},
 	})
 	return nil
 }

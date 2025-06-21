@@ -22,4 +22,5 @@ type Event interface {
 	HandleRequestWithKeys(res http.ResponseWriter, req *http.Request, keys map[string]any)
 	ScoreUpdated(ctx context.Context, gameID uuid.UUID, event ScoreUpdatedEvent) error
 	GameMatched(ctx context.Context, userNames [2]string, gameID uuid.UUID) error
+	GetConnectedWaitingUsers(ctx context.Context) ([]string, error)
 }

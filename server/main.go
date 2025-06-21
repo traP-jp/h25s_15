@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log"
 
 	"github.com/labstack/echo/v4"
@@ -35,6 +36,7 @@ func main() {
 
 	gameApi := e.Group("/games")
 	gameApi.POST("", game.CreateGame)
+	gameApi.GET("/ws", game.WaitGameWS)
 	gameApi.GET("/:gameID/ws", game.GameWS)
 
 	e.POST("/games/:gameID/clear", card.ClearHandCards,
@@ -42,6 +44,8 @@ func main() {
 
 	e.POST("/games/:gameID/picks", card.PickFieldCards,
 		card.CardsUpdatedEvent)
+
+	game.StartGameMatchLoop(context.Background())
 
 	e.Logger.Fatal(e.Start(":8080"))
 }
