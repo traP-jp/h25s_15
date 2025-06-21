@@ -8,8 +8,7 @@ import (
 var (
 	SessionKeyGameID   = "gameID"
 	SessionKeyUserName = "userName"
-	SessionKeyWaiting = "waiting"
-
+	SessionKeyWaiting  = "waiting"
 )
 
 type MelodyFilterFun func(*melody.Session) bool
