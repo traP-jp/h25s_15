@@ -19,7 +19,7 @@
   height: 70px;
   border-radius: 50px;
   border: none;
-  font-weight: 500;
+  font-weight: 400;
   margin: 0 4px;
 }
 </style>
