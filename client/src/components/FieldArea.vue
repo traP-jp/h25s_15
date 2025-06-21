@@ -2,7 +2,7 @@
   <div class="field-box"><slot /></div>
 </template>
 
-<style>
+<style scoped>
 .field-box {
   min-width: 41.5rem;
   height: 14.6875rem;
