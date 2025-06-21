@@ -5,6 +5,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/olahol/melody"
+	"github.com/traP-jp/h25s_15/internal/cards"
 	"github.com/traP-jp/h25s_15/internal/core/coredb"
 	"github.com/traP-jp/h25s_15/internal/games"
 )
@@ -20,6 +21,9 @@ func main() {
 	m := melody.New()
 
 	_ = games.New(db, m) // handler
+
+	card := cards.New(db, m)
+	e.POST("/games/:gameID/clear", card.ClearHandCards)
 
 	e.Logger.Fatal(e.Start(":8080"))
 }
