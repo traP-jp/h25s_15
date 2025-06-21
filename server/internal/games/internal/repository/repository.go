@@ -18,4 +18,22 @@ type Repo interface {
 	// CreateWaitingPlayer は、指定されたユーザー名で待機中のプレイヤーを作成する。
 	// 既に待機中のプレイヤーが存在する場合は、coredb.ErrDuplicateKeyを返す。
 	CreateWaitingPlayer(ctx context.Context, userName string) error
+
+	// DeleteWaitingPlayers は、指定されたユーザー名の待機中のプレイヤーを削除する。
+	DeleteWaitingPlayers(ctx context.Context, userNames []string) error
+
+	// GetWaitingPlayers は、待機中のプレイヤー情報を古い順に取得する。
+	GetWaitingPlayers(ctx context.Context) ([]domain.WaitingPlayer, error)
+
+	// CreateGames は、新しいゲームを作成する。
+	CreateGames(ctx context.Context, gameID []uuid.UUID) error
+
+	// CreatePlayers は、指定されたゲームIDとユーザー名でプレイヤーを作成する。
+	CreatePlayers(ctx context.Context, args []CreatePlayersArg) error
+}
+
+type CreatePlayersArg struct {
+	GameID    uuid.UUID
+	UserName0 string
+	UserName1 string
 }
