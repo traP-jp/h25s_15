@@ -1,30 +1,44 @@
+<script setup lang="ts">
+defineProps<{ myExpressions: string[]; opponentExpressions: string[] }>()
+</script>
+
 <template>
   <div class="exp-box">
-    <div class="left-exp-box"></div>
-    <div class="right-exp-box"></div>
+    <div class="left-exp-box">
+      <span v-for="(exp, index) in myExpressions" :key="index">{{ exp }}</span>
+    </div>
+    <div class="right-exp-box">
+      <span v-for="(exp, index) in opponentExpressions" :key="index">{{ exp }}</span>
+    </div>
   </div>
 </template>
 
 <style scoped>
 .exp-box {
-  height: 24.875rem;
+  min-height: 24.875rem;
   width: 102.6875rem;
   display: flex;
-  background-color: rgba(0, 0, 0, 0.25);
+  background-color: var(--theme-surface);
+  gap: 9.0625rem;
 }
 .left-exp-box {
-  height: 24.875rem;
-  width: 46.5625rem;
+  margin: 2.5rem 0;
+  flex: 1;
   display: flex;
   background-color: rgba(0, 0, 0, 0);
-  margin-right: 9.0625rem;
-  margin-left: 0.25rem;
+  text-align: right;
+  gap: 0.625rem;
+  font-size: 3.25rem;
+  flex-direction: column;
 }
 .right-exp-box {
-  height: 24.875rem;
-  width: 46.5625rem;
+  margin: 2.5rem 0;
+  flex: 1;
   display: flex;
   background-color: rgba(0, 0, 0, 0);
-  margin-right: 0.25rem;
+  text-align: left;
+  gap: 0.625rem;
+  font-size: 3.25rem;
+  flex-direction: column;
 }
 </style>
