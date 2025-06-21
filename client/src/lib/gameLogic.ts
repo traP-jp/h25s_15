@@ -24,9 +24,9 @@ export class GameInfo {
   turn: number
   turnTimeRemaining: number
 
-  constructor(gameId: string, playerId: number) {
+  constructor(gameId: string) {
     this.gameId = gameId
-    this.myPlayerId = playerId
+    this.myPlayerId = 0
     this.fieldCards = []
     this.players = [
       { id: 0, score: 0, handsLimit: 0, cards: [], expression: '', expressionCards: [] },
@@ -91,6 +91,7 @@ export class GameInfo {
 
   private handleGameReady(event: GameReady): void {
     this.fieldCards = event.fieldCards
+    this.myPlayerId = event.playerId
 
     this.players[0].id = 0
     this.players[0].cards = event.player0

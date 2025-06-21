@@ -7,6 +7,7 @@ export type Card = {
 export type GameReady = {
   type: 'gameReady'
   fieldCards: Card[]
+  playerId: number
   player0: Card[]
   player0HandsLimit: number
   player1: Card[]
