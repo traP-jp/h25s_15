@@ -11,7 +11,7 @@ function onClick() {
   emit('click')
 }
 
-const size = props.size || 'medium';
+const size = props.size || 'medium'
 const sizeValue = size === 'small' ? '4rem' : size === 'medium' ? '6.25rem' : '7.5rem'
 </script>
 
@@ -38,7 +38,7 @@ const sizeValue = size === 'small' ? '4rem' : size === 'medium' ? '6.25rem' : '7
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 'none';
+  border: none;
   aspect-ratio: 3 / 4;
 }
 </style>
