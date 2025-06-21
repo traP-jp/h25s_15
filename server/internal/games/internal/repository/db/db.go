@@ -232,3 +232,15 @@ func (r *Repo) StartGame(ctx context.Context, gameID uuid.UUID, startAt time.Tim
 
 	return nil
 }
+
+func (r *Repo) CreateTurn(ctx context.Context, gameID uuid.UUID, turn int, playerID int, startAt time.Time, endAt time.Time) error {
+	_, err := r.db.DB(ctx).ExecContext(ctx,
+		"INSERT INTO turns (game_id, turn_number, player_id, start_at, end_at) VALUES (?, ?, ?, ?, ?)",
+		gameID, turn, playerID, startAt, endAt,
+	)
+	if err != nil {
+		return fmt.Errorf("create turn: %w", err)
+	}
+
+	return nil
+}
