@@ -14,22 +14,7 @@
   </div>
 </template>
 
-<script lang="ts"></script>
-
 <style scoped>
-/*
-:root {
---theme-background: #323040;
---theme-surface: #252430;
---theme-primary: #5980ff;
---theme-secondary: #96e5b6;
---theme-tertiary: #c7eca8;
---theme-danger: #dd333c;
---theme-text-white: #ffffff;
---theme-text-black: #000000;
-}
-*/
-
 .score-display {
   display: flex;
   width: 100vw;
