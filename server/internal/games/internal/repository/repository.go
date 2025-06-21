@@ -42,6 +42,9 @@ type Repo interface {
 	// InitializeHandLimit は、指定されたゲームIDのプレイヤーのhand cardsの制限を初期化する。
 	InitializeHandLimit(ctx context.Context, gameID uuid.UUID) error
 
+	// InitializeFieldCardsLimit は、指定されたゲームIDのフィールドカードの制限を初期化する。
+	InitializeFieldCardsLimit(ctx context.Context, gameID uuid.UUID) error
+
 	// StartGame は、指定されたゲームIDのゲームを開始する。
 	StartGame(ctx context.Context, gameID uuid.UUID, startAt time.Time) error
 }
