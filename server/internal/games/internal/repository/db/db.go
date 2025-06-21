@@ -244,3 +244,25 @@ func (r *Repo) CreateTurn(ctx context.Context, gameID uuid.UUID, turn int, playe
 
 	return nil
 }
+
+func (r *Repo) GetTurn(ctx context.Context, gameID uuid.UUID) (domain.Turn, error) {
+	var turn Turn
+	err := r.db.DB(ctx).
+		GetContext(ctx, &turn,
+			"SELECT * FROM turns WHERE game_id = ? ORDER BY turn_number DESC LIMIT 1",
+			gameID)
+	if errors.Is(err, sql.ErrNoRows) {
+		return domain.Turn{}, coredb.ErrRecordNotFound
+	}
+	if err != nil {
+		return domain.Turn{}, fmt.Errorf("get turn: %w", err)
+	}
+
+	return domain.Turn{
+		GameID:     turn.GameID,
+		PlayerID:   turn.PlayerID,
+		TurnNumber: turn.TurnNumber,
+		StartAt:    turn.StartAt,
+		EndAt:      turn.EndAt,
+	}, nil
+}

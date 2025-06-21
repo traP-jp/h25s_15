@@ -50,6 +50,9 @@ type Repo interface {
 
 	// CreateTurn は、指定されたゲームIDのターンを作成する。
 	CreateTurn(ctx context.Context, gameID uuid.UUID, turn int, playerID int, startAt time.Time, endAt time.Time) error
+
+	// GetTurn は、指定されたゲームIDの最新のターン情報を取得する。
+	GetTurn(ctx context.Context, gameID uuid.UUID) (domain.Turn, error)
 }
 
 type CreatePlayersArg struct {
