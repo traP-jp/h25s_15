@@ -5,5 +5,5 @@ import PointResult from '../components/PointResult.vue'
 
 <template>
   <hello-world msg="Hello Vue 3 + Vite" />
-  <PointResult/>
+  <PointResult />
 </template>
