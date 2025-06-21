@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 const props = defineProps<{
-    max_value: number,
-    now_value: number,
-    turn: number,
+  max_value: number
+  now_value: number
+  turn: number
 }>()
 
 const percent = computed(() => {
   if (props.max_value === 0) return 0
-  let value = ((props.max_value - props.now_value) / props.max_value) * 100;
-  return Math.max(0, Math.min(100, value));
+  const value = ((props.max_value - props.now_value) / props.max_value) * 100
+  return Math.max(0, Math.min(100, value))
 })
 
 const radius = 45
@@ -23,18 +23,8 @@ const dashOffset = computed(() => {
 
 <template>
   <div class="progress-container">
-    <svg
-      class="progress-ring"
-      width="100%"
-      height="100%"
-      viewBox="0 0 120 120"
-    >
-      <circle
-        class="progress-ring__bg"
-        :r="radius"
-        :cx="center"
-        :cy="center"
-      />
+    <svg class="progress-ring" width="100%" height="100%" viewBox="0 0 120 120">
+      <circle class="progress-ring__bg" :r="radius" :cx="center" :cy="center" />
       <circle
         class="progress-ring__progress"
         :r="radius"
