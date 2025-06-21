@@ -43,6 +43,7 @@ type GameStartedEvent struct {
 	Type            string `json:"type"`
 	CurrentPlayerID int    `json:"currentPlayerId"` // ID of the player whose turn it is
 	Turn            int    `json:"turn"`            // Current turn number
+	TurnTotal       int    `json:"turnTotal"`       // Total number of turns in the game
 }
 
 type TurnStartedEvent struct {
