@@ -30,6 +30,9 @@ func main() {
 	user := users.New()
 	e.Use(user.AuthMiddleware())
 
+	userApi := e.Group("/users")
+	userApi.GET("/me", user.GetMe)
+
 	e.POST("/games/:gameID/clear", card.ClearHandCards)
 
 	e.Logger.Fatal(e.Start(":8080"))
