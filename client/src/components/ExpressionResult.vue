@@ -4,10 +4,10 @@ defineProps<{ myExpressions: string[]; opponentExpressions: string[] }>()
 
 <template>
   <div class="exp-box">
-    <div class="left-exp-box">
+    <div class="inner-exp-box left-exp-box">
       <span v-for="(exp, index) in myExpressions" :key="index">{{ exp }}</span>
     </div>
-    <div class="right-exp-box">
+    <div class="inner-exp-box right-exp-box">
       <span v-for="(exp, index) in opponentExpressions" :key="index">{{ exp }}</span>
     </div>
   </div>
@@ -21,24 +21,22 @@ defineProps<{ myExpressions: string[]; opponentExpressions: string[] }>()
   background-color: var(--theme-surface);
   gap: 9.0625rem;
 }
-.left-exp-box {
+
+.inner-exp-box {
   margin: 2.5rem 0;
   flex: 1;
   display: flex;
   background-color: rgba(0, 0, 0, 0);
-  text-align: right;
   gap: 0.625rem;
   font-size: 3.25rem;
   flex-direction: column;
 }
+
+.left-exp-box {
+  text-align: right;
+}
+
 .right-exp-box {
-  margin: 2.5rem 0;
-  flex: 1;
-  display: flex;
-  background-color: rgba(0, 0, 0, 0);
   text-align: left;
-  gap: 0.625rem;
-  font-size: 3.25rem;
-  flex-direction: column;
 }
 </style>
