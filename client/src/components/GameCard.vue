@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed } from 'vue'
 
 const props = defineProps<{
   selected?: boolean
@@ -14,7 +14,9 @@ function onClick() {
 }
 
 const size = computed(() => props.size || 'medium')
-const sizeValue = computed(() => size.value === 'small' ? '4.0625rem' : size.value === 'medium' ? '6.259375rem' : '7.625rem')
+const sizeValue = computed(() =>
+  size.value === 'small' ? '4.0625rem' : size.value === 'medium' ? '6.259375rem' : '7.625rem'
+)
 </script>
 
 <template>
