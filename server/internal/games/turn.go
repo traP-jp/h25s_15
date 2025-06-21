@@ -51,6 +51,7 @@ func (h *Handler) turn(ctx context.Context, gameID uuid.UUID, turn int, playerID
 	}
 
 	ticker := time.NewTicker(time.Millisecond * 500)
+	defer ticker.Stop()
 
 loop:
 	for {
@@ -69,7 +70,7 @@ loop:
 				break loop
 			}
 			err = h.events.TurnTimeRemainingChanged(ctx, gameID, events.TurnTimeRemainingChangedEvent{
-				Type:             "turnTimeRemaining",
+				Type:             "turnTimeRemainingChanged",
 				CurrentPlayerID:  playerID,
 				RemainingSeconds: remainingSeconds,
 			})
