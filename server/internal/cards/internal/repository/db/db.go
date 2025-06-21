@@ -49,3 +49,16 @@ func (r *Repo) UpdateScore(ctx context.Context, gameID uuid.UUID, playerID int, 
 	}
 	return nil
 }
+
+func (r *Repo) PickFieldCards(ctx context.Context, gameID uuid.UUID, playerID int, requestCard uuid.UUID) error {
+	result, err := r.db.DB(ctx).ExecContext(ctx, "UPDATE cards SET location = 'hand', owner_player_id = ? WHERE game_id = ? and id = ?",
+		playerID, gameID, requestCard)
+	if err != nil {
+		return fmt.Errorf("update location: %w", err)
+	}
+	ok, _ := result.RowsAffected()
+	if ok != 1 {
+		return coredb.ErrNoRecordUpdated
+	}
+	return nil
+}
