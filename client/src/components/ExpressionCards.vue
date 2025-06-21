@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { Card } from '@/lib/type'
 import CommonButton from './CommonButton.vue'
 
 const emits = defineEmits<{ (e: 'delete'): void; (e: 'submit'): void }>()
