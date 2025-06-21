@@ -30,6 +30,16 @@ type Repo interface {
 
 	// CreatePlayers は、指定されたゲームIDとユーザー名でプレイヤーを作成する。
 	CreatePlayers(ctx context.Context, args []CreatePlayersArg) error
+
+	// GetActiveCards は、指定されたゲームIDのアクティブなカード情報を取得する。
+	GetActiveCards(ctx context.Context, gameID uuid.UUID) ([]domain.Card, error)
+
+	// GetGameHandLimitは、ゲームのhand cardsの制限を取得する。
+	// playerID 0、playerID 1の順で、各プレイヤーのhand cardsの制限を返す。
+	GetGameHandLimit(ctx context.Context, gameID uuid.UUID) ([2]int, error)
+
+	// InitializeHandLimit は、指定されたゲームIDのプレイヤーのhand cardsの制限を初期化する。
+	InitializeHandLimit(ctx context.Context, gameID uuid.UUID) error
 }
 
 type CreatePlayersArg struct {

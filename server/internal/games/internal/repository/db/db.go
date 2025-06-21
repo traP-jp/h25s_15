@@ -167,3 +167,56 @@ func (r *Repo) CreatePlayers(ctx context.Context, args []repository.CreatePlayer
 	return nil
 
 }
+
+func (r *Repo) GetActiveCards(ctx context.Context, gameID uuid.UUID) ([]domain.Card, error) {
+	var cards []Card
+	err := r.db.DB(ctx).SelectContext(ctx, &cards, "SELECT * FROM cards WHERE game_id = ? AND location IN (?, ?)",
+		gameID, domain.CardLocationHand, domain.CardLocationField)
+	if err != nil {
+		return nil, fmt.Errorf("get active cards: %w", err)
+	}
+
+	domainCards := make([]domain.Card, 0, len(cards))
+	for _, card := range cards {
+		var playerID *int
+		if card.OwnerPlayerID.Valid {
+			id := int(card.OwnerPlayerID.Int16)
+			playerID = &id
+		}
+		domainCards = append(domainCards, domain.Card{
+			ID:            card.ID,
+			Type:          domain.CardType(card.Type),
+			Value:         card.Value,
+			Location:      domain.CardLocation(card.Location),
+			OwnerPlayerID: playerID,
+		})
+	}
+	return domainCards, nil
+}
+
+func (r *Repo) GetGameHandLimit(ctx context.Context, gameID uuid.UUID) ([2]int, error) {
+	var handLimits []HandLimit
+	err := r.db.DB(ctx).SelectContext(ctx, &handLimits,
+		"SELECT * FROM hand_cards_limits WHERE game_id = ? ORDER BY player_id ASC", gameID)
+	if err != nil {
+		return [2]int{}, fmt.Errorf("get game hand limit: %w", err)
+	}
+	if len(handLimits) < 2 {
+		return [2]int{}, fmt.Errorf("get game hand limit: not enough data")
+	}
+
+	return [2]int{handLimits[0].HandCardsLimit, handLimits[1].HandCardsLimit}, nil
+}
+
+const initialHandLimit int = 10 // 初期のhand cardsの制限
+
+func (r *Repo) InitializeHandLimit(ctx context.Context, gameID uuid.UUID) error {
+	_, err := r.db.DB(ctx).ExecContext(ctx,
+		"INSERT INTO hand_cards_limits (game_id, player_id, hand_cards) VALUES (?, 0, ?), (?, 1, ?)",
+		gameID, initialHandLimit, gameID, initialHandLimit)
+	if err != nil {
+		return fmt.Errorf("initialize hand limit: %w", err)
+	}
+
+	return nil
+}
