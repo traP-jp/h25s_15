@@ -17,7 +17,7 @@ const wsBaseUrl = import.meta.env.VUE_APP_WS_BASEURL || 'ws://localhost:8080'
 // };
 
 function pickCard(cardId: string) {
-  fetch(`${httpBaseUrl}game/${gameId}/field/${cardId}`, {
+  fetch(`${httpBaseUrl}/game/${gameId}/field/${cardId}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -36,7 +36,7 @@ function useCard(cardId: string) {
   }
   if (card.type === 'item') {
     // アイテムを使用する
-    fetch(`${httpBaseUrl}game/${gameId}/items`, {
+    fetch(`${httpBaseUrl}/game/${gameId}/items`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -50,7 +50,7 @@ function useCard(cardId: string) {
 }
 
 function clearHandCards() {
-  fetch(`${httpBaseUrl}game/${gameId}/clear`, {
+  fetch(`${httpBaseUrl}/game/${gameId}/clear`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -73,7 +73,7 @@ function submitExpression() {
     return
   }
 
-  fetch(`${httpBaseUrl}game/${gameId}/submissions`, {
+  fetch(`${httpBaseUrl}/game/${gameId}/submissions`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
