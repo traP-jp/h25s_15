@@ -24,3 +24,7 @@ tasks:
   lint:
     cmd: golangci-lint run --fix ./...
     desc: Goコードの静的解析を実行する。
+
+  fmt:
+    cmd: go fmt ./...
+    desc: Goコードのフォーマットを行う。
