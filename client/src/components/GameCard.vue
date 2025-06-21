@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const props = defineProps<{
-  charactor: string
+  character: string
   selected: boolean
   disabled?: boolean
   size?: 'small' | 'medium' | 'large'
@@ -28,7 +28,7 @@ const size = props.size || 'medium'
     }"
     @click="onClick"
   >
-    {{ props.charactor }}
+    {{ props.character }}
   </button>
 </template>
 
