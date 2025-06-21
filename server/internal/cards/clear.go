@@ -20,7 +20,7 @@ func (h Handler) ClearHandCards(c echo.Context) error {
 
 	userName, err := users.GetUserName(c)
 	if err != nil {
-		c.Logger().Printf("failed to get user name: %v", err)
+		c.Logger().Errorf("failed to get user name: %v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to get user name")
 	}
 
