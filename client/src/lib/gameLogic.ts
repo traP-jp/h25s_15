@@ -1,9 +1,22 @@
-import type { Card, GameEvent, PlayerInfo } from './type'
+import type {
+  Card,
+  CardsUpdated,
+  GameEnded,
+  GameEvent,
+  GameReady,
+  GameStarted,
+  PlayerInfo,
+  ScoreUpdated,
+  SubmissionSucceeded,
+  TurnEnded,
+  TurnStarted,
+  TurnTimeRemainingChanged,
+} from './type'
 
 /* eslint-disable */
 class GameInfo {
   gameId: string
-  playerId: number
+  myPlayerId: number
   fieldCards: Card[]
 
   players: PlayerInfo[]
@@ -14,7 +27,7 @@ class GameInfo {
 
   constructor(gameId: string, playerId: number) {
     this.gameId = gameId
-    this.playerId = playerId
+    this.myPlayerId = playerId
     this.fieldCards = []
     this.players = [
       { id: 0, score: 0, handsLimit: 0, cards: [], expression: '' },
@@ -63,13 +76,13 @@ class GameInfo {
     }
   }
 
-  private handleGameReady(event: GameEvent): void {}
-  private handleGameStarted(event: GameEvent): void {}
-  private handleTurnStarted(event: GameEvent): void {}
-  private handleCardsUpdated(event: GameEvent): void {}
-  private handleTurnTimeRemainingChanged(event: GameEvent): void {}
-  private handleSubmissionSucceeded(event: GameEvent): void {}
-  private handleScoreUpdated(event: GameEvent): void {}
-  private handleTurnEnded(event: GameEvent): void {}
-  private handleGameEnded(event: GameEvent): void {}
+  private handleGameReady(event: GameReady): void {}
+  private handleGameStarted(event: GameStarted): void {}
+  private handleTurnStarted(event: TurnStarted): void {}
+  private handleCardsUpdated(event: CardsUpdated): void {}
+  private handleTurnTimeRemainingChanged(event: TurnTimeRemainingChanged): void {}
+  private handleSubmissionSucceeded(event: SubmissionSucceeded): void {}
+  private handleScoreUpdated(event: ScoreUpdated): void {}
+  private handleTurnEnded(event: TurnEnded): void {}
+  private handleGameEnded(event: GameEnded): void {}
 }
