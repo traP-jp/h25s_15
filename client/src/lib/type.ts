@@ -61,7 +61,7 @@ export type ScoreUpdated = {
 export type TurnEnded = {
   type: 'turnEnded'
   nextPlayerId: number
-  nextTurn: number
+  nextTurn: number | null
 }
 
 export type GameEnded = {
@@ -87,4 +87,5 @@ export type PlayerInfo = {
   cards: Card[]
   handsLimit: number
   expression: string
+  expressionCards: Card[]
 }
