@@ -64,8 +64,6 @@ func (r *Repo) PickFieldCards(ctx context.Context, gameID uuid.UUID, playerID in
 	return nil
 }
 
-
-
 const operandProbability = 4
 const operatorProbability = 3
 const itemProbability = 1
