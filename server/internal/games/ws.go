@@ -5,6 +5,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
+	"github.com/traP-jp/h25s_15/internal/core/corews"
 )
 
 var GameIDSessionKey = "gameID"
@@ -17,7 +18,7 @@ func (h *Handler) GameWS(c echo.Context) error {
 	}
 
 	h.events.HandleRequestWithKeys(c.Response().Writer, c.Request(), map[string]any{
-		GameIDSessionKey: gameID,
+		corews.SessionKeyGameID: gameID,
 	})
 	return nil
 }

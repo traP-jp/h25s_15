@@ -31,18 +31,22 @@ func (h *Handler) ScoreUpdatedEvent(next echo.HandlerFunc) echo.HandlerFunc {
 			return echo.NewHTTPError(http.StatusInternalServerError)
 		}
 
-		scores, err := h.repo.GetScores(ctx, gameID)
+		players, err := h.repo.GetPlayers(ctx, gameID)
 		if err != nil {
-			c.Logger().Errorf("failed to get scores: %v", err)
+			c.Logger().Errorf("failed to get players: %v", err)
 			return echo.NewHTTPError(http.StatusInternalServerError)
 		}
 
 		var player0Score, player1Score int
-		for _, score := range scores {
-			if score.PlayerID == 0 {
-				player0Score = score.Score
-			} else if score.PlayerID == 1 {
-				player1Score = score.Score
+		for _, player := range players {
+			switch player.PlayerID {
+			case 0:
+				player0Score = player.Score
+			case 1:
+				player1Score = player.Score
+			default:
+				c.Logger().Errorf("unexpected player ID: %d", player.PlayerID)
+				return echo.NewHTTPError(http.StatusInternalServerError)
 			}
 		}
 
