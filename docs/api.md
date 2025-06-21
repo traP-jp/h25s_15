@@ -194,13 +194,21 @@ field cardsもしくはhand cardsが更新されたとき
 #### `turnEnded`
 
 ターンが終了したとき。ターンの残り時間が0になったときに送信される。
-最終ターンの場合は、`nextTurn` は `null` になる。
+最終ターンの場合は、`nextTurn` と `nextPlayerId` は `null` になる。
 
 ```json
 {
   "type": "turnEnded",
   "nextPlayerId": 0,
   "nextTurn": 1
+}
+```
+
+```json
+{
+  "type": "turnEnded",
+  "nextPlayerId": null,
+  "nextTurn": null
 }
 ```
 

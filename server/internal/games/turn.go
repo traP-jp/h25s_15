@@ -10,7 +10,7 @@ import (
 )
 
 const turnsCount = 20
-const turnTimeLimit = 15 * time.Second
+const turnTimeLimit = 3 * time.Second
 
 func (h *Handler) RunTurns(ctx context.Context, gameID uuid.UUID) error {
 	for turn := 1; turn <= turnsCount; turn++ {
@@ -50,6 +50,23 @@ func (h *Handler) turn(ctx context.Context, gameID uuid.UUID, turn int, playerID
 	}
 
 	<-time.After(time.Until(endAt))
+
+	var nextPlayerID, nextTurn *int
+	if turn+1 <= turnsCount {
+		p := playerID ^ 1 // Toggle player ID (0 -> 1, 1 -> 0)
+		nextPlayerID = &p
+		t := turn + 1
+		nextTurn = &t
+	}
+
+	err = h.events.TurnEnded(ctx, gameID, events.TurnEndedEvent{
+		Type:         "turnEnded",
+		NextPlayerID: nextPlayerID,
+		NextTurn:     nextTurn,
+	})
+	if err != nil {
+		return fmt.Errorf("send turn ended event: %w", err)
+	}
 
 	return nil
 }
