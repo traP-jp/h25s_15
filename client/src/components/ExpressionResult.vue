@@ -7,8 +7,7 @@
     .exp-box{
       height:24.875rem;
       width:102.6875rem;
-      display:block;
+      display:flex;
       background-color:rgba(0,0,0,0.25);
-      margin:0 auto;
     }
 </style>
