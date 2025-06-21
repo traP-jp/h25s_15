@@ -9,6 +9,7 @@ var (
 	SessionKeyGameID   = "gameID"
 	SessionKeyUserName = "userName"
 	SessionKeyWaiting  = "waiting"
+	SessionKeyPlayerID = "playerID"
 )
 
 type MelodyFilterFun func(*melody.Session) bool
