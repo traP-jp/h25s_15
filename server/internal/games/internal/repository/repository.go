@@ -16,5 +16,6 @@ type Repo interface {
 	GetPlayers(ctx context.Context, gameID uuid.UUID) ([]domain.Player, error)
 
 	// CreateWaitingPlayer は、指定されたユーザー名で待機中のプレイヤーを作成する。
+	// 既に待機中のプレイヤーが存在する場合は、coredb.ErrDuplicateKeyを返す。
 	CreateWaitingPlayer(ctx context.Context, userName string) error
 }
