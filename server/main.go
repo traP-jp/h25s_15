@@ -24,13 +24,21 @@ func main() {
 
 	m := melody.New()
 
-	_ = games.New(db, m) // handler
-
+	game := games.New(db, m) // handler
 	card := cards.New(db, m)
 	user := users.New()
+
 	e.Use(user.AuthMiddleware())
 
+	userApi := e.Group("/users")
+	userApi.GET("/me", user.GetMe)
+
+	gameApi := e.Group("/games")
+	gameApi.GET("/:gameID/ws", game.GameWS)
+
 	e.POST("/games/:gameID/clear", card.ClearHandCards)
+
+	e.POST("/games/:gameID/picks", card.PickFieldCards)
 
 	e.Logger.Fatal(e.Start(":8080"))
 }
