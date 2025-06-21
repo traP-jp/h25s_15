@@ -1,9 +1,9 @@
 <template>
-  <div class="expr-box"><slot /></div>
+  <div class="field-box"><slot /></div>
 </template>
 
 <style>
-.expr-box {
+.field-box {
   min-width: 41.5rem;
   height: 14.6875rem;
   padding: 1.875rem;
