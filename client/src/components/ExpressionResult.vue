@@ -18,13 +18,13 @@
   display: flex;
   background-color: rgba(255, 0, 0, 0.25);
   margin-right: 9.0625rem;
-  margin-left:0.25rem;
+  margin-left: 0.25rem;
 }
 .right-exp-box {
   height: 24.875rem;
   width: 46.5625rem;
   display: flex;
   background-color: rgba(255, 0, 0, 0.25);
-  margin-right:0.25rem;
+  margin-right: 0.25rem;
 }
 </style>
