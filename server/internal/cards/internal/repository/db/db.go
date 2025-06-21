@@ -66,7 +66,7 @@ func (r *Repo) PickFieldCards(ctx context.Context, gameID uuid.UUID, playerID in
 }
 
 func (r *Repo) ReplenishFieldCards(ctx context.Context, gameID uuid.UUID, number int) error {
-	for i := 0; i < number; i++ {
+	for i := range number {
 		operandProbability := 4
 		operatorProbability := 3
 		itemProbability := 1
