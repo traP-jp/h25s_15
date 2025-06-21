@@ -5,7 +5,10 @@ import (
 	"github.com/olahol/melody"
 )
 
-var SessionKeyGameID = "gameID"
+var (
+	SessionKeyGameID   = "gameID"
+	SessionKeyUserName = "userName"
+)
 
 type MelodyFilterFun func(*melody.Session) bool
 
