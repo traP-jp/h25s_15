@@ -14,4 +14,7 @@ type Repo interface {
 
 	// GetPlayers は、該当するgameIDのプレイヤー情報を取得する。
 	GetPlayers(ctx context.Context, gameID uuid.UUID) ([]domain.Player, error)
+
+	// CreateWaitingPlayer は、指定されたユーザー名で待機中のプレイヤーを作成する。
+	CreateWaitingPlayer(ctx context.Context, userName string) error
 }
