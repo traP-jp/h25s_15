@@ -8,6 +8,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 	"github.com/traP-jp/h25s_15/internal/core/coredb"
+	"github.com/traP-jp/h25s_15/internal/users"
 )
 
 func (h Handler) ClearHandCards(c echo.Context) error {
@@ -16,7 +17,13 @@ func (h Handler) ClearHandCards(c echo.Context) error {
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid uuid error")
 	}
-	userName := "mizu"
+
+	userName, err := users.GetUserName(c)
+	if err != nil {
+		log.Printf("failed to get user name: %v\n", err)
+		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to get user name")
+	}
+
 	player, err := h.repo.GetPlayer(c.Request().Context(), gameID, userName)
 	if errors.Is(err, coredb.ErrRecordNotFound) {
 		return echo.NewHTTPError(http.StatusBadRequest, "player not found")
