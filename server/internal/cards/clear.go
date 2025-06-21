@@ -30,7 +30,7 @@ func (h Handler) ClearHandCards(c echo.Context) error {
 		log.Printf("failed to clear hand cards: %v\n", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
-	err = h.repo.UpdateScore(c.Request().Context(), gameID, player.PlayerID, - 3)
+	err = h.repo.UpdateScore(c.Request().Context(), gameID, player.PlayerID, -3)
 	if err != nil {
 		log.Printf("failed to clear hand cards: %v\n", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)

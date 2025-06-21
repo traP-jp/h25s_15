@@ -41,9 +41,9 @@ func (r *Repo) GetPlayer(ctx context.Context, gameID uuid.UUID, userName string)
 	return domain.GamePlayer(player), nil
 }
 
-func (r *Repo) UpdateScore(ctx context.Context, gameID uuid.UUID, playerID int, diff int) error{
+func (r *Repo) UpdateScore(ctx context.Context, gameID uuid.UUID, playerID int, diff int) error {
 	_, err := r.db.DB(ctx).ExecContext(ctx, "UPDATE game_players SET score = score + (?) WHERE game_id = ? and player_id = ?",
-	diff, gameID, playerID)
+		diff, gameID, playerID)
 	if err != nil {
 		return fmt.Errorf("update score: %w", err)
 	}
