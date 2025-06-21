@@ -11,6 +11,7 @@ type Repo interface {
 	ClearHandCards(ctx context.Context, gameID uuid.UUID, playerID int) error
 	GetPlayer(ctx context.Context, gameID uuid.UUID, userName string) (domain.GamePlayer, error)
 	UpdateScore(ctx context.Context, gameID uuid.UUID, playerID int, score int) error
+	PickFieldCards(ctx context.Context, gameID uuid.UUID, playerID int, wantedcard uuid.UUID) error
 	// GetActiveCardsは、ゲームのhand cardsとfield cardsを取得する。
 	GetActiveCards(ctx context.Context, gameID uuid.UUID) ([]domain.Card, error)
 	// GetGameHandLimitは、ゲームのhand cardsの制限を取得する。
