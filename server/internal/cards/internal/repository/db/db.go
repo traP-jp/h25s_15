@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"math/rand"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/traP-jp/h25s_15/internal/cards/internal/domain"
