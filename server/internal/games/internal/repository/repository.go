@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/traP-jp/h25s_15/internal/games/internal/domain"
@@ -40,6 +41,9 @@ type Repo interface {
 
 	// InitializeHandLimit は、指定されたゲームIDのプレイヤーのhand cardsの制限を初期化する。
 	InitializeHandLimit(ctx context.Context, gameID uuid.UUID) error
+
+	// StartGame は、指定されたゲームIDのゲームを開始する。
+	StartGame(ctx context.Context, gameID uuid.UUID, startAt time.Time) error
 }
 
 type CreatePlayersArg struct {
