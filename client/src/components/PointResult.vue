@@ -3,8 +3,7 @@ type User = {
   name: string
   score: number
 }
-
-const props = defineProps<{
+defineProps<{
   user1: User
   user2: User
 }>()
