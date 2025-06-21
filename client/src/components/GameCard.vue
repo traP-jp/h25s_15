@@ -20,7 +20,7 @@ const size = props.size || 'medium'
     :disabled="props.selected || props.disabled"
     :style="{
       backgroundColor: props.selected ? '#636363' : '#FFFFFF',
-      width: size === 'small' ? '2rem' : size === 'medium' ? '4rem' : '5rem',
+      width: size === 'small' ? '4rem' : size === 'medium' ? '6.25rem' : '7.5rem',
       border: 'none',
       aspectRatio: 3 / 4,
     }"
