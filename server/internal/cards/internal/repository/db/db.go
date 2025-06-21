@@ -91,7 +91,8 @@ func (r *Repo) GetActiveCards(ctx context.Context, gameID uuid.UUID) ([]domain.C
 
 func (r *Repo) GetGameHandLimit(ctx context.Context, gameID uuid.UUID) ([2]int, error) {
 	var handLimits []HandLimit
-	err := r.db.DB(ctx).SelectContext(ctx, &handLimits, "SELECT * FROM hand_cards_limits WHERE game_id = ?", gameID)
+	err := r.db.DB(ctx).SelectContext(ctx, &handLimits,
+		"SELECT * FROM hand_cards_limits WHERE game_id = ? ORDER BY player_id ASC", gameID)
 	if err != nil {
 		return [2]int{}, fmt.Errorf("get game hand limit: %w", err)
 	}
