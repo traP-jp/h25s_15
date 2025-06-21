@@ -1,7 +1,6 @@
 <script setup lang="ts">
 const props = defineProps<{
-  character: string
-  selected: boolean
+  selected?: boolean 
   disabled?: boolean
   size?: 'small' | 'medium' | 'large'
 }>()
@@ -22,13 +21,12 @@ const size = props.size || 'medium'
     :style="{
       backgroundColor: props.selected ? '#636363' : '#FFFFFF',
       width: size === 'small' ? '2rem' : size === 'medium' ? '4rem' : '5rem',
-      fontSize: size === 'small' ? '2rem' : size === 'medium' ? '4rem' : '5rem',
       border: 'none',
       aspectRatio: 3 / 4,
     }"
     @click="onClick"
   >
-    {{ props.character }}
+    <slot />
   </button>
 </template>
 
@@ -37,5 +35,8 @@ const size = props.size || 'medium'
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   color: var(--theme-text-black);
   border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
