@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const props = defineProps<{
-  selected?: boolean 
+  selected?: boolean
   disabled?: boolean
   size?: 'small' | 'medium' | 'large'
 }>()
