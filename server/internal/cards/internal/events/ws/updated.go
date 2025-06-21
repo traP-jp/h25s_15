@@ -15,7 +15,7 @@ import (
 type EventCard struct {
 	ID    uuid.UUID `json:"id"`
 	Type  string    `json:"type"`
-	Value int       `json:"value"`
+	Value string    `json:"value"`
 }
 
 type CardUpdatedEvent struct {
@@ -53,13 +53,17 @@ func (e *Event) CardUpdated(ctx context.Context, gameID uuid.UUID) error {
 		case domain.CardLocationField:
 			fieldCards = append(fieldCards, eventCard)
 		case domain.CardLocationHand:
-			switch card.OwnerPlayerID {
+			if card.OwnerPlayerID == nil {
+				return fmt.Errorf("card in hand without owner player ID: %v", card)
+			}
+			ownerPlayerID := *card.OwnerPlayerID
+			switch ownerPlayerID {
 			case 0:
 				player0Cards = append(player0Cards, eventCard)
 			case 1:
 				player1Cards = append(player1Cards, eventCard)
 			default:
-				return fmt.Errorf("unexpected owner player ID: %d", card.OwnerPlayerID)
+				return fmt.Errorf("unexpected owner player ID: %d", ownerPlayerID)
 			}
 		default:
 			return fmt.Errorf("unexpected card location: %s", card.Location)
