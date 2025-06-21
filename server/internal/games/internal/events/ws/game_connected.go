@@ -2,6 +2,7 @@ package ws
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/google/uuid"
 	"github.com/traP-jp/h25s_15/internal/core/corews"
@@ -10,7 +11,7 @@ import (
 func (e *Event) GetGameConnectedUsers(ctx context.Context, gameID uuid.UUID) ([]string, error) {
 	sessions, err := e.m.Sessions()
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("get sessions: %w", err)
 	}
 
 	var connectedUsers []string

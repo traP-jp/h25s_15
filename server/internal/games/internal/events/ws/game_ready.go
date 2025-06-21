@@ -47,10 +47,16 @@ func (e *Event) GameReady(ctx context.Context, gameID uuid.UUID, event events.Ga
 	}
 
 	if len(sess0) > 0 {
-		e.m.BroadcastMultiple(event0JSON, sess0)
+		err := e.m.BroadcastMultiple(event0JSON, sess0)
+		if err != nil {
+			return fmt.Errorf("broadcast event0: %w", err)
+		}
 	}
 	if len(sess1) > 0 {
-		e.m.BroadcastMultiple(event1JSON, sess1)
+		err := e.m.BroadcastMultiple(event1JSON, sess1)
+		if err != nil {
+			return fmt.Errorf("broadcast event1: %w", err)
+		}
 	}
 
 	return nil
