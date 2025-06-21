@@ -2,6 +2,7 @@ package users
 
 import (
 	"errors"
+	"log"
 	"net/http"
 	"os"
 
@@ -13,6 +14,7 @@ func (h *Handler) AuthMiddleware() echo.MiddlewareFunc {
 	if mode == "prod" {
 		return h.prodModeAuth
 	}
+	log.Println("Running in development mode, using devModeAuth middleware")
 	return h.devModeAuth
 }
 
