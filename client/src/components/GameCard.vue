@@ -12,7 +12,10 @@ function onClick() {
 }
 
 const size = props.size || 'medium'
-const sizeValue = size === 'small' ? '4rem' : size === 'medium' ? '6.25rem' : '7.5rem'
+const sizeValue = size === 'small' ? '4.0625rem' : size === 'medium' ? '6.259375rem' : '7.625rem'
+
+console.log(size)
+console.log(sizeValue)
 </script>
 
 <template>
@@ -39,6 +42,6 @@ const sizeValue = size === 'small' ? '4rem' : size === 'medium' ? '6.25rem' : '7
   justify-content: center;
   align-items: center;
   border: none;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 122 / 163;
 }
 </style>
