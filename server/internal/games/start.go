@@ -71,7 +71,7 @@ func (h *Handler) PrepareGame(ctx context.Context, gameID uuid.UUID) error {
 	})
 
 	if err != nil {
-		return fmt.Errorf("transactioni: %w", err)
+		return fmt.Errorf("transaction: %w", err)
 	}
 
 	return nil
