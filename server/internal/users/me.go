@@ -18,7 +18,7 @@ func (h *Handler) GetMe(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to get user name")
 	}
 
-	iconUrl, err := url.JoinPath("https://q.trap.jp/api/v3/public/icon", userName)
+	iconURL, err := url.JoinPath("https://q.trap.jp/api/v3/public/icon", userName)
 	if err != nil {
 		c.Logger().Errorf("failed to create icon URL: %v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to create icon URL")
@@ -26,6 +26,6 @@ func (h *Handler) GetMe(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, GetMeResponse{
 		Name:    userName,
-		IconURL: iconUrl,
+		IconURL: iconURL,
 	})
 }
