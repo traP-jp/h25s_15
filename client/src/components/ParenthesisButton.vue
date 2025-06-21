@@ -5,7 +5,7 @@
   </div>
 </template>
 
-<style>
+<style scoped>
 .paren-row {
   display: flex;
   justify-content: center;
