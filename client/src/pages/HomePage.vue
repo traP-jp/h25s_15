@@ -5,5 +5,5 @@ import Score from '../components/Score.vue'
 
 <template>
   <hello-world msg="Hello Vue 3 + Vite" />
-  <Score />
+  <Score :is_mine="false" :now_score="15"/>
 </template>
