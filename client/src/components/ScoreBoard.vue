@@ -1,7 +1,7 @@
 <script setup lang="ts">
-const props = defineProps<{
-  is_mine: boolean
-  now_score: number
+const { score, opponent } = defineProps<{
+  score: number
+  opponent?: boolean
 }>()
 </script>
 
@@ -9,58 +9,29 @@ const props = defineProps<{
   <div
     class="score-display"
     :style="{
-      border: props.is_mine
-        ? '0.5rem dashed var(--theme-primary, #5980ff)'
-        : '0.5rem dashed var(--theme-danger, #dd333c)',
-      width: props.is_mine ? '15rem' : '12rem',
-      height: props.is_mine ? '10rem' : '8rem',
+      outlineColor: !opponent ? 'var(--theme-primary)' : 'var(--theme-danger)',
+      outlineOffset: '-0.5rem',
+      width: !opponent ? '15.4375rem' : '11.75rem',
+      height: !opponent ? '10.1875rem' : '7.75rem',
     }"
   >
-    <span
-      class="score-value"
-      :style="{
-        fontSize: props.is_mine ? '6rem' : '4.8rem',
-      }"
-    >
-      {{ now_score }}
+    <span>
+      <span :style="{ fontSize: !opponent ? '5.25rem' : '4rem' }">
+        {{ score }}
+      </span>
+      <span :style="{ fontSize: !opponent ? '3rem' : '2.5rem' }">pt</span>
     </span>
-
-    <span
-      class="score-unit"
-      :style="{
-        fontSize: props.is_mine ? '4rem' : '3.2rem',
-      }"
-      >pt</span
-    >
   </div>
 </template>
 
 <style scoped>
 .score-display {
-  /* 背景色に定義した変数を使用 */
-  background-color: var(--score-box-background, #30384d);
-
-  /* 点線ボーダーに定義した変数を使用 */
-
-  border-radius: 0.75rem;
-
   display: flex;
+  border-radius: 1.25rem;
   justify-content: center;
+  outline: 0.5rem dashed;
   align-items: center;
   box-sizing: border-box;
-}
-
-.score-value {
-  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
-  color: var(--theme-text-white, #ffffff); /* 文字色に定義した変数を使用 */
-  line-height: 1;
-  margin-right: 0.5rem;
-}
-
-.score-unit {
-  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
-  color: var(--theme-text-white, #ffffff); /* 単位の文字色にも定義した変数を使用 */
-  line-height: 1;
-  padding-bottom: 0.25rem;
+  color: var(--theme-text-white);
 }
 </style>
