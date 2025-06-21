@@ -53,7 +53,7 @@ func (r *Repo) GetGame(ctx context.Context, gameID uuid.UUID) (domain.Game, erro
 
 func (r *Repo) GetPlayers(ctx context.Context, gameID uuid.UUID) ([]domain.Player, error) {
 	var players []Player
-	err := r.db.DB(ctx).SelectContext(ctx, &players, "SELECT * FROM players WHERE game_id = ?", gameID)
+	err := r.db.DB(ctx).SelectContext(ctx, &players, "SELECT * FROM game_players WHERE game_id = ?", gameID)
 	if err != nil {
 		return nil, fmt.Errorf("get players: %w", err)
 	}
