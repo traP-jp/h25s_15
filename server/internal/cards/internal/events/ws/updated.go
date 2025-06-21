@@ -9,7 +9,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/olahol/melody"
 	"github.com/traP-jp/h25s_15/internal/cards/internal/events"
-	"github.com/traP-jp/h25s_15/internal/games"
+	"github.com/traP-jp/h25s_15/internal/core/corews"
 )
 
 func (e *Event) CardUpdated(ctx context.Context, gameID uuid.UUID, event events.CardUpdatedEvent) error {
@@ -20,7 +20,7 @@ func (e *Event) CardUpdated(ctx context.Context, gameID uuid.UUID, event events.
 	}
 
 	err = e.m.BroadcastFilter(eventJSON.Bytes(), func(s *melody.Session) bool {
-		if sessionGameIDI, ok := s.Get(games.GameIDSessionKey); ok {
+		if sessionGameIDI, ok := s.Get(corews.SessionKeyGameID); ok {
 			if sessionGameID, ok := sessionGameIDI.(uuid.UUID); ok {
 				return sessionGameID == gameID
 			}
