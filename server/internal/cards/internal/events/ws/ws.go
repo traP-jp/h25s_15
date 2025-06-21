@@ -1,6 +1,8 @@
 package ws
 
-import "github.com/olahol/melody"
+import (
+	"github.com/olahol/melody"
+)
 
 type Event struct {
 	m *melody.Melody
