@@ -82,7 +82,7 @@ const fontSize = computed(() => {
   color: var(--accent);
   outline: 0.25rem solid var(--accent);
   background-color: transparent;
-  outline-offset: '-0.25rem';
+  outline-offset: -0.25rem;
 }
 
 .outline:hover {
