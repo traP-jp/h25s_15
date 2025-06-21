@@ -14,7 +14,12 @@ func (h *Handler) PrepareGame(ctx context.Context, gameID uuid.UUID) error {
 
 		// TODO: fieldCardsを作って登録する
 
-		err := h.repo.InitializeHandLimit(ctx, gameID)
+		err := h.repo.InitializeFieldCardsLimit(ctx, gameID)
+		if err != nil {
+			return fmt.Errorf("initialize field cards limit: %w", err)
+		}
+
+		err = h.repo.InitializeHandLimit(ctx, gameID)
 		if err != nil {
 			return fmt.Errorf("initialize hand limit: %w", err)
 		}
