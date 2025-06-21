@@ -24,7 +24,6 @@ const dashOffset = computed(() => {
 <template>
   <div class="progress-container">
     <svg class="progress-ring" width="100%" height="100%" viewBox="0 0 120 120">
-      <circle class="progress-ring__bg" :r="radius" :cx="center" :cy="center" />
       <circle
         class="progress-ring__progress"
         :r="radius"
@@ -52,15 +51,9 @@ const dashOffset = computed(() => {
   transform: rotate(-90deg);
 }
 
-.progress-ring__bg {
-  fill: none;
-  stroke: #2e2e3a;
-  stroke-width: 10;
-}
-
 .progress-ring__progress {
   fill: none;
-  stroke: #4a78ff;
+  stroke: var(--theme-primary);
   stroke-width: 10;
   transition: stroke-dashoffset 0.4s ease;
 }
@@ -68,7 +61,7 @@ const dashOffset = computed(() => {
 .progress-text {
   position: absolute;
   font-size: 4rem;
-  color: #ffffff;
+  color: var(--theme-text-white);
   font-weight: 600;
 }
 </style>
