@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"math/rand"
 
 	"github.com/google/uuid"
 	"github.com/traP-jp/h25s_15/internal/cards/internal/domain"
@@ -59,6 +60,49 @@ func (r *Repo) PickFieldCards(ctx context.Context, gameID uuid.UUID, playerID in
 	ok, _ := result.RowsAffected()
 	if ok != 1 {
 		return coredb.ErrNoRecordUpdated
+	}
+	return nil
+}
+
+func (r *Repo) ReplenishFieldCards(ctx context.Context, gameID uuid.UUID, number int) error {
+	for i := 0; i < number; i++ {
+		operandProbability := 4
+		operatorProbability := 3
+		itemProbability := 1
+		randomIntForType := rand.Intn(operandProbability + operatorProbability + itemProbability)
+		cardId := uuid.New()
+		if randomIntForType < operandProbability {
+			selectedType := "operand"
+			_, err := r.db.DB(ctx).ExecContext(ctx, "INSERT INTO cards (id, game_id, type, value, location) VALUES (?, ?, ?, ?, 'field')",
+				cardId, gameID, selectedType, rand.Intn(10))
+			if err != nil {
+				return fmt.Errorf("failed to replenish field card: %w", err)
+			}
+		} else if randomIntForType < operandProbability+operatorProbability {
+			selectedType := "operand"
+			operators := []string{"+", "-", "/", "*"}
+			randomIndex := rand.Intn(len(operators))
+			_, err := r.db.DB(ctx).ExecContext(ctx, "INSERT INTO cards (id, game_id, type, value, location) VALUES (?, ?, ?, ?, 'field')",
+				cardId, gameID, selectedType, operators[randomIndex])
+			if err != nil {
+				return fmt.Errorf("failed to replenish field card: %w", err)
+			}
+		} else {
+			selectedType := "item"
+			items := []string{
+				"increaseFieldCards",
+				"refreshFieldCards",
+				"clearOpponentHandCards",
+				"increaseTurnTime",
+				"increaseHandCardsLimit",
+			}
+			randomIndex := rand.Intn(len(items))
+			_, err := r.db.DB(ctx).ExecContext(ctx, "INSERT INTO cards (id, game_id, type, value, location) VALUES (?, ?, ?, ?, 'field')",
+				cardId, gameID, selectedType, items[randomIndex])
+			if err != nil {
+				return fmt.Errorf("failed to replenish field card: %w", err)
+			}
+		}
 	}
 	return nil
 }

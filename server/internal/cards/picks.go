@@ -45,6 +45,11 @@ func (h Handler) PickFieldCards(c echo.Context) error {
 		c.Logger().Errorf("failed to pick a field card: %v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
+	err = h.repo.ReplenishFieldCards(c.Request().Context(), gameID, 1)
+	if err != nil {
+		c.Logger().Errorf("failed to replenish field cards: %v", err)
+		return echo.NewHTTPError(http.StatusInternalServerError)
+	}
 
 	return c.NoContent(http.StatusNoContent)
 }
