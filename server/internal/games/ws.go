@@ -2,7 +2,6 @@ package games
 
 import (
 	"context"
-	"log"
 	"net/http"
 	"slices"
 
@@ -60,7 +59,6 @@ func (h *Handler) GameWS(c echo.Context) error {
 	})
 
 	eg.Go(func() error {
-		log.Println(connectedUsers)
 		if len(slices.DeleteFunc(connectedUsers, func(u string) bool {
 			return u == userName
 		})) == 0 {
