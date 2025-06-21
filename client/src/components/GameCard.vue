@@ -11,7 +11,8 @@ function onClick() {
   emit('click')
 }
 
-const size = props.size || 'medium'
+const size = props.size || 'medium';
+const sizeValue = size === 'small' ? '4rem' : size === 'medium' ? '6.25rem' : '7.5rem'
 </script>
 
 <template>
@@ -20,9 +21,8 @@ const size = props.size || 'medium'
     :disabled="props.selected || props.disabled"
     :style="{
       backgroundColor: props.selected ? '#636363' : '#FFFFFF',
-      width: size === 'small' ? '4rem' : size === 'medium' ? '6.25rem' : '7.5rem',
-      border: 'none',
-      aspectRatio: 3 / 4,
+      width: sizeValue,
+      fontSize: sizeValue,
     }"
     @click="onClick"
   >
@@ -38,5 +38,7 @@ const size = props.size || 'medium'
   display: flex;
   justify-content: center;
   align-items: center;
+  border: 'none';
+  aspect-ratio: 3 / 4;
 }
 </style>
