@@ -53,6 +53,9 @@ type Repo interface {
 
 	// GetTurn は、指定されたゲームIDの最新のターン情報を取得する。
 	GetTurn(ctx context.Context, gameID uuid.UUID) (domain.Turn, error)
+
+	// EndGame は、指定されたゲームIDのゲームを終了する。
+	EndGame(ctx context.Context, gameID uuid.UUID, endAt time.Time) error
 }
 
 type CreatePlayersArg struct {
