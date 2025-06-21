@@ -12,6 +12,6 @@ type Repo interface {
 	// 該当するゲームが存在しない場合は、coredb.ErrRecordNotFoundを返す。
 	GetGame(ctx context.Context, gameID uuid.UUID) (domain.Game, error)
 
-	// GetScores は、該当するgameIDのスコアを取得する。
-	GetScores(ctx context.Context, gameID uuid.UUID) ([]domain.Player, error)
+	// GetPlayers は、該当するgameIDのプレイヤー情報を取得する。
+	GetPlayers(ctx context.Context, gameID uuid.UUID) ([]domain.Player, error)
 }
