@@ -2,7 +2,9 @@
 import CommonButton from '@/components/CommonButton.vue'
 import ExpressionResult from '@/components/ExpressionResult.vue'
 import PointResult from '@/components/PointResult.vue'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 // import { ref, onMounted } from 'vue'
 // const props = defineProps<{
 //   gameId: string;
@@ -45,6 +47,16 @@ import PointResult from '@/components/PointResult.vue'
 //     }
 //   }
 // })
+const shareText = 'いい感じの文字列'
+function share_traq() {
+  const url = `https://q.trap.jp/share-target?text=${shareText}`
+  window.location.href = url
+  return
+}
+
+function to_home() {
+  router.push('/')
+}
 </script>
 
 <template>
@@ -53,8 +65,12 @@ import PointResult from '@/components/PointResult.vue'
   <PointResult />
 
   <div class="button-container">
-    <CommonButton size="large" theme="primary" variant="filled">traQでシェア</CommonButton>
-    <CommonButton size="large" theme="secondary" variant="outline">ホームに戻る</CommonButton>
+    <CommonButton size="large" theme="primary" variant="filled" @click="share_traq"
+      >traQでシェア</CommonButton
+    >
+    <CommonButton size="large" theme="secondary" variant="outline" @click="to_home"
+      >ホームに戻る</CommonButton
+    >
   </div>
 
   <ExpressionResult
