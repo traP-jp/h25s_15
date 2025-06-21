@@ -8,8 +8,6 @@ import (
 	"github.com/traP-jp/h25s_15/internal/core/corews"
 )
 
-var GameIDSessionKey = "gameID"
-
 func (h *Handler) GameWS(c echo.Context) error {
 	gameIDStr := c.Param("gameID")
 	gameID, err := uuid.Parse(gameIDStr)
