@@ -149,7 +149,7 @@ watchEffect(() => {
     <div class="field-container">
       <div :style="{ flex: 1 }" />
       <FieldArea>
-        <GameCard v-for="fieldCard in gameState.fieldCards" size="large">
+        <GameCard v-for="fieldCard in gameState.fieldCards" size="large" :key="fieldCard.id">
           {{ fieldCard.value }}
         </GameCard>
       </FieldArea>

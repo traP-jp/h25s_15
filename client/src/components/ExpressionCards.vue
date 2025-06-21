@@ -12,7 +12,7 @@ const emits = defineEmits<{ (e: 'delete'): void; (e: 'submit'): void }>()
 
 <template>
   <div class="expression-card-container">
-    <GameCard v-for="card in cards">{{ card.value }}</GameCard>
+    <GameCard v-for="card in cards" :key="card.id">{{ card.value }}</GameCard>
     <div class="expression-buttons">
       <CommonButton
         @click="() => emits('delete')"

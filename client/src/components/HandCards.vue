@@ -20,9 +20,12 @@ const cardColumns = eachSlice(cards, 2)
     <div
       class="hand-card-rows"
       :style="{ gap: cardSize == 'medium' ? '1.2rem' : '0.75rem' }"
-      v-for="cardColumn in cardColumns"
+      v-for="(cardColumn, i) in cardColumns"
+      :key="`hand-card-row-${i}`"
     >
-      <GameCard v-for="card in cardColumn" :size="cardSize">{{ card.value }}</GameCard>
+      <GameCard v-for="card in cardColumn" :size="cardSize" :key="card.id">
+        {{ card.value }}
+      </GameCard>
     </div>
   </div>
 </template>
