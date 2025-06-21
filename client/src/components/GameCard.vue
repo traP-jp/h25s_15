@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { computed } from 'vue';
+
 const props = defineProps<{
   selected?: boolean
   disabled?: boolean
@@ -11,11 +13,8 @@ function onClick() {
   emit('click')
 }
 
-const size = props.size || 'medium'
-const sizeValue = size === 'small' ? '4.0625rem' : size === 'medium' ? '6.259375rem' : '7.625rem'
-
-console.log(size)
-console.log(sizeValue)
+const size = computed(() => props.size || 'medium')
+const sizeValue = computed(() => size.value === 'small' ? '4.0625rem' : size.value === 'medium' ? '6.259375rem' : '7.625rem')
 </script>
 
 <template>
