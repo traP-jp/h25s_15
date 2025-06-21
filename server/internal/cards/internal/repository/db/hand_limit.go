@@ -1,7 +1,9 @@
 package db
 
+import "github.com/google/uuid"
+
 type HandLimit struct {
-	GameID   int64 `db:"game_id"`
-	PlayerID int   `db:"player_id"`
-	Limit    int   `db:"limit"`
+	GameID         uuid.UUID `db:"game_id"`
+	PlayerID       int       `db:"player_id"`
+	HandCardsLimit int       `db:"hand_cards"`
 }

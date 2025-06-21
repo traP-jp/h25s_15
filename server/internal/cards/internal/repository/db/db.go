@@ -78,7 +78,7 @@ func (r *Repo) GetActiveCards(ctx context.Context, gameID uuid.UUID) ([]domain.C
 
 func (r *Repo) GetGameHandLimit(ctx context.Context, gameID uuid.UUID) ([2]int, error) {
 	var handLimits []HandLimit
-	err := r.db.DB(ctx).SelectContext(ctx, &handLimits, "SELECT * FROM game_hand_limits WHERE game_id = ?", gameID)
+	err := r.db.DB(ctx).SelectContext(ctx, &handLimits, "SELECT * FROM hand_cards_limits WHERE game_id = ?", gameID)
 	if err != nil {
 		return [2]int{}, fmt.Errorf("get game hand limit: %w", err)
 	}
@@ -86,5 +86,5 @@ func (r *Repo) GetGameHandLimit(ctx context.Context, gameID uuid.UUID) ([2]int, 
 		return [2]int{}, fmt.Errorf("get game hand limit: not enough data")
 	}
 
-	return [2]int{handLimits[0].Limit, handLimits[1].Limit}, nil
+	return [2]int{handLimits[0].HandCardsLimit, handLimits[1].HandCardsLimit}, nil
 }
