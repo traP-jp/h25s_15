@@ -84,6 +84,14 @@ func (h *Handler) GameWS(c echo.Context) error {
 			return echo.NewHTTPError(http.StatusInternalServerError)
 		}
 
+		time.Sleep(time.Second) // 変更が確実にDBに保存されるまで待つ
+
+		err = h.EndGame(ctx, gameID, time.Now())
+		if err != nil {
+			c.Logger().Errorf("failed to end game %s: %v", gameID, err)
+			return echo.NewHTTPError(http.StatusInternalServerError)
+		}
+
 		return nil
 	})
 
