@@ -43,10 +43,5 @@ func (h Handler) ClearHandCards(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
 
-	if err := h.events.CardUpdated(c.Request().Context(), gameID); err != nil {
-		log.Printf("failed to send card updated event: %v\n", err)
-		return echo.NewHTTPError(http.StatusInternalServerError)
-	}
-
 	return c.NoContent(http.StatusNoContent)
 }

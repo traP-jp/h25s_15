@@ -36,7 +36,7 @@ func main() {
 	gameApi := e.Group("/games")
 	gameApi.GET("/:gameID/ws", game.GameWS)
 
-	e.POST("/games/:gameID/clear", card.ClearHandCards)
+	e.POST("/games/:gameID/clear", card.ClearHandCards, card.CardsUpdatedEvent)
 
 	e.Logger.Fatal(e.Start(":8080"))
 }

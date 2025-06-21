@@ -17,7 +17,7 @@ type Handler struct {
 
 func New(d *coredb.DB, m *melody.Melody) *Handler {
 	repo := db.New(d)
-	events := ws.New(m, repo)
+	events := ws.New(m)
 
 	return &Handler{
 		db:     d,
