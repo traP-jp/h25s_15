@@ -79,7 +79,7 @@ func (r *Repo) ReplenishFieldCards(ctx context.Context, gameID uuid.UUID, number
 				return fmt.Errorf("failed to replenish field card: %w", err)
 			}
 		} else if randomIntForType < operandProbability+operatorProbability {
-			selectedType := "operand"
+			selectedType := "operator"
 			operators := []string{"+", "-", "/", "*"}
 			randomIndex := rand.Intn(len(operators))
 			_, err := r.db.DB(ctx).ExecContext(ctx, "INSERT INTO cards (id, game_id, type, value, location) VALUES (?, ?, ?, ?, 'field')",
