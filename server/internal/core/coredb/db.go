@@ -113,7 +113,7 @@ func (d *DB) Transaction(ctx context.Context, fn func(ctx context.Context) error
 
 	defer func() {
 		if r := recover(); r != nil {
-			tx.Rollback()
+			_ = tx.Rollback()
 			panic(r)
 		}
 	}()
@@ -121,7 +121,7 @@ func (d *DB) Transaction(ctx context.Context, fn func(ctx context.Context) error
 	ctx = context.WithValue(ctx, dbKeyInstance, tx)
 
 	if err := fn(ctx); err != nil {
-		tx.Rollback()
+		_ = tx.Rollback()
 		return fmt.Errorf("execute transaction function: %w", err)
 	}
 
