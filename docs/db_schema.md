@@ -13,12 +13,11 @@
 
 ## `waiting_players`
 
-| 列名       | 型            | 制約                             | 既定値 | 説明           |
-| ---------- | ------------- | -------------------------------- | ------ | -------------- |
-| id         | `INT`         | **PK**, **AUTO_INCREMENT**       | ―      | 行連番         |
-| user_name  | `VARCHAR(32)` | **PK**, **UNIQUE**, **NOT NULL** | ―      | 参加ユーザー   |
-| waiting    | `BOOLEAN`     | **NOT NULL**                     | `TRUE` | 待機中かどうか |
-| created_at | `DATETIME`    | **NOT NULL**                     | ―      | 作成時刻       |
+| 列名       | 型            | 制約                             | 既定値 | 説明         |
+| ---------- | ------------- | -------------------------------- | ------ | ------------ |
+| id         | `INT`         | **PK**, **AUTO_INCREMENT**       | ―      | 行連番       |
+| user_name  | `VARCHAR(32)` | **PK**, **UNIQUE**, **NOT NULL** | ―      | 参加ユーザー |
+| created_at | `DATETIME`    | **NOT NULL**                     | ―      | 作成時刻     |
 
 ## `game_players`
 
