@@ -1,18 +1,13 @@
 <script setup lang="ts">
 import type { Card } from '@/lib/type'
 import CommonButton from './CommonButton.vue'
-import GameCard from './GameCard.vue'
-
-defineProps<{
-  cards: Card[]
-}>()
 
 const emits = defineEmits<{ (e: 'delete'): void; (e: 'submit'): void }>()
 </script>
 
 <template>
   <div class="expression-card-container">
-    <GameCard v-for="card in cards" :key="card.id">{{ card.value }}</GameCard>
+    <slot />
     <div class="expression-buttons">
       <CommonButton
         @click="() => emits('delete')"

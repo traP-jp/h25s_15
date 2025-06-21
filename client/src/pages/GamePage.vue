@@ -176,7 +176,11 @@ watchEffect(() => {
     <div class="my-expression-container">
       <ParenthesisButtons />
       <div class="my-expression">
-        <ExpressionCards controllable :cards="myPlayer.expressionCards" />
+        <ExpressionCards>
+          <GameCard v-for="card in myPlayer.expressionCards" :key="card.id">
+            {{ card.value }}
+          </GameCard>
+        </ExpressionCards>
         <ScoreBoard :score="myPlayer.score" />
       </div>
     </div>
