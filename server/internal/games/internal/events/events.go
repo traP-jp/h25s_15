@@ -45,6 +45,13 @@ type GameStartedEvent struct {
 	Turn            int    `json:"turn"`            // Current turn number
 }
 
+type TurnStartedEvent struct {
+	Type              string `json:"type"`
+	CurrentPlayerID   int    `json:"currentPlayerId"`   // ID of the player whose turn it is
+	Turn              int    `json:"turn"`              // Current turn number
+	TurnTimeRemaining int    `json:"turnTimeRemaining"` // Remaining time for the turn in seconds
+}
+
 type Event interface {
 	HandleRequestWithKeys(res http.ResponseWriter, req *http.Request, keys map[string]any)
 	GetConnectedWaitingUsers(ctx context.Context) ([]string, error)
@@ -56,4 +63,5 @@ type Event interface {
 	// 内部でPlayerIDをよしなに付けてイベントを送る
 	GameReady(ctx context.Context, gameID uuid.UUID, event GameReadyEvent, playerNames [2]string) error
 	GameStarted(ctx context.Context, gameID uuid.UUID, event GameStartedEvent) error
+	TurnStarted(ctx context.Context, gameID uuid.UUID, event TurnStartedEvent) error
 }
