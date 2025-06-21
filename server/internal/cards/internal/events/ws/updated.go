@@ -9,6 +9,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/olahol/melody"
 	"github.com/traP-jp/h25s_15/internal/cards/internal/domain"
+	"github.com/traP-jp/h25s_15/internal/games"
 )
 
 type EventCard struct {
@@ -81,7 +82,12 @@ func (e *Event) CardUpdated(ctx context.Context, gameID uuid.UUID) error {
 	}
 
 	err = e.m.BroadcastFilter(eventJSON.Bytes(), func(s *melody.Session) bool {
-		return true // TODO: あとでちゃんとフィルターをかける
+		if sessionGameIDI, ok := s.Get(games.GameIDSessionKey); ok {
+			if sessionGameID, ok := sessionGameIDI.(uuid.UUID); ok {
+				return sessionGameID == gameID
+			}
+		}
+		return false
 	})
 	if err != nil {
 		return fmt.Errorf("broadcast event: %w", err)
