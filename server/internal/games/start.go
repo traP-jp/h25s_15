@@ -10,7 +10,7 @@ import (
 )
 
 func (h *Handler) StartGame(ctx context.Context, gameID uuid.UUID, startAt time.Time) error {
-	_ = <-time.After(time.Until(startAt))
+	<-time.After(time.Until(startAt))
 
 	err := h.db.Transaction(ctx, func(ctx context.Context) error {
 		err := h.repo.StartGame(ctx, gameID, startAt)
