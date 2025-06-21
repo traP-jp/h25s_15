@@ -5,11 +5,11 @@ import (
 )
 
 type Event struct {
-	m    *melody.Melody
+	m *melody.Melody
 }
 
 func New(m *melody.Melody) *Event {
 	return &Event{
-		m:    m,
+		m: m,
 	}
 }
