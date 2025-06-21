@@ -17,9 +17,9 @@
   font-size: 3rem;
   width: 8.0625rem;
   height: 4.375rem;
-  border-radius: 100%;
+  border-radius: 3.125rem;
   border: none;
   font-weight: 400;
-  margin: 0 0.25rem;
+  padding: 0.3125rem 3.125rem;
 }
 </style>
