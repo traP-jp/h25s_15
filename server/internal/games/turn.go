@@ -3,6 +3,7 @@ package games
 import (
 	"context"
 	"fmt"
+	"math"
 	"time"
 
 	"github.com/google/uuid"
@@ -10,7 +11,7 @@ import (
 )
 
 const turnsCount = 20
-const turnTimeLimit = 3 * time.Second
+const turnTimeLimit = 15 * time.Second
 
 func (h *Handler) RunTurns(ctx context.Context, gameID uuid.UUID) error {
 	for turn := 1; turn <= turnsCount; turn++ {
@@ -49,7 +50,34 @@ func (h *Handler) turn(ctx context.Context, gameID uuid.UUID, turn int, playerID
 		return fmt.Errorf("turn start transaction: %w", err)
 	}
 
-	<-time.After(time.Until(endAt))
+	ticker := time.NewTicker(time.Millisecond * 500)
+
+loop:
+	for {
+		select {
+		case <-ctx.Done():
+			return ctx.Err()
+		case t := <-ticker.C:
+			currentTurn, err := h.repo.GetTurn(ctx, gameID)
+			if err != nil {
+				return fmt.Errorf("get current turn: %w", err)
+			}
+			remaining := currentTurn.EndAt.Sub(t)
+			remainingSeconds := int(math.Round(remaining.Seconds()))
+			if remainingSeconds == 0 {
+				ticker.Stop()
+				break loop
+			}
+			err = h.events.TurnTimeRemainingChanged(ctx, gameID, events.TurnTimeRemainingChangedEvent{
+				Type:             "turnTimeRemaining",
+				CurrentPlayerID:  playerID,
+				RemainingSeconds: remainingSeconds,
+			})
+			if err != nil {
+				return fmt.Errorf("send turn time remaining event: %w", err)
+			}
+		}
+	}
 
 	var nextPlayerID, nextTurn *int
 	if turn+1 <= turnsCount {
