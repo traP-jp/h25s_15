@@ -266,3 +266,21 @@ func (r *Repo) GetTurn(ctx context.Context, gameID uuid.UUID) (domain.Turn, erro
 		EndAt:      turn.EndAt,
 	}, nil
 }
+
+func (r *Repo) EndGame(ctx context.Context, gameID uuid.UUID, endAt time.Time) error {
+	result, err := r.db.DB(ctx).ExecContext(ctx,
+		"UPDATE games SET status = ?, ended_at = ? WHERE id = ?",
+		domain.GameStatusFinished, sql.NullTime{Time: endAt, Valid: true}, gameID,
+	)
+	if err != nil {
+		return fmt.Errorf("end game: %w", err)
+	}
+
+	if rowsAffected, err := result.RowsAffected(); err != nil {
+		return fmt.Errorf("get rows affected: %w", err)
+	} else if rowsAffected == 0 {
+		return coredb.ErrRecordNotFound
+	}
+
+	return nil
+}
