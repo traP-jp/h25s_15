@@ -32,5 +32,7 @@ func main() {
 
 	e.POST("/games/:gameID/clear", card.ClearHandCards)
 
+	e.POST("/games/:gameID/picks", card.PickFieldCards)
+
 	e.Logger.Fatal(e.Start(":8080"))
 }
