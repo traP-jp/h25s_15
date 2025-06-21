@@ -9,17 +9,17 @@
 .paren-row {
   display: flex;
   justify-content: center;
-  gap: 50px;
+  gap: 3.125rem;
 }
 .paren {
   background: var(--theme-secondary);
   color: var(--theme-text-black);
-  font-size: 48px;
-  width: 129px;
-  height: 70px;
-  border-radius: 50px;
+  font-size: 3rem;
+  width: 8.0625rem;
+  height: 4.375rem;
+  border-radius: 100%;
   border: none;
   font-weight: 400;
-  margin: 0 4px;
+  margin: 0 0.25rem;
 }
 </style>
