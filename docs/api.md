@@ -102,6 +102,7 @@ operationID: `gameWS`
   "type": "gameStarted",
   "currentPlayerId": 0,
   "turn": 1,
+  "turnTotal": 10
 }
 ```
 
