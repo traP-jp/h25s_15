@@ -34,7 +34,7 @@ const size = props.size || 'medium'
 .card {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   color: var(--theme-text-black);
-  border-radius: 4px;
+  border-radius: 10%;
   display: flex;
   justify-content: center;
   align-items: center;
