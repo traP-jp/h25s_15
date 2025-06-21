@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"math/rand"
-	"time"
 
 	"github.com/google/uuid"
 	"github.com/traP-jp/h25s_15/internal/cards/internal/domain"
@@ -65,11 +64,14 @@ func (r *Repo) PickFieldCards(ctx context.Context, gameID uuid.UUID, playerID in
 	return nil
 }
 
+
+
+const operandProbability = 4
+const operatorProbability = 3
+const itemProbability = 1
+
 func (r *Repo) ReplenishFieldCards(ctx context.Context, gameID uuid.UUID, number int) error {
-	for i := range number {
-		operandProbability := 4
-		operatorProbability := 3
-		itemProbability := 1
+	for range number {
 		randomIntForType := rand.Intn(operandProbability + operatorProbability + itemProbability)
 		cardId := uuid.New()
 		if randomIntForType < operandProbability {
