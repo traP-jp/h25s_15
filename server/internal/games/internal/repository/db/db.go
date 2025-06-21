@@ -9,8 +9,10 @@ import (
 
 	"github.com/go-sql-driver/mysql"
 	"github.com/google/uuid"
+	"github.com/jmoiron/sqlx"
 	"github.com/traP-jp/h25s_15/internal/core/coredb"
 	"github.com/traP-jp/h25s_15/internal/games/internal/domain"
+	"github.com/traP-jp/h25s_15/internal/games/internal/repository"
 )
 
 type Repo struct {
@@ -83,4 +85,85 @@ func (r *Repo) CreateWaitingPlayer(ctx context.Context, userName string) error {
 	}
 
 	return nil
+}
+
+func (r *Repo) DeleteWaitingPlayers(ctx context.Context, userNames []string) error {
+	q, args, err := sqlx.In("DELETE FROM waiting_players WHERE user_name IN (?)", userNames)
+	if err != nil {
+		return fmt.Errorf("prepare delete waiting players query: %w", err)
+	}
+
+	_, err = r.db.DB(ctx).ExecContext(ctx, q, args...)
+	if err != nil {
+		return fmt.Errorf("delete waiting players: %w", err)
+	}
+
+	return nil
+}
+
+func (r *Repo) GetWaitingPlayers(ctx context.Context) ([]domain.WaitingPlayer, error) {
+	var waitingPlayers []WaitingPlayer
+	err := r.db.DB(ctx).SelectContext(ctx, &waitingPlayers,
+		"SELECT * FROM waiting_players ORDER BY created_at ASC")
+	if err != nil {
+		return nil, fmt.Errorf("get waiting players: %w", err)
+	}
+
+	result := make([]domain.WaitingPlayer, 0, len(waitingPlayers))
+	for _, player := range waitingPlayers {
+		result = append(result, domain.WaitingPlayer{
+			UserName:  player.UserName,
+			CreatedAt: player.CreatedAt,
+		})
+	}
+
+	return result, nil
+}
+
+func (r *Repo) CreateGames(ctx context.Context, gameID []uuid.UUID) error {
+	games := make([]Game, 0, len(gameID))
+	for _, id := range gameID {
+		games = append(games, Game{
+			ID:     id,
+			Status: string(domain.GameStatusWaiting),
+		})
+	}
+	_, err := r.db.DB(ctx).NamedExecContext(ctx,
+		"INSERT INTO games (id, status) VALUES (:id, :status)",
+		games,
+	)
+	if err != nil {
+		return fmt.Errorf("create games: %w", err)
+	}
+
+	return nil
+}
+
+func (r *Repo) CreatePlayers(ctx context.Context, args []repository.CreatePlayersArg) error {
+	players := make([]Player, 0, len(args))
+	for _, arg := range args {
+		players = append(players, Player{
+			GameID:   arg.GameID,
+			UserName: arg.UserName0,
+			PlayerID: 0,
+			Score:    0, // 初期スコアは0
+		})
+		players = append(players, Player{
+			GameID:   arg.GameID,
+			UserName: arg.UserName1,
+			PlayerID: 1,
+			Score:    0, // 初期スコアは0
+		})
+	}
+
+	_, err := r.db.DB(ctx).NamedExecContext(ctx,
+		"INSERT INTO game_players (game_id, player_id, user_name, score) VALUES (:game_id, :player_id, :user_name, :score)",
+		players,
+	)
+	if err != nil {
+		return fmt.Errorf("create players: %w", err)
+	}
+
+	return nil
+
 }
