@@ -5,13 +5,15 @@ import PointResult from '@/components/PointResult.vue'
 import { useRouter } from 'vue-router'
 import { ref, onMounted } from 'vue'
 
+const httpBaseUrl = import.meta.env.VUE_APP_HTTP_BASEURL || 'http://localhost:8080'
+
 const router = useRouter()
 
 const props = defineProps<{
   gameId: string
 }>()
 
-type MeInfo = {
+type MyInfo = {
   name: string
   iconUrl: string
 }
@@ -26,30 +28,30 @@ type ResultInfo = {
   player1SuccessExpressions: string[]
 }
 
-const meInfo = ref<MeInfo | null>(null)
-const resultInfo = ref<ResultInfo | null>(null)
-const isWin = ref<'VICTORY' | 'LOSE' | 'DRAW' | null>(null)
+const myInfo = ref<MyInfo | undefined>(undefined)
+const resultInfo = ref<ResultInfo | undefined>(undefined)
+const resultStatus = ref<'VICTORY' | 'DEFEAT' | 'DRAW' | undefined>(undefined)
 
 const judgeResult = () => {
-  if (!meInfo.value || !resultInfo.value) return
-  const isPlayer0 = resultInfo.value.player0Name === meInfo.value.name
+  if (!myInfo.value || !resultInfo.value) return
+  const isPlayer0 = resultInfo.value.player0Name === myInfo.value.name
   const myScore = isPlayer0 ? resultInfo.value.player0Score : resultInfo.value.player1Score
   const oppScore = isPlayer0 ? resultInfo.value.player1Score : resultInfo.value.player0Score
 
-  if (myScore > oppScore) isWin.value = 'VICTORY'
-  else if (myScore < oppScore) isWin.value = 'LOSE'
-  else isWin.value = 'DRAW'
+  if (myScore > oppScore) resultStatus.value = 'VICTORY'
+  else if (myScore < oppScore) resultStatus.value = 'DEFEAT'
+  else resultStatus.value = 'DRAW'
 }
 
 onMounted(async () => {
   try {
     //自分のnameを取得
-    const meRes = await fetch('/users/me')
+    const meRes = await fetch(`${httpBaseUrl}/users/me`)
     if (!meRes.ok) throw new Error('ユーザー情報の取得に失敗しました')
-    meInfo.value = await meRes.json()
+    myInfo.value = await meRes.json()
 
     //ゲームの結果を取得
-    const resultRes = await fetch('/games/' + props.gameId + '/results')
+    const resultRes = await fetch(`${httpBaseUrl}/games/${props.gameId}/results`)
     if (!resultRes.ok) throw new Error('ゲーム結果の取得に失敗しました')
     resultInfo.value = await resultRes.json()
 
@@ -73,7 +75,7 @@ function to_home() {
 </script>
 
 <template>
-  <div v-if="isWin" class="isJugded">{{ isWin }}</div>
+  <div v-if="resultStatus" class="isJugded">{{ resultStatus }}</div>
 
   <PointResult
     v-if="resultInfo"
