@@ -33,7 +33,7 @@ useGameEvent(gameWsUrl, (event) => {
 })
 
 function pickCard(cardId: string) {
-  fetch(`${httpBaseUrl}/games/${gameId}/field/${cardId}`, {
+  fetch(`${httpBaseUrl}/games/${gameId}/picks`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
