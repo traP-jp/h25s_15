@@ -5,7 +5,7 @@ import PointResult from '@/components/PointResult.vue'
 import { useRouter } from 'vue-router'
 import { ref, onMounted } from 'vue'
 
-const httpBaseUrl = import.meta.env.VUE_APP_HTTP_BASEURL || 'http://localhost:8080'
+const httpBaseUrl = import.meta.env.VITE_HTTP_BASEURL || 'http://localhost:8080'
 
 const router = useRouter()
 
