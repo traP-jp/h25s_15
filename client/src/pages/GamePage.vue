@@ -119,7 +119,12 @@ const opponentPlayer = computed(() => {
   <div class="game-container">
     <div class="opponent-container">
       <HandCards :cards="opponentPlayer.cards" card-size="small">
-        <GameCard v-for="handCard in opponentPlayer.cards" size="small" :key="handCard.id">
+        <GameCard
+          v-for="handCard in opponentPlayer.cards"
+          size="small"
+          :key="handCard.id"
+          :disabled="gameState.currentPlayerId == opponentPlayer.id"
+        >
           {{ handCard.value }}
         </GameCard>
       </HandCards>
@@ -145,6 +150,7 @@ const opponentPlayer = computed(() => {
           :max_value="gameState.currentTurnTimeLimit"
           :now_value="gameState.turnTimeRemaining"
           :turn="gameState.turnTotal - gameState.turn + 1"
+          :theme="gameState.currentPlayerId == myPlayer.id ? 'primary' : 'danger'"
         />
       </div>
     </div>
