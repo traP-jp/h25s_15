@@ -130,7 +130,8 @@ watchEffect(() => {
   opponentPlayer.value.expressionCards.push(
     ...new Array(5).fill(undefined).map((_, i) => ({ id: `${i}`, type: 'num', value: `${i}` }))
   )
-  opponentPlayer.value.expression = '2 × 3 + 4 = 10'
+  opponentPlayer.value.expression = '2×3+4=10'
+  myPlayer.value.expression = '(2×3)+4=10'
   myPlayer.value.handsLimit = 10
 })
 </script>
@@ -172,11 +173,11 @@ watchEffect(() => {
     </div>
 
     <div class="my-expression-container">
-      <ParenthesisButtons />
+      <ParenthesisButtons @left="addOperator('(')" @right="addOperator(')')"></ParenthesisButtons>
       <div class="my-expression">
         <ExpressionCards @delete="deleteExpression" @submit="submitExpression">
-          <GameCard v-for="card in myPlayer.expressionCards" :key="card.id">
-            {{ card.value }}
+          <GameCard v-for="card in myPlayer.expression" :key="card">
+            {{ card }}
           </GameCard>
         </ExpressionCards>
         <ScoreBoard :score="myPlayer.score" />
