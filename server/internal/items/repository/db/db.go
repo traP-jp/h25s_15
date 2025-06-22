@@ -68,7 +68,7 @@ func (r *Repo) IncreaseFieldCardsMaxNumber(ctx context.Context, gameID uuid.UUID
 }
 
 func (r *Repo) ClearAllCards(ctx context.Context, gameID uuid.UUID, ownerPlayerID *int, location string) (clearedNumber int, err error) {
-	result, err := r.db.DB(ctx).ExecContext(ctx, "UPDATE cards SET location = 'used WHERE game_id = ? and  owner_player_id = ? and location = ?",
+	result, err := r.db.DB(ctx).ExecContext(ctx, "UPDATE cards SET location = 'used' WHERE game_id = ? and  owner_player_id = ? and location = ?",
 		gameID, ownerPlayerID, location)
 	if err != nil {
 		return 0, fmt.Errorf("failed to clear field cards: %w", err)
