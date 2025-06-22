@@ -17,8 +17,8 @@ const routes = useRoute()
 const gameId = routes.params.gameId as string
 const gameState = ref(new GameInfo(gameId))
 
-const httpBaseUrl = import.meta.env.VUE_APP_HTTP_BASEURL || 'http://localhost:8080'
-const wsBaseUrl = import.meta.env.VUE_APP_WS_BASEURL || 'ws://localhost:8080'
+const httpBaseUrl = import.meta.env.VITE_HTTP_BASEURL || 'http://localhost:8080'
+const wsBaseUrl = import.meta.env.VITE_WS_BASEURL || 'ws://localhost:8080'
 const gameWsUrl = `${wsBaseUrl}/games/${gameId}/ws`
 
 useGameEvent(gameWsUrl, gameState.value.onEvent)
