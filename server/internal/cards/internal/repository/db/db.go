@@ -112,3 +112,29 @@ func (r *Repo) GetGameHandLimit(ctx context.Context, gameID uuid.UUID) ([2]int, 
 
 	return [2]int{handLimits[0].HandCardsLimit, handLimits[1].HandCardsLimit}, nil
 }
+
+func (r *Repo) GetPlayerHandCards(ctx context.Context, gameID uuid.UUID, playerID int) ([]domain.Card, error) {
+	var cards []Card
+	err := r.db.DB(ctx).SelectContext(ctx, &cards, "SELECT * FROM cards WHERE game_id = ? AND owner_player_id = ? AND location = ?",
+		gameID, playerID, domain.CardLocationHand)
+	if err != nil {
+		return nil, fmt.Errorf("get player hand cards: %w", err)
+	}
+
+	domainCards := make([]domain.Card, 0, len(cards))
+	for _, card := range cards {
+		var ownerPlayerID *int
+		if card.OwnerPlayerID.Valid {
+			id := int(card.OwnerPlayerID.Int16)
+			ownerPlayerID = &id
+		}
+		domainCards = append(domainCards, domain.Card{
+			ID:            card.ID,
+			Type:          domain.CardType(card.Type),
+			Value:         card.Value,
+			Location:      domain.CardLocation(card.Location),
+			OwnerPlayerID: ownerPlayerID,
+		})
+	}
+	return domainCards, nil
+}
