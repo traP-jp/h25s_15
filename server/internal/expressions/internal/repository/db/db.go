@@ -131,7 +131,7 @@ func (r *Repo) CreateExpression(ctx context.Context, id uuid.UUID, gameID uuid.U
 		VALUES (?, ?, ?, ?, ?, ?, ?, ?)
 	`
 	_, err := r.db.DB(ctx).ExecContext(ctx, query,
-		id, gameID, playerID, expression, value, point, success, time.Now())
+		id, gameID, playerID, expression, value, points, success, time.Now())
 	if err != nil {
 		return fmt.Errorf("exec insert expression: %w", err)
 	}
