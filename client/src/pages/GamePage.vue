@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { GameInfo } from '../lib/gameLogic'
 import { computed, ref } from 'vue'
 import GameCard from '@/components/GameCard.vue'
@@ -14,6 +14,7 @@ import HandCardCounter from '@/components/HandCardCounter.vue'
 import { useGameEvent } from '@/composables/useGameEvent'
 
 const routes = useRoute()
+const router = useRouter()
 const gameId = routes.params.gameId as string
 const gameState = ref(new GameInfo(gameId))
 
@@ -21,7 +22,15 @@ const httpBaseUrl = import.meta.env.VUE_APP_HTTP_BASEURL || 'http://localhost:80
 const wsBaseUrl = import.meta.env.VUE_APP_WS_BASEURL || 'ws://localhost:8080'
 const gameWsUrl = `${wsBaseUrl}/games/${gameId}/ws`
 
-useGameEvent(gameWsUrl, gameState.value.onEvent)
+useGameEvent(gameWsUrl, (event) => {
+  gameState.value.onEvent(event)
+  if (event.type == 'gameEnded') {
+    router.replace({
+      name: 'result',
+      params: { gameId },
+    })
+  }
+})
 
 function pickCard(cardId: string) {
   fetch(`${httpBaseUrl}/game/${gameId}/field/${cardId}`, {
