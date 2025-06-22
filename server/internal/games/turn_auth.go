@@ -30,10 +30,7 @@ func (h *Handler) GameTurnAuth(next echo.HandlerFunc) echo.HandlerFunc {
 
 		var player domain.Player
 		idx := slices.IndexFunc(players, func(p domain.Player) bool {
-			if p.UserName == userName {
-				return true
-			}
-			return false
+			return p.UserName == userName
 		})
 		if idx == -1 {
 			return echo.NewHTTPError(403, "Forbidden: User is not a player in this game")
