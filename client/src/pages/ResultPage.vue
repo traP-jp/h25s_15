@@ -56,6 +56,17 @@ onMounted(async () => {
     console.error(error)
   }
 })
+
+const shareText = 'いい感じの文字列'
+function share_traq() {
+  const url = `https://q.trap.jp/share-target?text=${shareText}`
+  window.location.href = url
+  return
+}
+
+function to_home() {
+  router.push('/')
+}
 </script>
 
 <template>
