@@ -113,23 +113,6 @@ const opponentPlayer = computed(() => {
 
   return opponentPlayer
 })
-
-// テスト用データ
-myPlayer.value.cards.push(
-  ...new Array(10).fill(undefined).map((_, i) => ({ id: `${i}`, type: 'num', value: `${i}` }))
-)
-opponentPlayer.value.cards.push(
-  ...new Array(10).fill(undefined).map((_, i) => ({ id: `${i}`, type: 'num', value: `${i}` }))
-)
-gameState.value.fieldCards.push(
-  ...new Array(4).fill(undefined).map((_, i) => ({ id: `${i}`, type: 'num', value: `${i}` }))
-)
-opponentPlayer.value.expressionCards.push(
-  ...new Array(5).fill(undefined).map((_, i) => ({ id: `${i}`, type: 'num', value: `${i}` }))
-)
-opponentPlayer.value.expression = '2×3+4'
-myPlayer.value.expression = '(2×3)+4'
-myPlayer.value.handsLimit = 10
 </script>
 
 <template>
