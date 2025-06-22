@@ -8,7 +8,7 @@ const props = defineProps<{
 
 const percent = computed(() => {
   if (props.max_value === 0) return 0
-  const value = ((props.max_value - props.now_value) / props.max_value) * 100
+  const value = (props.now_value / props.max_value) * 100
   return Math.max(0, Math.min(100, value))
 })
 
