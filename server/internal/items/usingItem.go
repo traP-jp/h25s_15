@@ -32,6 +32,13 @@ func (h Handler) UsingItem(c echo.Context) error {
 	if item.Type != domain.CardTypeItem {
 		return echo.NewHTTPError(http.StatusBadRequest, "invalid request card type")
 	}
+
+	err = h.repo.UseCard(c.Request().Context(), gameID, item.ID, *item.OwnerPlayerID)
+	if err != nil {
+		c.Logger().Errorf("failed to use card: %v", err)
+		return echo.NewHTTPError(http.StatusInternalServerError, "failed to use card")
+	}
+
 	switch item.Value {
 	case "increaseFieldCards":
 		err = h.repo.IncreaseFieldCardsMaxNumber(c.Request().Context(), gameID)

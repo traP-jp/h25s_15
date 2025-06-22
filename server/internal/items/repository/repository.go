@@ -15,4 +15,5 @@ type Repo interface {
 	ClearAllCards(c context.Context, gameID uuid.UUID, ownerPlayerID *int, location string) (clearedNumber int, err error)
 	GetPlayer(c context.Context, gameID uuid.UUID, userName string) (domain.GamePlayer, error)
 	IncreaseHandCardsLimit(c context.Context, gameID uuid.UUID, playerID int) error
+	UseCard(ctx context.Context, gameID uuid.UUID, cardID uuid.UUID, playerID int) error
 }
