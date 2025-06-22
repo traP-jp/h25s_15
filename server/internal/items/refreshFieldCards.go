@@ -35,14 +35,5 @@ func (h Handler) RefreshFieldCards(c echo.Context, gameID uuid.UUID) error {
 			return fmt.Errorf("failed to create card: %w", err)
 		}
 	}
-
-	var increasedCardNumber int
-	err = h.db.DB(c.Request().Context()).GetContext(c.Request().Context(), &increasedCardNumber, "SELECT count(*) FROM cards WHERE location = 'field'")
-	if err != nil {
-		return fmt.Errorf("failed to get field cards number: %w", err)
-	}
-	if increasedCardNumber != fieldCardMaxNumber {
-		return fmt.Errorf("number of cards does not match: %w", err)
-	}
 	return nil
 }

@@ -8,21 +8,26 @@ import (
 	"github.com/traP-jp/h25s_15/internal/items/domain"
 )
 
+type useItemRequest struct {
+	CardID uuid.UUID `json:"cardId"`
+}
+
 func (h Handler) UsingItem(c echo.Context) error {
-	var item domain.Card
-	err := c.Bind(&item)
+	var req useItemRequest
+	err := c.Bind(&req)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, "failed to parse request item")
+		return echo.NewHTTPError(http.StatusBadRequest, "no request item")
 	}
 	gameIDStr := c.Param("gameID")
 	gameID, err := uuid.Parse(gameIDStr)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid uuid error")
 	}
-	item, err = h.repo.GetCard(c.Request().Context(), item.ID, gameID)
+	var item domain.Card
+	item, err = h.repo.GetCard(c.Request().Context(), req.CardID, gameID)
 	if err != nil {
-		c.Logger().Errorf("failed to get card information: %w", err)
-		return echo.NewHTTPError(http.StatusInternalServerError, "failed to get card information")
+		c.Logger().Errorf("failed to get card infomation: %w", err)
+		return echo.NewHTTPError(http.StatusInternalServerError, "failed to get card infomation")
 	}
 	if item.Type != domain.CardTypeItem {
 		return echo.NewHTTPError(http.StatusBadRequest, "invalid request card type")
@@ -32,31 +37,37 @@ func (h Handler) UsingItem(c echo.Context) error {
 		err = h.repo.IncreaseFieldCardsMaxNumber(c.Request().Context(), gameID)
 		if err != nil {
 			c.Logger().Errorf("failed to increase field cards: %w", err)
+			return echo.NewHTTPError(http.StatusInternalServerError)
 		}
-		err = h.IncreaseFieldCards(c, gameID, 1)
+		err = h.IncreaseFieldCards(c, gameID)
 		if err != nil {
 			c.Logger().Errorf("failed to increase field cards: %w", err)
+			return echo.NewHTTPError(http.StatusInternalServerError)
 		}
 	case "refreshFieldCards":
 		err = h.RefreshFieldCards(c, gameID)
 		if err != nil {
 			c.Logger().Errorf("failed to refresh field cards: %w", err)
+			return echo.NewHTTPError(http.StatusInternalServerError)
 		}
 	case "clearOpponentHandCards":
 		err = h.ClearOpponentHandCards(c, gameID)
 		if err != nil {
 			c.Logger().Errorf("failed to refresh field cards: %w", err)
+			return echo.NewHTTPError(http.StatusInternalServerError)
 		}
-	case "rincreaseTurnTime":
-		// err = h.RincreaseTurnTime(c, gameID)
-		// if err != nil {
-		// 	c.Logger().Errorf("failed to refresh field cards: %w", err)
-		// }
+	case "increaseTurnTime":
+	// err = h.IncreaseTurnTime(c, gameID)
+	// if err != nil {
+	// 	c.Logger().Errorf("failed to refresh field cards: %w", err)
+	// return echo.NewHTTPError(http.StatusInternalServerError)
+	// }
 	case "increaseHandCardsLimit":
-		// err = h.repo.IncreaseHandCardsLimit(c, gameID)
-		// if err != nil {
-		// 	c.Logger().Errorf("failed to refresh field cards: %w", err)
-		// }
+		err = h.IncreaseHandCardsLimit(c, gameID)
+		if err != nil {
+			c.Logger().Errorf("failed to refresh field cards: %w", err)
+			return echo.NewHTTPError(http.StatusInternalServerError)
+		}
 	default:
 		return echo.NewHTTPError(http.StatusBadRequest, "not exist")
 	}
