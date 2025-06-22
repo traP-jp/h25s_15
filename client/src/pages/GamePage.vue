@@ -12,6 +12,7 @@ import ExpressionCards from '@/components/ExpressionCards.vue'
 import ScoreBoard from '@/components/ScoreBoard.vue'
 import HandCardCounter from '@/components/HandCardCounter.vue'
 import { useGameEvent } from '@/composables/useGameEvent'
+import GameCardContent from '@/components/GameCardContent.vue'
 
 const routes = useRoute()
 const router = useRouter()
@@ -120,7 +121,7 @@ const opponentPlayer = computed(() => {
     <div class="opponent-container">
       <HandCards :cards="opponentPlayer.cards" card-size="small">
         <GameCard v-for="handCard in opponentPlayer.cards" size="small" :key="handCard.id">
-          {{ handCard.value }}
+          <GameCardContent :card="handCard"></GameCardContent>
         </GameCard>
       </HandCards>
       <div :style="{ flex: 1 }" />
@@ -137,7 +138,7 @@ const opponentPlayer = computed(() => {
           :key="fieldCard.id"
           :onClick="() => pickCard(fieldCard.id)"
         >
-          {{ fieldCard.value }}
+          <GameCardContent :card="fieldCard"></GameCardContent>
         </GameCard>
       </FieldArea>
       <div class="turn-timer-container" :style="{ flex: 1 }">
@@ -164,7 +165,7 @@ const opponentPlayer = computed(() => {
           :onClick="() => useCard(handCard.id)"
           :selected="myPlayer.expressionCards.includes(handCard)"
         >
-          {{ handCard.value }}
+          <GameCardContent :card="handCard"></GameCardContent>
         </GameCard>
       </HandCards>
       <div :style="{ flex: 1 }" />
