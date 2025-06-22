@@ -41,11 +41,6 @@ func (h Handler) UsingItem(c echo.Context) error {
 
 	switch item.Value {
 	case "increaseFieldCards":
-		err = h.repo.IncreaseFieldCardsMaxNumber(c.Request().Context(), gameID)
-		if err != nil {
-			c.Logger().Errorf("failed to increase field cards: %w", err)
-			return echo.NewHTTPError(http.StatusInternalServerError)
-		}
 		err = h.IncreaseFieldCards(c, gameID)
 		if err != nil {
 			c.Logger().Errorf("failed to increase field cards: %w", err)
