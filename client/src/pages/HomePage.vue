@@ -19,7 +19,7 @@ function gameMatching() {
     },
   })
     .then((response) => {
-      if (!response.ok) {
+      if (!response.ok && response.status !== 400) {
         throw new Error('ゲームの開始に失敗しました')
       } else {
         const ws = new WebSocket(`${wsBaseUrl}/games/ws`)
