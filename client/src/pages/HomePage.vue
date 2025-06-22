@@ -2,8 +2,39 @@
 import CommonButton from '@/components/CommonButton.vue'
 import RankingRow from '@/components/RankingRow.vue'
 import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 
-const httpBaseUrl = import.meta.env.VUE_APP_HTTP_BASEURL || 'http://localhost:8080'
+const httpBaseUrl = import.meta.env.VITE_HTTP_BASEURL || 'http://localhost:8080'
+const wsBaseUrl = import.meta.env.VITE_WS_BASEURL || 'ws://localhost:8080'
+const router = useRouter()
+
+const wating_matching = ref(false)
+
+function gameMatching() {
+  // POST /games でゲームのリクエスト
+  fetch(`${httpBaseUrl}/games`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('ゲームの開始に失敗しました')
+      } else {
+        const ws = new WebSocket(`${wsBaseUrl}/games/ws`)
+        wating_matching.value = true
+        ws.onmessage = (event) => {
+          const data = JSON.parse(event.data) as { gameId: string; playerId: number }
+          router.push({ name: 'game', params: { gameId: data.gameId } })
+        }
+      }
+    })
+    .catch((error) => {
+      console.error('ゲームの開始に失敗しました:', error)
+      wating_matching.value = false
+    })
+}
 
 type MyInfo = {
   name: string
