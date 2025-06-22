@@ -33,7 +33,7 @@ useGameEvent(gameWsUrl, (event) => {
 })
 
 function pickCard(cardId: string) {
-  fetch(`${httpBaseUrl}/game/${gameId}/field/${cardId}`, {
+  fetch(`${httpBaseUrl}/games/${gameId}/field/${cardId}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -52,7 +52,7 @@ function useCard(cardId: string) {
   }
   if (card.type === 'item') {
     // アイテムを使用する
-    fetch(`${httpBaseUrl}/game/${gameId}/items`, {
+    fetch(`${httpBaseUrl}/games/${gameId}/items`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -66,7 +66,7 @@ function useCard(cardId: string) {
 }
 
 function clearHandCards() {
-  fetch(`${httpBaseUrl}/game/${gameId}/clear`, {
+  fetch(`${httpBaseUrl}/games/${gameId}/clear`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -89,7 +89,7 @@ function submitExpression() {
     return
   }
 
-  fetch(`${httpBaseUrl}/game/${gameId}/submissions`, {
+  fetch(`${httpBaseUrl}/games/${gameId}/submissions`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
