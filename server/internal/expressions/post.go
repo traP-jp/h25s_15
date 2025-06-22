@@ -96,9 +96,9 @@ func (h *Handler) Post(c echo.Context) error {
 			expressionValuesCountMap[char]++
 		}
 
-		for value, count := range expressionValuesCountMap {
-			cardsCount, ok := cardsValuesCountMap[value]
-			if !ok || cardsCount != count {
+		for value, count := range cardsValuesCountMap {
+			expCount, ok := expressionValuesCountMap[value]
+			if !ok || expCount != count {
 				return echo.NewHTTPError(http.StatusBadRequest, "expression does not match the cards provided")
 			}
 		}
