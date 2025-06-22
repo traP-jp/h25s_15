@@ -11,6 +11,7 @@ import (
 	"github.com/traP-jp/h25s_15/internal/core/coredb"
 	"github.com/traP-jp/h25s_15/internal/expressions"
 	"github.com/traP-jp/h25s_15/internal/games"
+	"github.com/traP-jp/h25s_15/internal/items"
 	"github.com/traP-jp/h25s_15/internal/users"
 )
 
@@ -29,6 +30,7 @@ func main() {
 	game := games.New(db, m) // handler
 	card := cards.New(db, m)
 	user := users.New()
+	item := items.New(db, m)
 	expr, err := expressions.New(db, m)
 	if err != nil {
 		log.Fatal("failed to create expressions handler:", err)
@@ -52,6 +54,8 @@ func main() {
 
 	e.POST("/games/:gameID/picks", card.PickFieldCards, game.GamePlayerAuth,
 		card.CardsUpdatedEvent)
+
+	e.POST("/games/:gameID/items", item.UsingItem)
 
 	game.StartGameMatchLoop(context.Background())
 

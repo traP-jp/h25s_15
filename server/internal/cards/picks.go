@@ -45,9 +45,14 @@ func (h Handler) PickFieldCards(c echo.Context) error {
 		c.Logger().Errorf("failed to pick a field card: %v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
-	err = h.repo.ReplenishFieldCards(c.Request().Context(), gameID, 1)
+	cardID := uuid.New()
+	cardType, cardValue, err := DecideMakingCard(c.Request().Context())
 	if err != nil {
-		c.Logger().Errorf("failed to replenish field cards: %v", err)
+		return echo.NewHTTPError(http.StatusInternalServerError, "couldn't decide making card")
+	}
+	err = h.repo.CreateCard(c.Request().Context(), cardID, gameID, cardType, cardValue)
+	if err != nil {
+		c.Logger().Errorf("failed to create cards: %v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
 
