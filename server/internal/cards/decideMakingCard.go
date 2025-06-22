@@ -10,7 +10,7 @@ import (
 // 	どんなカードを作るか決める関数
 // func F(ctx context.Context) (cardType string, value string) {}
 
-const operandProbability = 4
+const operandProbability = 5
 const operatorProbability = 3
 const itemProbability = 1
 
@@ -30,7 +30,7 @@ func DecideMakingCard(ctx context.Context) (cardType string, value string, err e
 			"increaseFieldCards",
 			"refreshFieldCards",
 			"clearOpponentHandCards",
-			"increaseTurnTime",
+			// "increaseTurnTime", 未実装
 			"increaseHandCardsLimit",
 		}
 		randomIndex := rand.Intn(len(items))
