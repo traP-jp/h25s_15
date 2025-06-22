@@ -124,14 +124,11 @@ watchEffect(() => {
   gameState.value.fieldCards.push(
     ...new Array(4).fill(undefined).map((_, i) => ({ id: `${i}`, type: 'num', value: `${i}` }))
   )
-  myPlayer.value.expressionCards.push(
-    ...new Array(5).fill(undefined).map((_, i) => ({ id: `${i}`, type: 'num', value: `${i}` }))
-  )
   opponentPlayer.value.expressionCards.push(
     ...new Array(5).fill(undefined).map((_, i) => ({ id: `${i}`, type: 'num', value: `${i}` }))
   )
-  opponentPlayer.value.expression = '2×3+4=10'
-  myPlayer.value.expression = '(2×3)+4=10'
+  opponentPlayer.value.expression = '2×3+4'
+  myPlayer.value.expression = '(2×3)+4'
   myPlayer.value.handsLimit = 10
 })
 </script>
@@ -139,7 +136,11 @@ watchEffect(() => {
 <template>
   <div class="game-container">
     <div class="opponent-container">
-      <HandCards :cards="opponentPlayer.cards" card-size="small" />
+      <HandCards :cards="opponentPlayer.cards" card-size="small">
+        <GameCard v-for="handCard in opponentPlayer.cards" size="small" :key="handCard.id">
+          {{ handCard.value }}
+        </GameCard>
+      </HandCards>
       <div :style="{ flex: 1 }" />
       <div class="opponent-expression">{{ opponentPlayer.expression }}</div>
       <ScoreBoard opponent :score="opponentPlayer.score" />
@@ -148,7 +149,12 @@ watchEffect(() => {
     <div class="field-container">
       <div :style="{ flex: 1 }" />
       <FieldArea>
-        <GameCard v-for="fieldCard in gameState.fieldCards" size="large" :key="fieldCard.id">
+        <GameCard
+          v-for="fieldCard in gameState.fieldCards"
+          size="large"
+          :key="fieldCard.id"
+          :onClick="() => pickCard(fieldCard.id)"
+        >
           {{ fieldCard.value }}
         </GameCard>
       </FieldArea>
@@ -168,7 +174,17 @@ watchEffect(() => {
           <CommonButton @click="clearHandCards" theme="danger">Clear ( -3pt )</CommonButton>
         </div>
       </div>
-      <HandCards :cards="myPlayer.cards" card-size="medium" />
+      <HandCards :cards="myPlayer.cards" card-size="medium">
+        <GameCard
+          v-for="handCard in myPlayer.cards"
+          size="medium"
+          :key="handCard.id"
+          :onClick="() => useCard(handCard.id)"
+          :selected="myPlayer.expressionCards.includes(handCard)"
+        >
+          {{ handCard.value }}
+        </GameCard>
+      </HandCards>
       <div :style="{ flex: 1 }" />
     </div>
 

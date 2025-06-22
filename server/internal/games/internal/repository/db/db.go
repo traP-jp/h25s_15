@@ -284,3 +284,29 @@ func (r *Repo) EndGame(ctx context.Context, gameID uuid.UUID, endAt time.Time) e
 
 	return nil
 }
+
+func (r *Repo) GetSuccessExpressions(ctx context.Context, gameID uuid.UUID) ([]domain.Expression, error) {
+	var expressions []Expression
+	err := r.db.DB(ctx).SelectContext(ctx, &expressions,
+		"SELECT * FROM expressions WHERE game_id = ? AND success = 1 ORDER BY submitted_at ASC",
+		gameID)
+	if err != nil {
+		return nil, fmt.Errorf("get success expressions: %w", err)
+	}
+
+	result := make([]domain.Expression, 0, len(expressions))
+	for _, expr := range expressions {
+		result = append(result, domain.Expression{
+			ID:          expr.ID,
+			GameID:      expr.GameID,
+			PlayerID:    expr.PlayerID,
+			Expression:  expr.Expression,
+			Value:       expr.Value,
+			Success:     expr.Success,
+			Points:      expr.Points,
+			SubmittedAt: expr.SubmittedAt,
+		})
+	}
+
+	return result, nil
+}
