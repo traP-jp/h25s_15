@@ -1,6 +1,7 @@
 package expressions
 
 import (
+	"errors"
 	"math/big"
 
 	"github.com/alecthomas/participle/v2"
@@ -36,10 +37,17 @@ type Factor struct {
 
 // ========== 評価関数 ==========
 
-func (e *Expr) Eval() *big.Rat {
-	result := new(big.Rat).Set(e.Left.Eval())
+func (e *Expr) Eval() (*big.Rat, error) {
+	left, err := e.Left.Eval()
+	if err != nil {
+		return nil, err
+	}
+	result := new(big.Rat).Set(left)
 	for _, op := range e.Right {
-		val := op.Term.Eval()
+		val, err := op.Term.Eval()
+		if err != nil {
+			return nil, err
+		}
 		switch op.Operator {
 		case "+":
 			result.Add(result, val)
@@ -47,28 +55,40 @@ func (e *Expr) Eval() *big.Rat {
 			result.Sub(result, val)
 		}
 	}
-	return result
+	return result, nil
 }
 
-func (t *Term) Eval() *big.Rat {
-	result := new(big.Rat).Set(t.Left.Eval())
+func (t *Term) Eval() (*big.Rat, error) {
+	left, err := t.Left.Eval()
+	if err != nil {
+		return nil, err
+	}
+	result := new(big.Rat).Set(left)
 	for _, op := range t.Right {
-		val := op.Factor.Eval()
+		val, err := op.Factor.Eval()
+		if err != nil {
+			return nil, err
+		}
 		switch op.Operator {
 		case "*":
 			result.Mul(result, val)
 		case "/":
+			if val.Sign() == 0 {
+				return nil, errZeroDivision
+			}
 			result.Quo(result, val)
 		}
 	}
-	return result
+	return result, nil
 }
 
-func (f *Factor) Eval() *big.Rat {
+var errZeroDivision = errors.New("division by zero")
+
+func (f *Factor) Eval() (*big.Rat, error) {
 	if f.Number != nil {
 		r := new(big.Rat)
 		r.SetString(*f.Number)
-		return r
+		return r, nil
 	}
 	return f.Nested.Eval()
 }
