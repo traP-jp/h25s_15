@@ -107,7 +107,16 @@ func (h *Handler) Post(c echo.Context) error {
 		if err != nil {
 			return echo.NewHTTPError(http.StatusBadRequest, "invalid expression syntax")
 		}
-		result := expr.Eval()
+		result, err := expr.Eval()
+		if errors.Is(err, errZeroDivision) {
+			val = big.NewRat(0, 1) // Handle zero division by returning 0
+			success = false
+			return nil
+		}
+		if err != nil {
+			c.Logger().Errorf("failed to evaluate expression: %v", err)
+			return echo.NewHTTPError(http.StatusBadRequest, "invalid expression")
+		}
 		val = result
 		success = result.Cmp(ten) == 0
 		if !success {

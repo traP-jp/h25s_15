@@ -33,7 +33,7 @@ func TestEval(t *testing.T) {
 				t.Fatalf("failed to parse expression: %v", err)
 			}
 
-			result := expr.Eval()
+			result, _ := expr.Eval()
 			if result.RatString() != tc.expected {
 				t.Errorf("unexpected result for '%s': got %s, want %s", tc.expr, result.RatString(), tc.expected)
 			}
