@@ -43,6 +43,8 @@ const judgeResult = () => {
   else resultStatus.value = 'DRAW'
 }
 
+let shareText = ''
+
 onMounted(async () => {
   try {
     //自分のnameを取得
@@ -55,6 +57,17 @@ onMounted(async () => {
     if (!resultRes.ok) throw new Error('ゲーム結果の取得に失敗しました')
     resultInfo.value = await resultRes.json()
 
+    //シェア用のテキストを生成
+    if (resultInfo.value) {
+      shareText =
+        `【${resultInfo.value.player0Name} vs ${resultInfo.value.player1Name}】\n` +
+        `結果: ${resultStatus.value}\n` +
+        `スコア: ` +
+        `${resultInfo.value.player0Name}: ${resultInfo.value.player0Score}\n` +
+        `${resultInfo.value.player1Name}: ${resultInfo.value.player1Score}\n` +
+        `[詳細はこちら](https://h25s15.trap.show/result/${resultInfo.value.gameId})`
+    }
+
     //勝敗判定
     judgeResult()
   } catch (error) {
@@ -62,9 +75,8 @@ onMounted(async () => {
   }
 })
 
-const shareText = 'いい感じの文字列'
 function share_traq() {
-  const url = `https://q.trap.jp/share-target?text=${shareText}`
+  const url = encodeURI(`https://q.trap.jp/share-target?text=${shareText}`)
   window.location.href = url
   return
 }
