@@ -164,7 +164,7 @@ watchEffect(() => {
       <div :style="{ flex: 1 }">
         <div class="my-hand-info">
           <HandCardCounter :current-count="myPlayer.cards.length" :maxCount="myPlayer.handsLimit" />
-          <CommonButton theme="danger">Clear ( -3pt )</CommonButton>
+          <CommonButton @click="clearHandCards" theme="danger">Clear ( -3pt )</CommonButton>
         </div>
       </div>
       <HandCards :cards="myPlayer.cards" card-size="medium" />
@@ -174,7 +174,7 @@ watchEffect(() => {
     <div class="my-expression-container">
       <ParenthesisButtons />
       <div class="my-expression">
-        <ExpressionCards>
+        <ExpressionCards @delete="deleteExpression" @submit="submitExpression">
           <GameCard v-for="card in myPlayer.expressionCards" :key="card.id">
             {{ card.value }}
           </GameCard>
