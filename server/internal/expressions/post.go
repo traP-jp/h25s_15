@@ -186,11 +186,7 @@ func calculateScore(cards []domain.Card) (int, error) {
 		return 1, nil
 	case 3:
 		return 5, nil
-	case 4:
-		return 10, nil
-	case 5:
-		return 20, nil
 	default:
-		return 0, errors.New("invalid number of operands")
+		return (operandCount - 3) * 10, nil
 	}
 }
