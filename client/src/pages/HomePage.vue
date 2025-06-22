@@ -144,7 +144,14 @@ onMounted(async () => {
 
 <template>
   <div class="game-title">（タイトル）</div>
-  <CommonButton class="game-start">ゲームを始める</CommonButton>
+  <CommonButton class="game-start" @click="gameMatching" :disabled="wating_matching"
+    >ゲームを始める</CommonButton
+  >
+  <div v-if="wating_matching" class="spinner">
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
   <div class="square">
     <div v-if="rankingInfo" class="ranking-list">
       <RankingRow :rank="1" :name="rankingInfo.ranking[0].name"></RankingRow>
