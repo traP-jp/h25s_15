@@ -119,12 +119,7 @@ const opponentPlayer = computed(() => {
   <div class="game-container">
     <div class="opponent-container">
       <HandCards :cards="opponentPlayer.cards" card-size="small">
-        <GameCard
-          v-for="handCard in opponentPlayer.cards"
-          size="small"
-          :key="handCard.id"
-          :disabled="gameState.currentPlayerId == opponentPlayer.id"
-        >
+        <GameCard v-for="handCard in opponentPlayer.cards" size="small" :key="handCard.id">
           {{ handCard.value }}
         </GameCard>
       </HandCards>
@@ -141,6 +136,7 @@ const opponentPlayer = computed(() => {
           size="large"
           :key="fieldCard.id"
           :onClick="() => pickCard(fieldCard.id)"
+          :disabled="gameState.currentPlayerId == opponentPlayer.id"
         >
           {{ fieldCard.value }}
         </GameCard>
