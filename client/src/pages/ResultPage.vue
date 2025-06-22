@@ -23,49 +23,48 @@ type ResultInfo = {
   player1SuccessExpressions: string[]
 }
 
-const meInfo = ref<MeInfo | null>(null)
-const resultInfo = ref<ResultInfo | null>(null)
-const isWin = ref<'VICTORY' | 'LOSE' | 'DRAW' | null>(null)
+const meInfo = ref<MeInfo | null>(null);
+const resultInfo = ref<ResultInfo | null>(null);
+const isWin = ref<'VICTORY' | 'LOSE' | 'DRAW' | null>(null);
 
 const judgeResult = () => {
-  if (!meInfo.value || !resultInfo.value) return
-  const isPlayer0 = resultInfo.value.player0Name === meInfo.value.name
-  const myScore = isPlayer0 ? resultInfo.value.player0Score : resultInfo.value.player1Score
-  const oppScore = isPlayer0 ? resultInfo.value.player1Score : resultInfo.value.player0Score
+  if (!meInfo.value || !resultInfo.value) return;
+  const isPlayer0 = resultInfo.value.player0Name === meInfo.value.name;
+  const myScore = isPlayer0 ? resultInfo.value.player0Score : resultInfo.value.player1Score;
+  const oppScore = isPlayer0 ? resultInfo.value.player1Score : resultInfo.value.player0Score;
 
-  if (myScore > oppScore) isWin.value = 'VICTORY'
-  else if (myScore < oppScore) isWin.value = 'LOSE'
-  else isWin.value = 'DRAW'
+  if (myScore > oppScore) isWin.value = 'VICTORY';
+  else if (myScore < oppScore) isWin.value = 'LOSE';
+  else isWin.value = 'DRAW';
 }
 
 onMounted(async () => {
   try {
     //自分のnameを取得
-    const meRes = await fetch('/users/me')
-    if (!meRes.ok) throw new Error('ユーザー情報の取得に失敗しました')
-    meInfo.value = await meRes.json()
+    const meRes = await fetch('/users/me');
+    if (!meRes.ok) throw new Error('ユーザー情報の取得に失敗しました');
+    meInfo.value = await meRes.json();
 
     //ゲームの結果を取得
-    const resultRes = await fetch('/games/' + props.gameId + '/results')
-    if (!resultRes.ok) throw new Error('ゲーム結果の取得に失敗しました')
-    resultInfo.value = await resultRes.json()
+    const resultRes = await fetch('/games/' + props.gameId + '/results');
+    if (!resultRes.ok) throw new Error('ゲーム結果の取得に失敗しました');
+    resultInfo.value = await resultRes.json();
 
     //勝敗判定
-    judgeResult()
+    judgeResult();
   } catch (error) {
-    console.error(error)
+    console.error(error);
   }
 })
 </script>
 
 <template>
-  <!-- あとでVICTORYを{{isWin}}に変更する -->
-  <div class="isJugded">VICTORY</div>
+  <div v-if="isWin" class="isJugded">{{isWin}}</div>
 
-  <!-- あとでUser情報を:user1="{ name: resultInfo.player0Name, score: resultInfo.player0Score }" :user2="{ name: resultInfo.player1Name, score: resultInfo.player1Score }"に変更する -->
   <PointResult
-    :user1="{ name: 'Ponjuice', score: 20 }"
-    :user2="{ name: 'ikura-hamu', score: 30 }"
+    v-if="resultInfo"
+    :user1="{ name: resultInfo.player0Name, score: resultInfo.player0Score }" 
+    :user2="{ name: resultInfo.player1Name, score: resultInfo.player1Score }"
   />
 
   <div class="button-container">
@@ -73,10 +72,11 @@ onMounted(async () => {
     <CommonButton size="large" theme="secondary" variant="outline">ホームに戻る</CommonButton>
   </div>
 
-  <!-- あとでExpressions情報を:myExpressions="resultInfo.player0SuccessExpressions" :opponentExpressions="resultInfo.player1SuccessExpressions"に変更する -->
+  <!-- あとでExpressions情報をに変更する -->
   <ExpressionResult
-    :myExpressions="['3+7=10', '2×4+2=10']"
-    :opponentExpressions="['10=4+6', '10=2×4+2']"
+    v-if="resultInfo"
+    :myExpressions="resultInfo.player0SuccessExpressions" 
+    :opponentExpressions="resultInfo.player1SuccessExpressions"
     class="resultField"
   ></ExpressionResult>
 </template>
