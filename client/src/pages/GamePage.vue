@@ -99,7 +99,7 @@ function submitExpression() {
     },
     body: JSON.stringify({
       expression: player.expression,
-      cards: player.cards.map((card) => card.id),
+      cards: player.expressionCards.map((card) => card.id),
     }),
   })
 }
