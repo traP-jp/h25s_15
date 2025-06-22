@@ -21,8 +21,8 @@ func (h Handler) UsingItem(c echo.Context) error {
 	}
 	item, err = h.repo.GetCard(c.Request().Context(), item.ID, gameID)
 	if err != nil {
-		c.Logger().Errorf("failed to get card infomation: %w", err)
-		return echo.NewHTTPError(http.StatusInternalServerError, "failed to get card infomation")
+		c.Logger().Errorf("failed to get card information: %w", err)
+		return echo.NewHTTPError(http.StatusInternalServerError, "failed to get card information")
 	}
 	if item.Type != domain.CardTypeItem {
 		return echo.NewHTTPError(http.StatusBadRequest, "invalid request card type")
