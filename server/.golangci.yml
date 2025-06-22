@@ -7,3 +7,4 @@ linters:
       extra-ignore-sigs:
         - (github.com/labstack/echo/v4.Context).
         - (context.Context).Err() error
+        - (*github.com/traP-jp/h25s_15/internal/core/coredb.DB).Transaction(ctx context.Context, fn func(ctx context.Context) error) error
