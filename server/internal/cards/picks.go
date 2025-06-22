@@ -1,6 +1,7 @@
 package cards
 
 import (
+	"context"
 	"errors"
 	"net/http"
 
@@ -27,50 +28,58 @@ func (h Handler) PickFieldCards(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to get user name")
 	}
 
-	player, err := h.repo.GetPlayer(c.Request().Context(), gameID, userName)
-	if errors.Is(err, coredb.ErrRecordNotFound) {
-		return echo.NewHTTPError(http.StatusBadRequest, "player not found")
-	}
-	if err != nil {
-		c.Logger().Errorf("failed to get player: %v", err)
-		return echo.NewHTTPError(http.StatusInternalServerError)
-	}
+	err = h.db.Transaction(c.Request().Context(), func(ctx context.Context) error {
 
-	limits, err := h.repo.GetGameHandLimit(c.Request().Context(), gameID)
-	if err != nil {
-		c.Logger().Errorf("failed to get game hand limit: %v", err)
-		return echo.NewHTTPError(http.StatusInternalServerError)
-	}
+		player, err := h.repo.GetPlayer(c.Request().Context(), gameID, userName)
+		if errors.Is(err, coredb.ErrRecordNotFound) {
+			return echo.NewHTTPError(http.StatusBadRequest, "player not found")
+		}
+		if err != nil {
+			c.Logger().Errorf("failed to get player: %v", err)
+			return echo.NewHTTPError(http.StatusInternalServerError)
+		}
 
-	cards, err := h.repo.GetPlayerHandCards(c.Request().Context(), gameID, player.PlayerID)
-	if err != nil {
-		c.Logger().Errorf("failed to get player hand cards: %v", err)
-		return echo.NewHTTPError(http.StatusInternalServerError)
-	}
+		limits, err := h.repo.GetGameHandLimit(c.Request().Context(), gameID)
+		if err != nil {
+			c.Logger().Errorf("failed to get game hand limit: %v", err)
+			return echo.NewHTTPError(http.StatusInternalServerError)
+		}
 
-	if len(cards) >= limits[player.PlayerID] {
-		return echo.NewHTTPError(http.StatusBadRequest, "too many cards in hand")
-	}
+		cards, err := h.repo.GetPlayerHandCards(c.Request().Context(), gameID, player.PlayerID)
+		if err != nil {
+			c.Logger().Errorf("failed to get player hand cards: %v", err)
+			return echo.NewHTTPError(http.StatusInternalServerError)
+		}
 
-	requestCard := &RequestCard{}
-	err = c.Bind(requestCard)
+		if len(cards) >= limits[player.PlayerID] {
+			return echo.NewHTTPError(http.StatusBadRequest, "too many cards in hand")
+		}
+
+		requestCard := &RequestCard{}
+		err = c.Bind(requestCard)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusBadRequest, "no request card")
+		}
+		err = h.repo.PickFieldCards(c.Request().Context(), gameID, player.PlayerID, requestCard.CardID)
+		if err != nil {
+			c.Logger().Errorf("failed to pick a field card: %v", err)
+			return echo.NewHTTPError(http.StatusInternalServerError)
+		}
+		cardID := uuid.New()
+		cardType, cardValue, err := DecideMakingCard(c.Request().Context())
+		if err != nil {
+			return echo.NewHTTPError(http.StatusInternalServerError, "couldn't decide making card")
+		}
+		err = h.repo.CreateCard(c.Request().Context(), cardID, gameID, cardType, cardValue)
+		if err != nil {
+			c.Logger().Errorf("failed to create cards: %v", err)
+			return echo.NewHTTPError(http.StatusInternalServerError)
+		}
+
+		return nil
+	})
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, "no request card")
-	}
-	err = h.repo.PickFieldCards(c.Request().Context(), gameID, player.PlayerID, requestCard.CardID)
-	if err != nil {
-		c.Logger().Errorf("failed to pick a field card: %v", err)
-		return echo.NewHTTPError(http.StatusInternalServerError)
-	}
-	cardID := uuid.New()
-	cardType, cardValue, err := DecideMakingCard(c.Request().Context())
-	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, "couldn't decide making card")
-	}
-	err = h.repo.CreateCard(c.Request().Context(), cardID, gameID, cardType, cardValue)
-	if err != nil {
-		c.Logger().Errorf("failed to create cards: %v", err)
-		return echo.NewHTTPError(http.StatusInternalServerError)
+		return err
 	}
 
 	return c.NoContent(http.StatusNoContent)
