@@ -122,7 +122,7 @@ func (d *DB) Transaction(ctx context.Context, fn func(ctx context.Context) error
 
 	if err := fn(ctx); err != nil {
 		_ = tx.Rollback()
-		return fmt.Errorf("execute transaction function: %w", err)
+		return err
 	}
 
 	if err := tx.Commit(); err != nil {

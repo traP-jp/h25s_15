@@ -49,6 +49,8 @@ func main() {
 		card.CardsUpdatedEvent, game.ScoreUpdatedEvent,
 	)
 
+	gameApi.GET("/:gameID/results", game.GetResult, game.GamePlayerAuth)
+
 	e.POST("/games/:gameID/clear", card.ClearHandCards, game.GamePlayerAuth, game.GameTurnAuth,
 		card.CardsUpdatedEvent, game.ScoreUpdatedEvent)
 

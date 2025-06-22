@@ -88,7 +88,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="game-title">（タイトル）</div>
+  <div class="game-title">hasTEN</div>
   <CommonButton class="game-start" @click="gameMatching" :disabled="wating_matching"
     >ゲームを始める</CommonButton
   >
@@ -160,6 +160,7 @@ onMounted(async () => {
   display: block;
   padding-top: 5rem;
   margin-bottom: 4rem;
+  color: var(--theme-tertiary)
 }
 
 .game-start {
