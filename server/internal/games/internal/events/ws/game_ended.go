@@ -15,7 +15,7 @@ func (e *Event) GameEnded(ctx context.Context, gameID uuid.UUID, event events.Ga
 		return fmt.Errorf("marshal game ended event: %w", err)
 	}
 
-	err = e.m.BroadcastBinaryFilter(eventJSON, corews.FilterGameID(gameID))
+	err = e.m.BroadcastFilter(eventJSON, corews.FilterGameID(gameID))
 	if err != nil {
 		return fmt.Errorf("broadcast game ended event: %w", err)
 	}
