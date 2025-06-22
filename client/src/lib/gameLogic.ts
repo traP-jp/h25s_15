@@ -37,7 +37,7 @@ export class GameInfo {
     ]
     this.currentPlayerId = -1
     this.turn = 0
-    this.turnTotal = 0
+    this.turnTotal = 20
     this.turnTimeRemaining = 0
     this.currentTurnTimeLimit = 0
   }
