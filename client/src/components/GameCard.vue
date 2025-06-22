@@ -5,12 +5,12 @@ const props = defineProps<{
   selected?: boolean
   disabled?: boolean
   size?: 'small' | 'medium' | 'large'
+  onClick?: () => void // あるかないかでスタイルを分けたいのでコールバックにする
 }>()
 
-const emit = defineEmits(['click'])
-
-function onClick() {
-  emit('click')
+const onClick = (event: MouseEvent) => {
+  event.preventDefault()
+  props.onClick?.()
 }
 
 const size = computed(() => props.size || 'medium')
@@ -23,6 +23,7 @@ const sizeValue = computed(() =>
   <button
     class="card"
     :disabled="props.selected || props.disabled"
+    :class="{ clickable: props.onClick != null }"
     :style="{
       backgroundColor: props.selected ? '#636363' : '#FFFFFF',
       width: sizeValue,
@@ -44,5 +45,15 @@ const sizeValue = computed(() =>
   align-items: center;
   border: none;
   aspect-ratio: 122 / 163;
+
+  transition: all ease-in 100ms;
+}
+
+.card.clickable:hover {
+  transform: scale(108%);
+}
+
+.card.clickable:active {
+  transform: none;
 }
 </style>
