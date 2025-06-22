@@ -167,7 +167,7 @@ const opponentPlayer = computed(() => {
           size="medium"
           :key="handCard.id"
           :onClick="() => useCard(handCard.id)"
-          :selected="myPlayer.expressionCards.includes(handCard)"
+          :selected="myPlayer.expressionCards.some(({ id }) => id == handCard.id)"
         >
           <GameCardContent :card="handCard"></GameCardContent>
         </GameCard>
