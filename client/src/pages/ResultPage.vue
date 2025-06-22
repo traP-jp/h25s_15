@@ -76,7 +76,7 @@ onMounted(async () => {
 })
 
 function share_traq() {
-  const url = encodeURI(`https://q.trap.jp/share-target?text=${shareText}`)
+  const url = `https://q.trap.jp/share-target?text=${encodeURIComponent(shareText)}`
   window.location.href = url
   return
 }
