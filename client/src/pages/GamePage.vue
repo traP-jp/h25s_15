@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
 import { GameInfo } from '../lib/gameLogic'
-import { computed, ref, watchEffect } from 'vue'
+import { computed, ref } from 'vue'
 import GameCard from '@/components/GameCard.vue'
 import ParenthesisButtons from '@/components/ParenthesisButtons.vue'
 import HandCards from '@/components/HandCards.vue'
@@ -92,14 +92,6 @@ function submitExpression() {
   })
 }
 
-// 使ってる風
-pickCard('')
-useCard('')
-clearHandCards()
-deleteExpression()
-addOperator('(')
-submitExpression()
-
 const myPlayer = computed(() => {
   const myPlayer = gameState.value.players.find(({ id }) => id == gameState.value.myPlayerId)
   if (!myPlayer) throw new Error('No my player found')
@@ -114,23 +106,21 @@ const opponentPlayer = computed(() => {
 })
 
 // テスト用データ
-watchEffect(() => {
-  myPlayer.value.cards.push(
-    ...new Array(10).fill(undefined).map((_, i) => ({ id: `${i}`, type: 'num', value: `${i}` }))
-  )
-  opponentPlayer.value.cards.push(
-    ...new Array(10).fill(undefined).map((_, i) => ({ id: `${i}`, type: 'num', value: `${i}` }))
-  )
-  gameState.value.fieldCards.push(
-    ...new Array(4).fill(undefined).map((_, i) => ({ id: `${i}`, type: 'num', value: `${i}` }))
-  )
-  opponentPlayer.value.expressionCards.push(
-    ...new Array(5).fill(undefined).map((_, i) => ({ id: `${i}`, type: 'num', value: `${i}` }))
-  )
-  opponentPlayer.value.expression = '2×3+4'
-  myPlayer.value.expression = '(2×3)+4'
-  myPlayer.value.handsLimit = 10
-})
+myPlayer.value.cards.push(
+  ...new Array(10).fill(undefined).map((_, i) => ({ id: `${i}`, type: 'num', value: `${i}` }))
+)
+opponentPlayer.value.cards.push(
+  ...new Array(10).fill(undefined).map((_, i) => ({ id: `${i}`, type: 'num', value: `${i}` }))
+)
+gameState.value.fieldCards.push(
+  ...new Array(4).fill(undefined).map((_, i) => ({ id: `${i}`, type: 'num', value: `${i}` }))
+)
+opponentPlayer.value.expressionCards.push(
+  ...new Array(5).fill(undefined).map((_, i) => ({ id: `${i}`, type: 'num', value: `${i}` }))
+)
+opponentPlayer.value.expression = '2×3+4'
+myPlayer.value.expression = '(2×3)+4'
+myPlayer.value.handsLimit = 10
 </script>
 
 <template>
