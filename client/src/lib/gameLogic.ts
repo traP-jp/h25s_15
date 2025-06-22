@@ -23,6 +23,7 @@ export class GameInfo {
   currentPlayerId: number
   turn: number
   turnTimeRemaining: number
+  turnTotal: number
 
   constructor(gameId: string) {
     this.gameId = gameId
@@ -34,6 +35,7 @@ export class GameInfo {
     ]
     this.currentPlayerId = -1
     this.turn = 0
+    this.turnTotal = 0
     this.turnTimeRemaining = 0
   }
 
@@ -110,6 +112,7 @@ export class GameInfo {
   private handleGameStarted(event: GameStarted): void {
     this.currentPlayerId = event.currentPlayerId
     this.turn = event.turn
+    this.turnTotal = event.turnTotal
   }
 
   private handleTurnStarted(event: TurnStarted): void {

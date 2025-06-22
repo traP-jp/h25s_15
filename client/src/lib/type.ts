@@ -22,6 +22,7 @@ export type GameStarted = {
   type: 'gameStarted'
   currentPlayerId: number
   turn: number
+  turnTotal: number
 }
 
 export type TurnStarted = {
