@@ -19,4 +19,7 @@ type Repo interface {
 
 	// UpdatePlayerScore updates the score of a player in a game.
 	UpdatePlayerScore(ctx context.Context, gameID uuid.UUID, playerID int, scoreDiff int) error
+
+	// CreateExpression logs the creation of an expression by a player in a game.
+	CreateExpression(ctx context.Context, id uuid.UUID, gameID uuid.UUID, playerID int, expression string, value string, point int, success bool) error
 }
