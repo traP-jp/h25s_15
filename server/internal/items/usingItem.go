@@ -63,11 +63,11 @@ func (h Handler) UsingItem(c echo.Context) error {
 	// return echo.NewHTTPError(http.StatusInternalServerError)
 	// }
 	case "increaseHandCardsLimit":
-		// err = h.IncreaseHandCardsLimit(c, gameID)
-		// if err != nil {
-		// 	c.Logger().Errorf("failed to refresh field cards: %w", err)
-		// return echo.NewHTTPError(http.StatusInternalServerError)
-		// }
+		err = h.IncreaseHandCardsLimit(c, gameID)
+		if err != nil {
+			c.Logger().Errorf("failed to refresh field cards: %w", err)
+			return echo.NewHTTPError(http.StatusInternalServerError)
+		}
 	default:
 		return echo.NewHTTPError(http.StatusBadRequest, "not exist")
 	}
