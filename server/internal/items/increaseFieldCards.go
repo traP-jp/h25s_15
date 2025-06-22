@@ -17,12 +17,12 @@ func (h Handler) IncreaseFieldCards(c echo.Context, gameID uuid.UUID) error {
 	}
 	err = h.repo.CreateCard(c.Request().Context(), cardID, gameID, cardType, cardValue)
 	if err != nil {
-		c.Logger().Errorf("failed to create cards: %w", err)
+		c.Logger().Errorf("failed to create cards: %v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
 	err = h.repo.IncreaseFieldCardsMaxNumber(c.Request().Context(), gameID)
 	if err != nil {
-		c.Logger().Errorf("failed to increase field cards max number: %w", err)
+		c.Logger().Errorf("failed to increase field cards max number: %v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
 	return nil
