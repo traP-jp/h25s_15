@@ -35,7 +35,6 @@ useGameEvent(gameWsUrl, (event) => {
 
 function pickCard(cardId: string) {
   fetch(`${httpBaseUrl}/games/${gameId}/picks`, {
-  fetch(`${httpBaseUrl}/games/${gameId}/picks`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -147,7 +146,6 @@ const opponentPlayer = computed(() => {
           :max_value="gameState.currentTurnTimeLimit"
           :now_value="gameState.turnTimeRemaining"
           :turn="gameState.turnTotal - gameState.turn + 1"
-          :theme="gameState.currentPlayerId == myPlayer.id ? 'primary' : 'danger'"
           :theme="gameState.currentPlayerId == myPlayer.id ? 'primary' : 'danger'"
         />
       </div>
