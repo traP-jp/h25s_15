@@ -10,9 +10,9 @@ import (
 
 func (h Handler) UsingItem(c echo.Context) error {
 	var item domain.Card
-	err := c.Bind(&item.ID)
+	err := c.Bind(&item)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, "no request item")
+		return echo.NewHTTPError(http.StatusBadRequest, "failed to parse request item")
 	}
 	gameIDStr := c.Param("gameID")
 	gameID, err := uuid.Parse(gameIDStr)
