@@ -76,6 +76,6 @@ CREATE TABLE turns (
     turn_number INT NOT NULL,
     start_at DATETIME NOT NULL,
     end_at DATETIME NOT NULL,
-    PRIMARY KEY (game_id, player_id),
+    PRIMARY KEY (game_id, turn_number),
     FOREIGN KEY (game_id) REFERENCES games(id)
 );

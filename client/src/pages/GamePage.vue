@@ -1,7 +1,16 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
 import { GameInfo } from '../lib/gameLogic'
-import { ref } from 'vue'
+import { computed, ref, watchEffect } from 'vue'
+import GameCard from '@/components/GameCard.vue'
+import ParenthesisButtons from '@/components/ParenthesisButtons.vue'
+import HandCards from '@/components/HandCards.vue'
+import FieldArea from '@/components/FieldArea.vue'
+import CommonButton from '@/components/CommonButton.vue'
+import TurnTimer from '@/components/TurnTimer.vue'
+import ExpressionCards from '@/components/ExpressionCards.vue'
+import ScoreBoard from '@/components/ScoreBoard.vue'
+import HandCardCounter from '@/components/HandCardCounter.vue'
 
 const routes = useRoute()
 const gameId = routes.params.gameId as string
@@ -92,8 +101,159 @@ clearHandCards()
 deleteExpression()
 addOperator('(')
 submitExpression()
+
+const myPlayer = computed(() => {
+  const myPlayer = gameState.value.players.find(({ id }) => id == gameState.value.myPlayerId)
+  if (!myPlayer) throw new Error('No my player found')
+
+  return myPlayer
+})
+const opponentPlayer = computed(() => {
+  const opponentPlayer = gameState.value.players.find(({ id }) => id != gameState.value.myPlayerId)
+  if (!opponentPlayer) throw new Error('No opponent player found')
+
+  return opponentPlayer
+})
+
+// テスト用データ
+watchEffect(() => {
+  myPlayer.value.cards.push(
+    ...new Array(10).fill(undefined).map((_, i) => ({ id: `${i}`, type: 'num', value: `${i}` }))
+  )
+  opponentPlayer.value.cards.push(
+    ...new Array(10).fill(undefined).map((_, i) => ({ id: `${i}`, type: 'num', value: `${i}` }))
+  )
+  gameState.value.fieldCards.push(
+    ...new Array(4).fill(undefined).map((_, i) => ({ id: `${i}`, type: 'num', value: `${i}` }))
+  )
+  myPlayer.value.expressionCards.push(
+    ...new Array(5).fill(undefined).map((_, i) => ({ id: `${i}`, type: 'num', value: `${i}` }))
+  )
+  opponentPlayer.value.expressionCards.push(
+    ...new Array(5).fill(undefined).map((_, i) => ({ id: `${i}`, type: 'num', value: `${i}` }))
+  )
+  opponentPlayer.value.expression = '2 × 3 + 4 = 10'
+  myPlayer.value.handsLimit = 10
+})
 </script>
 
 <template>
-  <h1>this is GamePage</h1>
+  <div class="game-container">
+    <div class="opponent-container">
+      <HandCards :cards="opponentPlayer.cards" card-size="small" />
+      <div :style="{ flex: 1 }" />
+      <div class="opponent-expression">{{ opponentPlayer.expression }}</div>
+      <ScoreBoard opponent :score="opponentPlayer.score" />
+    </div>
+
+    <div class="field-container">
+      <div :style="{ flex: 1 }" />
+      <FieldArea>
+        <GameCard v-for="fieldCard in gameState.fieldCards" size="large" :key="fieldCard.id">
+          {{ fieldCard.value }}
+        </GameCard>
+      </FieldArea>
+      <div class="turn-timer-container" :style="{ flex: 1 }">
+        <TurnTimer
+          :max_value="15"
+          :now_value="gameState.turnTimeRemaining"
+          :turn="10 - gameState.turn + 1"
+        />
+      </div>
+    </div>
+
+    <div class="my-hand-container">
+      <div :style="{ flex: 1 }">
+        <div class="my-hand-info">
+          <HandCardCounter :current-count="myPlayer.cards.length" :maxCount="myPlayer.handsLimit" />
+          <CommonButton theme="danger">Clear ( -3pt )</CommonButton>
+        </div>
+      </div>
+      <HandCards :cards="myPlayer.cards" card-size="medium" />
+      <div :style="{ flex: 1 }" />
+    </div>
+
+    <div class="my-expression-container">
+      <ParenthesisButtons />
+      <div class="my-expression">
+        <ExpressionCards>
+          <GameCard v-for="card in myPlayer.expressionCards" :key="card.id">
+            {{ card.value }}
+          </GameCard>
+        </ExpressionCards>
+        <ScoreBoard :score="myPlayer.score" />
+      </div>
+    </div>
+  </div>
 </template>
+
+<style scoped>
+.game-container {
+  padding: 1.375rem;
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  align-items: center;
+}
+
+.opponent-container {
+  width: 100%;
+  height: 14.5rem;
+  display: flex;
+  gap: 1.125rem;
+}
+
+.opponent-expression {
+  display: flex;
+  height: 7.8125rem;
+  width: 58.35rem;
+  color: var(--theme-text-white);
+  background: var(--theme-surface);
+  font-size: 2.5rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.field-container {
+  width: 100%;
+  display: flex;
+}
+
+.turn-timer-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.my-hand-container {
+  padding: 2.8125rem 0 1.5rem 0;
+  width: 100%;
+  display: flex;
+  gap: 5.125rem;
+}
+
+.my-hand-container > *:first-child {
+  display: flex;
+  justify-content: end;
+}
+
+.my-hand-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: right;
+}
+
+.my-expression-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.3125rem;
+}
+
+.my-expression {
+  display: flex;
+  gap: 1.1875rem;
+  height: 10.1875rem;
+  align-items: center;
+}
+</style>

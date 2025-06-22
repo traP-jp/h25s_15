@@ -8,6 +8,7 @@ require (
 	github.com/jmoiron/sqlx v1.4.0
 	github.com/labstack/echo/v4 v4.13.4
 	github.com/olahol/melody v1.3.0
+	golang.org/x/sync v0.14.0
 )
 
 require (

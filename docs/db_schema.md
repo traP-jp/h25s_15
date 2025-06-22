@@ -6,7 +6,7 @@
 | ---------- | -------------------------------------- | --------------- | ------------------- | ----------- |
 | id         | `VARCHAR(36)`                          | **PK**          | ―                   | ゲーム UUID |
 | status     | `ENUM('waiting','running','finished')` | **NOT NULL**    | ―                   | ゲーム状態  |
-| started_at | `DATETIME`                             | **NOT NULL**    | ―                   | 開始時刻    |
+| started_at | `DATETIME`                             |                 | `NULL`              | 開始時刻    |
 | ended_at   | `DATETIME`                             |                 | `NULL`              | 終了時刻    |
 | created_at | `DATETIME`                             |                 | `CURRENT_TIMESTAMP` | 作成時刻    |
 | **索引**   | ―                                      | `INDEX(status)` |                     | 状態検索用  |
@@ -74,7 +74,7 @@ PK(1,2) = 複合主キー (game_id, player_index)
 | 列名        | 型            | 制約                                    | 既定値 | 説明               |
 | ----------- | ------------- | --------------------------------------- | ------ | ------------------ |
 | game_id     | `VARCHAR(36)` | **PK**, **FK → games.id**, **NOT NULL** | ―      | ゲーム UUID        |
-| player_id   | `TINYINT`     | **PK**, **NOT NULL**                    | ―      | スロット番号 (0/1) |
-| turn_number | `INT`         | **NOT NULL**                            | ―      | ターン番号         |
+| player_id   | `TINYINT`     | **NOT NULL**                    | ―      | スロット番号 (0/1) |
+| turn_number | `INT`         | **PK**, **NOT NULL**                            | ―      | ターン番号         |
 | start_at    | `DATETIME`    | **NOT NULL**                            | ―      | 開始時刻           |
 | end_at      | `DATETIME`    | **NOT NULL**                            | ―      | 終了時刻           |
