@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/traP-jp/h25s_15/internal/core/coredb"
@@ -106,6 +107,15 @@ func (r *Repo) IncreaseHandCardsLimit(c context.Context, gameID uuid.UUID, playe
 		gameID, playerID)
 	if err != nil {
 		return fmt.Errorf("failed to increase hand cards limit: %w", err)
+	}
+	return nil
+}
+
+func (r *Repo) IncreaseTurnTime(c context.Context, gameID uuid.UUID, playerID int) error {
+	_, err := r.db.DB(c).ExecContext(c, "UPDATE turns SET end_at = (end_at + ?) WHERE game_id = ? and player_id = ?",
+		gameID, 3*time.Second, playerID)
+	if err != nil {
+		return fmt.Errorf("failed to increase turn time: %w", err)
 	}
 	return nil
 }
