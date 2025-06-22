@@ -43,7 +43,7 @@ type Repo interface {
 	InitializeHandLimit(ctx context.Context, gameID uuid.UUID) error
 
 	// InitializeFieldCardsLimit は、指定されたゲームIDのフィールドカードの制限を初期化する。
-	InitializeFieldCardsLimit(ctx context.Context, gameID uuid.UUID) error
+	InitializeFieldCardsLimit(ctx context.Context, gameID uuid.UUID, limit int) error
 
 	// StartGame は、指定されたゲームIDのゲームを開始する。
 	StartGame(ctx context.Context, gameID uuid.UUID, startAt time.Time) error
@@ -56,6 +56,9 @@ type Repo interface {
 
 	// EndGame は、指定されたゲームIDのゲームを終了する。
 	EndGame(ctx context.Context, gameID uuid.UUID, endAt time.Time) error
+
+	// CreateCard は、指定されたゲームIDに新しいカードをfieldで作成する。
+	CreateCard(ctx context.Context, cardID uuid.UUID, gameID uuid.UUID, cardType string, value string) error
 
 	// GetSuccessExpressions は、指定されたゲームIDの成功した式を取得する。
 	GetSuccessExpressions(ctx context.Context, gameID uuid.UUID) ([]domain.Expression, error)

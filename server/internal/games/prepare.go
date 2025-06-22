@@ -6,15 +6,28 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/traP-jp/h25s_15/internal/cards"
 	"github.com/traP-jp/h25s_15/internal/games/internal/events"
 )
 
+const initialFieldCardsLimit int = 4
+
 func (h *Handler) PrepareGame(ctx context.Context, gameID uuid.UUID) error {
 	err := h.db.Transaction(ctx, func(ctx context.Context) error {
+		for range initialFieldCardsLimit {
+			cardType, value, err := cards.DecideMakingCard(ctx)
+			if err != nil {
+				return fmt.Errorf("decide making card: %w", err)
+			}
 
-		// TODO: fieldCardsを作って登録する
+			cardID := uuid.New()
+			err = h.repo.CreateCard(ctx, cardID, gameID, cardType, value)
+			if err != nil {
+				return fmt.Errorf("create card: %w", err)
+			}
+		}
 
-		err := h.repo.InitializeFieldCardsLimit(ctx, gameID)
+		err := h.repo.InitializeFieldCardsLimit(ctx, gameID, initialFieldCardsLimit)
 		if err != nil {
 			return fmt.Errorf("initialize field cards limit: %w", err)
 		}
