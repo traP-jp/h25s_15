@@ -2,8 +2,11 @@
 import CommonButton from '@/components/CommonButton.vue'
 import ExpressionResult from '@/components/ExpressionResult.vue'
 import PointResult from '@/components/PointResult.vue'
-
+import { useRouter } from 'vue-router'
 import { ref, onMounted } from 'vue'
+
+const router = useRouter()
+
 const props = defineProps<{
   gameId: string
 }>()
@@ -79,8 +82,12 @@ function to_home() {
   />
 
   <div class="button-container">
-    <CommonButton size="large" theme="primary" variant="filled">traQでシェア</CommonButton>
-    <CommonButton size="large" theme="secondary" variant="outline">ホームに戻る</CommonButton>
+    <CommonButton size="large" theme="primary" variant="filled" @click="share_traq"
+      >traQでシェア</CommonButton
+    >
+    <CommonButton size="large" theme="secondary" variant="outline" @click="to_home"
+      >ホームに戻る</CommonButton
+    >
   </div>
 
   <ExpressionResult
