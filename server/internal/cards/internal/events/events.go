@@ -7,7 +7,7 @@ import (
 )
 
 type Event interface {
-	CardUpdated(ctx context.Context, gameID uuid.UUID, event CardUpdatedEvent) error
+	CardsUpdated(ctx context.Context, gameID uuid.UUID, event CardsUpdatedEvent) error
 }
 
 type EventCard struct {
@@ -16,7 +16,7 @@ type EventCard struct {
 	Value string    `json:"value"`
 }
 
-type CardUpdatedEvent struct {
+type CardsUpdatedEvent struct {
 	Type              string      `json:"type"`
 	FieldCards        []EventCard `json:"fieldCards"`
 	Player0           []EventCard `json:"player0"`

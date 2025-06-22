@@ -66,8 +66,8 @@ func (h Handler) CardsUpdatedEvent(next echo.HandlerFunc) echo.HandlerFunc {
 			}
 		}
 
-		event := events.CardUpdatedEvent{
-			Type:              "cardUpdated",
+		event := events.CardsUpdatedEvent{
+			Type:              "cardsUpdated",
 			FieldCards:        fieldCards,
 			Player0:           player0Cards,
 			Player0HandsLimit: handLimits[0],
@@ -75,7 +75,7 @@ func (h Handler) CardsUpdatedEvent(next echo.HandlerFunc) echo.HandlerFunc {
 			Player1HandsLimit: handLimits[1],
 		}
 
-		if err := h.events.CardUpdated(ctx, gameID, event); err != nil {
+		if err := h.events.CardsUpdated(ctx, gameID, event); err != nil {
 			return fmt.Errorf("publish card updated event: %w", err)
 		}
 
