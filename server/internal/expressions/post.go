@@ -47,6 +47,7 @@ func (h *Handler) Post(c echo.Context) error {
 	}
 
 	var val *big.Rat
+	var success bool
 
 	err = h.db.Transaction(c.Request().Context(), func(ctx context.Context) error {
 		players, err := h.repo.GetPlayers(c.Request().Context(), gameID)
@@ -108,7 +109,8 @@ func (h *Handler) Post(c echo.Context) error {
 		}
 		result := expr.Eval()
 		val = result
-		if result.Cmp(ten) != 0 {
+		success = result.Cmp(ten) == 0
+		if !success {
 			return nil
 		}
 
@@ -121,6 +123,13 @@ func (h *Handler) Post(c echo.Context) error {
 		err = h.repo.UseCards(c.Request().Context(), gameID, player.PlayerID, req.Cards)
 		if err != nil {
 			c.Logger().Errorf("failed to use cards: %v", err)
+			return echo.NewHTTPError(http.StatusInternalServerError)
+		}
+
+		err = h.repo.CreateExpression(c.Request().Context(),
+			uuid.New(), gameID, player.PlayerID, req.Expression, val.RatString(), score, success)
+		if err != nil {
+			c.Logger().Errorf("failed to create expression: %v", err)
 			return echo.NewHTTPError(http.StatusInternalServerError)
 		}
 
@@ -148,7 +157,7 @@ func (h *Handler) Post(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, submitExpressionResponse{
-		Success: val.Cmp(ten) == 0,
+		Success: success,
 		Value:   val.RatString(),
 	})
 }
