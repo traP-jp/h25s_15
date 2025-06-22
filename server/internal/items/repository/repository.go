@@ -14,7 +14,7 @@ type Repo interface {
 	IncreaseFieldCardsMaxNumber(c context.Context, gameID uuid.UUID) error
 	ClearAllCards(c context.Context, gameID uuid.UUID, ownerPlayerID *int, location string) (clearedNumber int, err error)
 	GetPlayer(c context.Context, gameID uuid.UUID, userName string) (domain.GamePlayer, error)
-	IncreaseHandCardsLimit(c context.Context, gameID uuid.UUID, playerID int) error
-	IncreaseTurnTime(c context.Context, gameID uuid.UUID, player int) error
+	IncreaseHandCardsLimitDB(c context.Context, gameID uuid.UUID, playerID int) error
+	IncreaseTurnTimeDB(c context.Context, gameID uuid.UUID, player int) error
 	UseCard(ctx context.Context, gameID uuid.UUID, cardID uuid.UUID, playerID int) error
 }

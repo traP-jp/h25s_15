@@ -21,7 +21,7 @@ func (h Handler) IncreaseHandCardsLimit(c echo.Context, gameID uuid.UUID) error 
 		c.Logger().Errorf("failed to get player: %v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
-	err = h.repo.IncreaseHandCardsLimit(c.Request().Context(), gameID, player.PlayerID)
+	err = h.repo.IncreaseHandCardsLimitDB(c.Request().Context(), gameID, player.PlayerID)
 	if err != nil {
 		c.Logger().Errorf("failed to increase hand cards limit: %v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)

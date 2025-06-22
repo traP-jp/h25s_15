@@ -21,7 +21,7 @@ func (h Handler) IncreaseTurnTime(c echo.Context, gameID uuid.UUID) error {
 		c.Logger().Errorf("failed to get player: %v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
-	err = h.repo.IncreaseTurnTime(c.Request().Context(), gameID, player.PlayerID)
+	err = h.repo.IncreaseTurnTimeDB(c.Request().Context(), gameID, player.PlayerID)
 	if err != nil {
 		c.Logger().Errorf("failed to increase turn time: %v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
