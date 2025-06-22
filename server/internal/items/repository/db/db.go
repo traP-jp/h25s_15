@@ -109,3 +109,13 @@ func (r *Repo) IncreaseHandCardsLimit(c context.Context, gameID uuid.UUID, playe
 	}
 	return nil
 }
+
+func (r *Repo) UseCard(ctx context.Context, gameID uuid.UUID, cardID uuid.UUID, playerID int) error {
+	_, err := r.db.DB(ctx).ExecContext(ctx,
+		"UPDATE cards SET location = 'used' WHERE id = ? and game_id = ? and owner_player_id = ?",
+		cardID, gameID, playerID)
+	if err != nil {
+		return fmt.Errorf("failed to use card: %w", err)
+	}
+	return nil
+}
