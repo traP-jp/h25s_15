@@ -49,7 +49,7 @@ func (h Handler) PickFieldCards(c echo.Context) error {
 	cardID := uuid.New()
 	cardType, cardValue, err := DecideMakingCard(c.Request().Context())
 	if err != nil {
-		return fmt.Errorf("couldn't decide making card")
+		return echo.NewHTTPError(http.StatusInternalServerError, "couldn't decide making card")
 	}
 	err = h.repo.CreateCard(c.Request().Context(), cardID, gameID, cardType, cardValue)
 	if err != nil {
