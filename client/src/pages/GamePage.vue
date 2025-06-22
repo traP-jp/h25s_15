@@ -113,7 +113,6 @@ const opponentPlayer = computed(() => {
 
   return opponentPlayer
 })
-
 </script>
 
 <template>
