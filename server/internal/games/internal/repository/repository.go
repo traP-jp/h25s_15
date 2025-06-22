@@ -56,6 +56,9 @@ type Repo interface {
 
 	// EndGame は、指定されたゲームIDのゲームを終了する。
 	EndGame(ctx context.Context, gameID uuid.UUID, endAt time.Time) error
+
+	// GetSuccessExpressions は、指定されたゲームIDの成功した式を取得する。
+	GetSuccessExpressions(ctx context.Context, gameID uuid.UUID) ([]domain.Expression, error)
 }
 
 type CreatePlayersArg struct {
