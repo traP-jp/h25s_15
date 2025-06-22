@@ -35,7 +35,7 @@ func (h Handler) UsingItem(c echo.Context) error {
 
 	err = h.repo.UseCard(c.Request().Context(), gameID, item.ID, *item.OwnerPlayerID)
 	if err != nil {
-		c.Logger().Errorf("failed to use card: %w", err)
+		c.Logger().Errorf("failed to use card: %v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError, "failed to use card")
 	}
 
