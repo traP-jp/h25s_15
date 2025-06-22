@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import CommonButton from '@/components/CommonButton.vue'
-import { onUnmounted, ref } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 const httpBaseUrl = import.meta.env.VUE_APP_HTTP_BASEURL || 'http://localhost:8080'
@@ -16,22 +16,23 @@ function gameMatching() {
     headers: {
       'Content-Type': 'application/json',
     },
-  }).then((response) => {
-    if (!response.ok) {
-      throw new Error('ゲームの開始に失敗しました')
-    } else {
-      const ws = new WebSocket(`${wsBaseUrl}/games/ws`)
-      wating_matching.value = true
-      ws.onmessage = (event) => {
-        const data = JSON.parse(event.data) as { gameId: string; playerId: number }
-        router.push({ name: 'game', params: { gameId: data.gameId } })
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('ゲームの開始に失敗しました')
+      } else {
+        const ws = new WebSocket(`${wsBaseUrl}/games/ws`)
+        wating_matching.value = true
+        ws.onmessage = (event) => {
+          const data = JSON.parse(event.data) as { gameId: string; playerId: number }
+          router.push({ name: 'game', params: { gameId: data.gameId } })
+        }
       }
-    }
-  })
-  .catch((error) => {
-    console.error('ゲームの開始に失敗しました:', error)
-    wating_matching.value = false
-  })
+    })
+    .catch((error) => {
+      console.error('ゲームの開始に失敗しました:', error)
+      wating_matching.value = false
+    })
 }
 </script>
 
