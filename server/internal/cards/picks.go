@@ -2,7 +2,6 @@ package cards
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 
 	"github.com/google/uuid"

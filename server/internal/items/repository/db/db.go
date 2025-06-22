@@ -68,14 +68,25 @@ func (r *Repo) IncreaseFieldCardsMaxNumber(ctx context.Context, gameID uuid.UUID
 }
 
 func (r *Repo) ClearAllCards(ctx context.Context, gameID uuid.UUID, ownerPlayerID *int, location string) (clearedNumber int, err error) {
-	result, err := r.db.DB(ctx).ExecContext(ctx, "UPDATE cards SET location = 'used WHERE game_id = ? and  owner_player_id = ? and location = ?",
-		gameID, ownerPlayerID, location)
-	if err != nil {
-		return 0, fmt.Errorf("failed to clear field cards: %w", err)
+	if ownerPlayerID == nil {
+		result, err := r.db.DB(ctx).ExecContext(ctx, "UPDATE cards SET location = 'used' WHERE game_id = ? and location = ?",
+			gameID, location)
+		if err != nil {
+			return 0, fmt.Errorf("failed to clear field cards: %w", err)
+		}
+		ok, _ := result.RowsAffected()
+		clearedNumber = int(ok)
+		return clearedNumber, nil
+	} else {
+		result, err := r.db.DB(ctx).ExecContext(ctx, "UPDATE cards SET location = 'used' WHERE game_id = ? and owner_player_id = ? and location = ?",
+			gameID, ownerPlayerID, location)
+		if err != nil {
+			return 0, fmt.Errorf("failed to clear field cards: %w", err)
+		}
+		ok, _ := result.RowsAffected()
+		clearedNumber = int(ok)
+		return clearedNumber, nil
 	}
-	ok, _ := result.RowsAffected()
-	clearedNumber = int(ok)
-	return clearedNumber, nil
 }
 
 func (r *Repo) GetPlayer(ctx context.Context, gameID uuid.UUID, userName string) (domain.GamePlayer, error) {

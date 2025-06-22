@@ -26,7 +26,13 @@ func (h Handler) ClearOpponentHandCards(c echo.Context, gameID uuid.UUID) error 
 		log.Printf("failed to get player: %v\n", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
-	_, err = h.repo.ClearAllCards(c.Request().Context(), gameID, &player.PlayerID, "hand")
+	var opponentPlayerID int
+	if player.PlayerID == 1 {
+		opponentPlayerID = 0
+	} else {
+		opponentPlayerID = 1
+	}
+	_, err = h.repo.ClearAllCards(c.Request().Context(), gameID, &opponentPlayerID, "hand")
 	if err != nil {
 		log.Printf("failed to clear hand cards: %v\n", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
