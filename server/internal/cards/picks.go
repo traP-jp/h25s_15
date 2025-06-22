@@ -29,7 +29,6 @@ func (h Handler) PickFieldCards(c echo.Context) error {
 	}
 
 	err = h.db.Transaction(c.Request().Context(), func(ctx context.Context) error {
-
 		player, err := h.repo.GetPlayer(ctx, gameID, userName)
 		if errors.Is(err, coredb.ErrRecordNotFound) {
 			return echo.NewHTTPError(http.StatusBadRequest, "player not found")
