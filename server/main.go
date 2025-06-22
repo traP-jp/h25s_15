@@ -43,7 +43,9 @@ func main() {
 	gameApi.POST("", game.CreateGame)
 	gameApi.GET("/ws", game.WaitGameWS)
 	gameApi.GET("/:gameID/ws", game.GameWS)
-	gameApi.POST("/:gameID/submissions", expr.Post)
+	gameApi.POST("/:gameID/submissions", expr.Post,
+		card.CardsUpdatedEvent, game.ScoreUpdatedEvent,
+	)
 
 	e.POST("/games/:gameID/clear", card.ClearHandCards,
 		card.CardsUpdatedEvent, game.ScoreUpdatedEvent)
