@@ -12,6 +12,7 @@ import ExpressionCards from '@/components/ExpressionCards.vue'
 import ScoreBoard from '@/components/ScoreBoard.vue'
 import HandCardCounter from '@/components/HandCardCounter.vue'
 import { useGameEvent } from '@/composables/useGameEvent'
+import GameCardContent from '@/components/GameCardContent.vue'
 
 const routes = useRoute()
 const router = useRouter()
@@ -33,6 +34,7 @@ useGameEvent(gameWsUrl, (event) => {
 })
 
 function pickCard(cardId: string) {
+  fetch(`${httpBaseUrl}/games/${gameId}/picks`, {
   fetch(`${httpBaseUrl}/games/${gameId}/picks`, {
     method: 'POST',
     headers: {
@@ -119,13 +121,8 @@ const opponentPlayer = computed(() => {
   <div class="game-container">
     <div class="opponent-container">
       <HandCards :cards="opponentPlayer.cards" card-size="small">
-        <GameCard
-          v-for="handCard in opponentPlayer.cards"
-          size="small"
-          :key="handCard.id"
-          :disabled="gameState.currentPlayerId == opponentPlayer.id"
-        >
-          {{ handCard.value }}
+        <GameCard v-for="handCard in opponentPlayer.cards" size="small" :key="handCard.id">
+          <GameCardContent :card="handCard"></GameCardContent>
         </GameCard>
       </HandCards>
       <div :style="{ flex: 1 }" />
@@ -142,7 +139,7 @@ const opponentPlayer = computed(() => {
           :key="fieldCard.id"
           :onClick="() => pickCard(fieldCard.id)"
         >
-          {{ fieldCard.value }}
+          <GameCardContent :card="fieldCard"></GameCardContent>
         </GameCard>
       </FieldArea>
       <div class="turn-timer-container" :style="{ flex: 1 }">
@@ -150,6 +147,7 @@ const opponentPlayer = computed(() => {
           :max_value="gameState.currentTurnTimeLimit"
           :now_value="gameState.turnTimeRemaining"
           :turn="gameState.turnTotal - gameState.turn + 1"
+          :theme="gameState.currentPlayerId == myPlayer.id ? 'primary' : 'danger'"
           :theme="gameState.currentPlayerId == myPlayer.id ? 'primary' : 'danger'"
         />
       </div>
@@ -170,7 +168,7 @@ const opponentPlayer = computed(() => {
           :onClick="() => useCard(handCard.id)"
           :selected="myPlayer.expressionCards.includes(handCard)"
         >
-          {{ handCard.value }}
+          <GameCardContent :card="handCard"></GameCardContent>
         </GameCard>
       </HandCards>
       <div :style="{ flex: 1 }" />
