@@ -21,7 +21,7 @@ func DecideMakingCard(ctx context.Context) (cardType string, value string, err e
 		value = strconv.Itoa(rand.Intn(10))
 	} else if randomIntForType < operandProbability+operatorProbability {
 		cardType = "operator"
-		operators := [4]string{"+", "-", "/", "*"}
+		operators := [7]string{"+", "+", "-", "-", "/", "*", "*"}
 		randomIndex := rand.Intn(len(operators))
 		value = operators[randomIndex]
 	} else {
