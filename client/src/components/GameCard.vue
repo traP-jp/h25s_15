@@ -46,7 +46,7 @@ const sizeValue = computed(() =>
   border: none;
   aspect-ratio: 122 / 163;
 
-  transition: all ease-in 100ms;
+  transition: transform ease-in 100ms;
 }
 
 .card.clickable:hover {
@@ -55,5 +55,10 @@ const sizeValue = computed(() =>
 
 .card.clickable:active {
   transform: none;
+}
+
+.card.clickable:disabled {
+  transform: none;
+  box-shadow: none;
 }
 </style>

@@ -137,7 +137,11 @@ watchEffect(() => {
 <template>
   <div class="game-container">
     <div class="opponent-container">
-      <HandCards :cards="opponentPlayer.cards" card-size="small" />
+      <HandCards :cards="opponentPlayer.cards" card-size="small">
+        <GameCard v-for="handCard in opponentPlayer.cards" size="small" :key="handCard.id">
+          {{ handCard.value }}
+        </GameCard>
+      </HandCards>
       <div :style="{ flex: 1 }" />
       <div class="opponent-expression">{{ opponentPlayer.expression }}</div>
       <ScoreBoard opponent :score="opponentPlayer.score" />
@@ -171,7 +175,17 @@ watchEffect(() => {
           <CommonButton theme="danger">Clear ( -3pt )</CommonButton>
         </div>
       </div>
-      <HandCards :cards="myPlayer.cards" card-size="medium" @click="(card) => useCard(card.id)" />
+      <HandCards :cards="myPlayer.cards" card-size="medium" @click="(card) => useCard(card.id)">
+        <GameCard
+          v-for="handCard in myPlayer.cards"
+          size="medium"
+          :key="handCard.id"
+          :onClick="() => useCard(handCard.id)"
+          :selected="myPlayer.expressionCards.includes(handCard)"
+        >
+          {{ handCard.value }}
+        </GameCard>
+      </HandCards>
       <div :style="{ flex: 1 }" />
     </div>
 
