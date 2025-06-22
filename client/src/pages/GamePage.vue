@@ -175,7 +175,7 @@ watchEffect(() => {
           <CommonButton theme="danger">Clear ( -3pt )</CommonButton>
         </div>
       </div>
-      <HandCards :cards="myPlayer.cards" card-size="medium" @click="(card) => useCard(card.id)">
+      <HandCards :cards="myPlayer.cards" card-size="medium">
         <GameCard
           v-for="handCard in myPlayer.cards"
           size="medium"
