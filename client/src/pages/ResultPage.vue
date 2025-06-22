@@ -3,50 +3,65 @@ import CommonButton from '@/components/CommonButton.vue'
 import ExpressionResult from '@/components/ExpressionResult.vue'
 import PointResult from '@/components/PointResult.vue'
 import { useRouter } from 'vue-router'
+import { ref, onMounted } from 'vue'
+
+const httpBaseUrl = import.meta.env.VUE_APP_HTTP_BASEURL || 'http://localhost:8080'
 
 const router = useRouter()
-// import { ref, onMounted } from 'vue'
-// const props = defineProps<{
-//   gameId: string;
-// }>()
 
-// const meInfo = ref()
-// const resultInfo = ref()
-// const isWin = ref()
+const props = defineProps<{
+  gameId: string
+}>()
 
-// onMounted(async () => {
+type MyInfo = {
+  name: string
+  iconUrl: string
+}
 
-//   //自分のnameを取得
-//   const meRes = await fetch('/users/me')
-//   if (meRes.ok) {
-//     meInfo.value = await meRes.json()
-//   }
+type ResultInfo = {
+  gameId: string
+  player0Name: string
+  player1Name: string
+  player0Score: number
+  player1Score: number
+  player0SuccessExpressions: string[]
+  player1SuccessExpressions: string[]
+}
 
-//   //ゲームの結果を取得
-//   const resultRes = await fetch('/games/:gameId/results')
-//   if (resultRes.ok) {
-//     resultInfo.value = await resultRes.json()
-//   }
+const myInfo = ref<MyInfo | undefined>(undefined)
+const resultInfo = ref<ResultInfo | undefined>(undefined)
+const resultStatus = ref<'VICTORY' | 'DEFEAT' | 'DRAW' | undefined>(undefined)
 
-//   //勝ち負けを判定し、isWinに代入
-//   if(resultInfo.value.player0Name == meInfo.value.name){
-//     if(resultInfo.value.player0Score > resultInfo.value.player1Score){
-//       isWin.value = "VICTORY";
-//     }else if(resultInfo.value.player0Score < resultInfo.value.player1Score){
-//       isWin.value = "LOSE";
-//     }else{
-//       isWin.value = "DRAW"
-//     }
-//   }else{
-//     if(resultInfo.value.player0Score > resultInfo.value.player1Score){
-//       isWin.value = "LOSE";
-//     }else if(resultInfo.value.player0Score < resultInfo.value.player1Score){
-//       isWin.value = "VICTORY";
-//     }else{
-//       isWin.value = "DRAW"
-//     }
-//   }
-// })
+const judgeResult = () => {
+  if (!myInfo.value || !resultInfo.value) return
+  const isPlayer0 = resultInfo.value.player0Name === myInfo.value.name
+  const myScore = isPlayer0 ? resultInfo.value.player0Score : resultInfo.value.player1Score
+  const oppScore = isPlayer0 ? resultInfo.value.player1Score : resultInfo.value.player0Score
+
+  if (myScore > oppScore) resultStatus.value = 'VICTORY'
+  else if (myScore < oppScore) resultStatus.value = 'DEFEAT'
+  else resultStatus.value = 'DRAW'
+}
+
+onMounted(async () => {
+  try {
+    //自分のnameを取得
+    const meRes = await fetch(`${httpBaseUrl}/users/me`)
+    if (!meRes.ok) throw new Error('ユーザー情報の取得に失敗しました')
+    myInfo.value = await meRes.json()
+
+    //ゲームの結果を取得
+    const resultRes = await fetch(`${httpBaseUrl}/games/${props.gameId}/results`)
+    if (!resultRes.ok) throw new Error('ゲーム結果の取得に失敗しました')
+    resultInfo.value = await resultRes.json()
+
+    //勝敗判定
+    judgeResult()
+  } catch (error) {
+    console.error(error)
+  }
+})
+
 const shareText = 'いい感じの文字列'
 function share_traq() {
   const url = `https://q.trap.jp/share-target?text=${shareText}`
@@ -60,11 +75,12 @@ function to_home() {
 </script>
 
 <template>
-  <div class="isJugded">VICTORY</div>
+  <div v-if="resultStatus" class="isJugded">{{ resultStatus }}</div>
 
   <PointResult
-    :user1="{ name: 'Ponjuice', score: 20 }"
-    :user2="{ name: 'ikura-hamu', score: 30 }"
+    v-if="resultInfo"
+    :user1="{ name: resultInfo.player0Name, score: resultInfo.player0Score }"
+    :user2="{ name: resultInfo.player1Name, score: resultInfo.player1Score }"
   />
 
   <div class="button-container">
@@ -77,8 +93,9 @@ function to_home() {
   </div>
 
   <ExpressionResult
-    :myExpressions="['3+7=10', '2×4+2=10']"
-    :opponentExpressions="['10=4+6', '10=2×4+2']"
+    v-if="resultInfo"
+    :myExpressions="resultInfo.player0SuccessExpressions"
+    :opponentExpressions="resultInfo.player1SuccessExpressions"
     class="resultField"
   ></ExpressionResult>
 </template>
