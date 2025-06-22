@@ -55,9 +55,9 @@ func main() {
 	e.POST("/games/:gameID/picks", card.PickFieldCards,
 		card.CardsUpdatedEvent)
 
-	e.POST("/games/:gameID/items", item.UsingItem)
-
 	game.StartGameMatchLoop(context.Background())
+
+	e.POST("/games/:gameID/items", item.UsingItem)
 
 	e.Logger.Fatal(e.Start(":8080"))
 }
