@@ -38,30 +38,30 @@ func (h Handler) UsingItem(c echo.Context) error {
 		if err != nil {
 			c.Logger().Errorf("failed to increase field cards: %w", err)
 		}
-		err = h.repo.IncreaseFieldCards(c.Request().Context(), gameID, 1)
+		err = h.IncreaseFieldCards(c, gameID, 1)
 		if err != nil {
 			c.Logger().Errorf("failed to increase field cards: %w", err)
 		}
 	case "refreshFieldCards":
-		err = h.repo.RefreshFieldCards(c.Request().Context(), gameID)
+		err = h.RefreshFieldCards(c, gameID)
 		if err != nil {
 			c.Logger().Errorf("failed to refresh field cards: %w", err)
 		}
 	case "clearOpponentHandCards":
-		err = h.repo.ClearOpponentHandCards(c.Request().Context(), gameID)
+		err = h.ClearOpponentHandCards(c, gameID)
 		if err != nil {
 			c.Logger().Errorf("failed to refresh field cards: %w", err)
 		}
 	case "rincreaseTurnTime":
-		err = h.repo.RincreaseTurnTime(c.Request().Context(), gameID)
-		if err != nil {
-			c.Logger().Errorf("failed to refresh field cards: %w", err)
-		}
+		// err = h.RincreaseTurnTime(c, gameID)
+		// if err != nil {
+		// 	c.Logger().Errorf("failed to refresh field cards: %w", err)
+		// }
 	case "increaseHandCardsLimit":
-		err = h.repo.IncreaseHandCardsLimit(c.Request().Context(), gameID)
-		if err != nil {
-			c.Logger().Errorf("failed to refresh field cards: %w", err)
-		}
+		// err = h.repo.IncreaseHandCardsLimit(c, gameID)
+		// if err != nil {
+		// 	c.Logger().Errorf("failed to refresh field cards: %w", err)
+		// }
 	default:
 		return echo.NewHTTPError(http.StatusBadRequest, "not exist")
 	}
