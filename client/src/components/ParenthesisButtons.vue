@@ -1,7 +1,11 @@
+<script setup lang="ts">
+const emits = defineEmits<{ (e: 'left'): void; (e: 'right'): void }>()
+</script>
+
 <template>
   <div class="paren-row">
-    <button class="paren">(</button>
-    <button class="paren">)</button>
+    <button class="paren" @click="() => emits('left')">(</button>
+    <button class="paren" @click="() => emits('right')">)</button>
   </div>
 </template>
 
