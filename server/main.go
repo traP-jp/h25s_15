@@ -9,6 +9,7 @@ import (
 	"github.com/olahol/melody"
 	"github.com/traP-jp/h25s_15/internal/cards"
 	"github.com/traP-jp/h25s_15/internal/core/coredb"
+	"github.com/traP-jp/h25s_15/internal/expressions"
 	"github.com/traP-jp/h25s_15/internal/games"
 	"github.com/traP-jp/h25s_15/internal/users"
 )
@@ -28,6 +29,10 @@ func main() {
 	game := games.New(db, m) // handler
 	card := cards.New(db, m)
 	user := users.New()
+	expr, err := expressions.New(db, m)
+	if err != nil {
+		log.Fatal("failed to create expressions handler:", err)
+	}
 
 	e.Use(user.AuthMiddleware())
 
@@ -38,6 +43,7 @@ func main() {
 	gameApi.POST("", game.CreateGame)
 	gameApi.GET("/ws", game.WaitGameWS)
 	gameApi.GET("/:gameID/ws", game.GameWS)
+	gameApi.POST("/:gameID/submissions", expr.Post)
 
 	e.POST("/games/:gameID/clear", card.ClearHandCards,
 		card.CardsUpdatedEvent, game.ScoreUpdatedEvent)
