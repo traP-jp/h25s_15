@@ -150,9 +150,9 @@ myPlayer.value.handsLimit = 10
       </FieldArea>
       <div class="turn-timer-container" :style="{ flex: 1 }">
         <TurnTimer
-          :max_value="15"
+          :max_value="gameState.currentTurnTimeLimit"
           :now_value="gameState.turnTimeRemaining"
-          :turn="10 - gameState.turn + 1"
+          :turn="gameState.turnTotal - gameState.turn + 1"
         />
       </div>
     </div>
