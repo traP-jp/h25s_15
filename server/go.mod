@@ -3,11 +3,13 @@ module github.com/traP-jp/h25s_15
 go 1.24.3
 
 require (
+	github.com/alecthomas/participle/v2 v2.1.4
 	github.com/go-sql-driver/mysql v1.8.1
 	github.com/google/uuid v1.6.0
 	github.com/jmoiron/sqlx v1.4.0
 	github.com/labstack/echo/v4 v4.13.4
 	github.com/olahol/melody v1.3.0
+	golang.org/x/sync v0.14.0
 )
 
 require (

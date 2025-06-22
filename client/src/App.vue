@@ -1,13 +1,11 @@
 <template>
   <main>
-    <div :class="$style.container">
-      <router-view />
-    </div>
+    <router-view />
   </main>
 </template>
 
 <style module>
-.container {
+main {
   max-width: fit-content;
   margin: auto;
 }

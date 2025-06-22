@@ -9,10 +9,12 @@ const {
   size = 'medium',
   theme = 'primary',
   variant = 'filled',
+  disabled,
 } = defineProps<{
   size?: Size
   theme?: Theme
   variant?: Variant
+  disabled?: boolean
 }>()
 
 const emits = defineEmits<{ (e: 'click'): void }>()
@@ -48,6 +50,7 @@ const fontSize = computed(() => {
       '--accent': `var(${accent})`,
     }"
     @click="() => emits('click')"
+    :disabled="disabled"
   >
     <slot>Button</slot>
   </button>
@@ -82,7 +85,7 @@ const fontSize = computed(() => {
   color: var(--accent);
   outline: 0.25rem solid var(--accent);
   background-color: transparent;
-  outline-offset: '-0.25rem';
+  outline-offset: -0.25rem;
 }
 
 .outline:hover {
@@ -93,5 +96,12 @@ const fontSize = computed(() => {
 .outline:active {
   color: color-mix(in srgb, var(--accent) 80%, black 20%);
   outline-color: color-mix(in srgb, var(--accent) 80%, black 20%);
+}
+
+.button:disabled {
+  box-shadow: none;
+  color: color-mix(in srgb, var(--theme-text-white) 70%, black 30%);
+  background-color: color-mix(in srgb, var(--accent) 70%, black 30%);
+  outline-color: color-mix(in srgb, var(--accent) 70%, black 30%);
 }
 </style>

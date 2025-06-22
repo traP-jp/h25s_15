@@ -81,6 +81,7 @@ operationID: `gameWS`
       "value": 5
     }
   ],
+  "playerId": 1,
   "player0": [],
   "player0HandsLimit": 10,
   "player1": [],
@@ -101,6 +102,7 @@ operationID: `gameWS`
   "type": "gameStarted",
   "currentPlayerId": 0,
   "turn": 1,
+  "turnTotal": 10
 }
 ```
 
@@ -152,7 +154,7 @@ field cardsもしくはhand cardsが更新されたとき
 
 #### `turnTimeRemainingChanged`
 
-ターンの残り時間が変更されたとき。1秒ごとに送信される。
+ターンの残り時間が変更されたとき。0.5秒ごとに送信される。
 残り時間が 0 のときは送信されない。
 
 ```json
@@ -193,13 +195,21 @@ field cardsもしくはhand cardsが更新されたとき
 #### `turnEnded`
 
 ターンが終了したとき。ターンの残り時間が0になったときに送信される。
-最終ターンの場合は、`nextTurn` は `null` になる。
+最終ターンの場合は、`nextTurn` と `nextPlayerId` は `null` になる。
 
 ```json
 {
   "type": "turnEnded",
   "nextPlayerId": 0,
   "nextTurn": 1
+}
+```
+
+```json
+{
+  "type": "turnEnded",
+  "nextPlayerId": null,
+  "nextTurn": null
 }
 ```
 
@@ -284,12 +294,19 @@ expressionは、数字と`+`, `-`, `*`, `/` ,`(`, `)`を含む文字列である
 
 成功 200
 
-値が10でない場合も200を返すことに注意する。10でなかった場合は、`success`が`false`になる。
+値が10でない場合も200を返すことに注意する。10でなかった場合は、`success`が`false`になる。答えが分数になったときは分数を返す。
 
 ```json
 {
   "success": true,
-  "value": 10
+  "value": "10"
+}
+```
+
+```json
+{
+  "success": false,
+  "value": "5/3"
 }
 ```
 
