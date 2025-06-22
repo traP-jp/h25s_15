@@ -121,7 +121,7 @@ const opponentPlayer = computed(() => {
     <div class="opponent-container">
       <HandCards :cards="opponentPlayer.cards" card-size="small">
         <GameCard v-for="handCard in opponentPlayer.cards" size="small" :key="handCard.id">
-          {{ handCard.value }}
+          <GameCardContent :card="handCard"></GameCardContent>
         </GameCard>
       </HandCards>
       <div :style="{ flex: 1 }" />
