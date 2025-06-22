@@ -7,6 +7,8 @@ const { cards, cardSize = 'medium' } = defineProps<{
   cardSize?: 'small' | 'medium'
 }>()
 
+const emit = defineEmits<{ (e: 'click', card: Card): void }>()
+
 const eachSlice = <T,>(array: T[], size: number): T[][] =>
   new Array(Math.ceil(array.length / size))
     .fill(null)
@@ -23,7 +25,12 @@ const cardColumns = eachSlice(cards, 2)
       v-for="(cardColumn, i) in cardColumns"
       :key="`hand-card-row-${i}`"
     >
-      <GameCard v-for="card in cardColumn" :size="cardSize" :key="card.id">
+      <GameCard
+        v-for="card in cardColumn"
+        :size="cardSize"
+        :key="card.id"
+        :onClick="() => emit('click', card)"
+      >
         {{ card.value }}
       </GameCard>
     </div>
