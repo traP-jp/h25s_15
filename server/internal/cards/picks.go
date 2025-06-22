@@ -35,6 +35,23 @@ func (h Handler) PickFieldCards(c echo.Context) error {
 		c.Logger().Errorf("failed to get player: %v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
+
+	limits, err := h.repo.GetGameHandLimit(c.Request().Context(), gameID)
+	if err != nil {
+		c.Logger().Errorf("failed to get game hand limit: %v", err)
+		return echo.NewHTTPError(http.StatusInternalServerError)
+	}
+
+	cards, err := h.repo.GetPlayerHandCards(c.Request().Context(), gameID, player.PlayerID)
+	if err != nil {
+		c.Logger().Errorf("failed to get player hand cards: %v", err)
+		return echo.NewHTTPError(http.StatusInternalServerError)
+	}
+
+	if len(cards) >= limits[player.PlayerID] {
+		return echo.NewHTTPError(http.StatusBadRequest, "too many cards in hand")
+	}
+
 	requestCard := &RequestCard{}
 	err = c.Bind(requestCard)
 	if err != nil {

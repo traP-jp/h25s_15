@@ -18,4 +18,5 @@ type Repo interface {
 	// GetGameHandLimitは、ゲームのhand cardsの制限を取得する。
 	// playerID 0、playerID 1の順で、各プレイヤーのhand cardsの制限を返す。
 	GetGameHandLimit(ctx context.Context, gameID uuid.UUID) ([2]int, error)
+	GetPlayerHandCards(ctx context.Context, gameID uuid.UUID, playerID int) ([]domain.Card, error)
 }
