@@ -33,7 +33,7 @@ CREATE TABLE expressions (
     game_id VARCHAR(36) NOT NULL,
     player_id TINYINT NOT NULL,
     expression TEXT NOT NULL,
-    value INT NOT NULL,
+    value TEXT NOT NULL,
     points INT NOT NULL,
     success BOOLEAN NOT NULL,
     submitted_at DATETIME NOT NULL,

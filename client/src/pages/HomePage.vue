@@ -168,6 +168,47 @@ onMounted(async () => {
 </template>
 
 <style scoped>
+.spinner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  align-items: center;
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  background-color: rgba(128, 128, 128, 0.3);
+}
+
+.dot {
+  width: 2rem;
+  height: 2rem;
+  margin: 0 0.5rem;
+  background-color: var(--theme-primary);
+  border-radius: 50%;
+  animation: bounce 1.4s infinite ease-in-out both;
+}
+
+.dot:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.dot:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+@keyframes bounce {
+  0%,
+  80%,
+  100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
+}
+
 .game-title {
   font-size: 8rem;
   text-align: center;
