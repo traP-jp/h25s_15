@@ -5,7 +5,7 @@ import GamePage from './pages/GamePage.vue' // 仮
 
 const routes = [
   { path: '/', name: 'home', component: HomePage },
-  { path: '/result/:gameId', name: 'resultpage', component: ResultPage, props: true },
+  { path: '/result/:gameId', name: 'result', component: ResultPage, props: true },
   { path: '/game/:gameId', name: 'game', component: GamePage },
 ]
 
