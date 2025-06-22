@@ -34,7 +34,7 @@ useGameEvent(gameWsUrl, (event) => {
 })
 
 function pickCard(cardId: string) {
-  fetch(`${httpBaseUrl}/games/${gameId}/field/${cardId}`, {
+  fetch(`${httpBaseUrl}/games/${gameId}/picks`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -121,7 +121,7 @@ const opponentPlayer = computed(() => {
     <div class="opponent-container">
       <HandCards :cards="opponentPlayer.cards" card-size="small">
         <GameCard v-for="handCard in opponentPlayer.cards" size="small" :key="handCard.id">
-          <GameCardContent :card="handCard"></GameCardContent>
+          {{ handCard.value }}
         </GameCard>
       </HandCards>
       <div :style="{ flex: 1 }" />
@@ -146,6 +146,7 @@ const opponentPlayer = computed(() => {
           :max_value="gameState.currentTurnTimeLimit"
           :now_value="gameState.turnTimeRemaining"
           :turn="gameState.turnTotal - gameState.turn + 1"
+          :theme="gameState.currentPlayerId == myPlayer.id ? 'primary' : 'danger'"
         />
       </div>
     </div>
