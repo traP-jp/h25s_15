@@ -160,7 +160,7 @@ onMounted(async () => {
   display: block;
   padding-top: 5rem;
   margin-bottom: 4rem;
-  color: var(--theme-tertiary)
+  color: var(--theme-tertiary);
 }
 
 .game-start {
