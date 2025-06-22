@@ -59,11 +59,11 @@ func (h Handler) UsingItem(c echo.Context) error {
 			return echo.NewHTTPError(http.StatusInternalServerError)
 		}
 	case "increaseTurnTime":
-	// err = h.IncreaseTurnTime(c, gameID)
-	// if err != nil {
-	// 	c.Logger().Errorf("failed to refresh field cards: %w", err)
-	// return echo.NewHTTPError(http.StatusInternalServerError)
-	// }
+		err = h.IncreaseTurnTime(c, gameID)
+		if err != nil {
+			c.Logger().Errorf("failed to refresh field cards: %w", err)
+			return echo.NewHTTPError(http.StatusInternalServerError)
+		}
 	case "increaseHandCardsLimit":
 		err = h.IncreaseHandCardsLimit(c, gameID)
 		if err != nil {

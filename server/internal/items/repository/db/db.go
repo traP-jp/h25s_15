@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/traP-jp/h25s_15/internal/core/coredb"
@@ -101,7 +102,7 @@ func (r *Repo) GetPlayer(ctx context.Context, gameID uuid.UUID, userName string)
 	return domain.GamePlayer(player), nil
 }
 
-func (r *Repo) IncreaseHandCardsLimit(c context.Context, gameID uuid.UUID, playerID int) error {
+func (r *Repo) IncreaseHandCardsLimitDB(c context.Context, gameID uuid.UUID, playerID int) error {
 	_, err := r.db.DB(c).ExecContext(c, "UPDATE hand_cards_limits SET hand_cards = (hand_cards + 1) WHERE game_id = ? and player_id = ?",
 		gameID, playerID)
 	if err != nil {
@@ -110,12 +111,11 @@ func (r *Repo) IncreaseHandCardsLimit(c context.Context, gameID uuid.UUID, playe
 	return nil
 }
 
-func (r *Repo) UseCard(ctx context.Context, gameID uuid.UUID, cardID uuid.UUID, playerID int) error {
-	_, err := r.db.DB(ctx).ExecContext(ctx,
-		"UPDATE cards SET location = 'used' WHERE id = ? and game_id = ? and owner_player_id = ?",
-		cardID, gameID, playerID)
+func (r *Repo) IncreaseTurnTimeDB(c context.Context, gameID uuid.UUID, playerID int) error {
+	_, err := r.db.DB(c).ExecContext(c, "UPDATE turns SET end_at = (end_at + ?) WHERE game_id = ? and player_id = ?",
+		gameID, 3*time.Second, playerID)
 	if err != nil {
-		return fmt.Errorf("failed to use card: %w", err)
+		return fmt.Errorf("failed to increase turn time: %w", err)
 	}
 	return nil
 }

@@ -9,7 +9,7 @@ import (
 	"github.com/traP-jp/h25s_15/internal/users"
 )
 
-func (h Handler) IncreaseHandCardsLimit(c echo.Context, gameID uuid.UUID) error {
+func (h Handler) IncreaseTurnTime(c echo.Context, gameID uuid.UUID) error {
 	userName, err := users.GetUserName(c)
 	if err != nil {
 		c.Logger().Errorf("failed to get user name: %v", err)
@@ -21,9 +21,9 @@ func (h Handler) IncreaseHandCardsLimit(c echo.Context, gameID uuid.UUID) error 
 		c.Logger().Errorf("failed to get player: %v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
-	err = h.repo.IncreaseHandCardsLimitDB(c.Request().Context(), gameID, player.PlayerID)
+	err = h.repo.IncreaseTurnTimeDB(c.Request().Context(), gameID, player.PlayerID)
 	if err != nil {
-		c.Logger().Errorf("failed to increase hand cards limit: %v", err)
+		c.Logger().Errorf("failed to increase turn time: %v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
 	return nil
