@@ -38,7 +38,7 @@ PK(1,2) = 複合主キー (game_id, player_index)
 | game_id      | `VARCHAR(36)` | **FK → games.id**, **INDEX**, **NOT NULL** | ―      | ゲーム           |
 | player_id    | `TINYINT`     | **NOT NULL**                               | ―      | プレイヤーの番号 |
 | expression   | `TEXT`        | **NOT NULL**                               | ―      | 入力式           |
-| value        | `INT`         | **NOT NULL**                               | ―      | 計算結果         |
+| value        | `TEXT`         | **NOT NULL**                               | ―      | 計算結果         |
 | points       | `INT`         | **NOT NULL**                               | ―      | 加算点           |
 | success      | `BOOLEAN`     | **NOT NULL**                               | ―      | 目標達成か       |
 | submitted_at | `DATETIME`    | **NOT NULL**                               | ―      | 送信時刻         |

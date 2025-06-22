@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
@@ -119,6 +120,20 @@ func (r *Repo) UpdatePlayerScore(ctx context.Context, gameID uuid.UUID, playerID
 	}
 	if rowsAffected == 0 {
 		return coredb.ErrNoRecordUpdated
+	}
+
+	return nil
+}
+
+func (r *Repo) CreateExpression(ctx context.Context, id uuid.UUID, gameID uuid.UUID, playerID int, expression string, value string, points int, success bool) error {
+	query := `
+		INSERT INTO expressions (id, game_id, player_id, expression, value, points, success, submitted_at)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+	`
+	_, err := r.db.DB(ctx).ExecContext(ctx, query,
+		id, gameID, playerID, expression, value, points, success, time.Now())
+	if err != nil {
+		return fmt.Errorf("exec insert expression: %w", err)
 	}
 
 	return nil

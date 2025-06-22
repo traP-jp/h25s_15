@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { GameInfo } from '../lib/gameLogic'
-import { computed, ref, watchEffect } from 'vue'
+import { computed, ref } from 'vue'
 import GameCard from '@/components/GameCard.vue'
 import ParenthesisButtons from '@/components/ParenthesisButtons.vue'
 import HandCards from '@/components/HandCards.vue'
@@ -14,17 +14,26 @@ import HandCardCounter from '@/components/HandCardCounter.vue'
 import { useGameEvent } from '@/composables/useGameEvent'
 
 const routes = useRoute()
+const router = useRouter()
 const gameId = routes.params.gameId as string
 const gameState = ref(new GameInfo(gameId))
 
-const httpBaseUrl = import.meta.env.VUE_APP_HTTP_BASEURL || 'http://localhost:8080'
-const wsBaseUrl = import.meta.env.VUE_APP_WS_BASEURL || 'ws://localhost:8080'
+const httpBaseUrl = import.meta.env.VITE_HTTP_BASEURL || 'http://localhost:8080'
+const wsBaseUrl = import.meta.env.VITE_WS_BASEURL || 'ws://localhost:8080'
 const gameWsUrl = `${wsBaseUrl}/games/${gameId}/ws`
 
-useGameEvent(gameWsUrl, gameState.value.onEvent)
+useGameEvent(gameWsUrl, (event) => {
+  gameState.value.onEvent(event)
+  if (event.type == 'gameEnded') {
+    router.replace({
+      name: 'result',
+      params: { gameId },
+    })
+  }
+})
 
 function pickCard(cardId: string) {
-  fetch(`${httpBaseUrl}/game/${gameId}/field/${cardId}`, {
+  fetch(`${httpBaseUrl}/games/${gameId}/picks`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -43,7 +52,7 @@ function useCard(cardId: string) {
   }
   if (card.type === 'item') {
     // アイテムを使用する
-    fetch(`${httpBaseUrl}/game/${gameId}/items`, {
+    fetch(`${httpBaseUrl}/games/${gameId}/items`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -57,7 +66,7 @@ function useCard(cardId: string) {
 }
 
 function clearHandCards() {
-  fetch(`${httpBaseUrl}/game/${gameId}/clear`, {
+  fetch(`${httpBaseUrl}/games/${gameId}/clear`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -80,7 +89,7 @@ function submitExpression() {
     return
   }
 
-  fetch(`${httpBaseUrl}/game/${gameId}/submissions`, {
+  fetch(`${httpBaseUrl}/games/${gameId}/submissions`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -91,14 +100,6 @@ function submitExpression() {
     }),
   })
 }
-
-// 使ってる風
-pickCard('')
-useCard('')
-clearHandCards()
-deleteExpression()
-addOperator('(')
-submitExpression()
 
 const myPlayer = computed(() => {
   const myPlayer = gameState.value.players.find(({ id }) => id == gameState.value.myPlayerId)
@@ -112,34 +113,21 @@ const opponentPlayer = computed(() => {
 
   return opponentPlayer
 })
-
-// テスト用データ
-watchEffect(() => {
-  myPlayer.value.cards.push(
-    ...new Array(10).fill(undefined).map((_, i) => ({ id: `${i}`, type: 'num', value: `${i}` }))
-  )
-  opponentPlayer.value.cards.push(
-    ...new Array(10).fill(undefined).map((_, i) => ({ id: `${i}`, type: 'num', value: `${i}` }))
-  )
-  gameState.value.fieldCards.push(
-    ...new Array(4).fill(undefined).map((_, i) => ({ id: `${i}`, type: 'num', value: `${i}` }))
-  )
-  myPlayer.value.expressionCards.push(
-    ...new Array(5).fill(undefined).map((_, i) => ({ id: `${i}`, type: 'num', value: `${i}` }))
-  )
-  opponentPlayer.value.expressionCards.push(
-    ...new Array(5).fill(undefined).map((_, i) => ({ id: `${i}`, type: 'num', value: `${i}` }))
-  )
-  opponentPlayer.value.expression = '2×3+4'
-  myPlayer.value.expression = '2×(3+4)'
-  myPlayer.value.handsLimit = 10
-})
 </script>
 
 <template>
   <div class="game-container">
     <div class="opponent-container">
-      <HandCards :cards="opponentPlayer.cards" card-size="small" />
+      <HandCards :cards="opponentPlayer.cards" card-size="small">
+        <GameCard
+          v-for="handCard in opponentPlayer.cards"
+          size="small"
+          :key="handCard.id"
+          :disabled="gameState.currentPlayerId == opponentPlayer.id"
+        >
+          {{ handCard.value }}
+        </GameCard>
+      </HandCards>
       <div :style="{ flex: 1 }" />
       <div class="opponent-expression">{{ opponentPlayer.expression }}</div>
       <ScoreBoard opponent :score="opponentPlayer.score" />
@@ -148,15 +136,21 @@ watchEffect(() => {
     <div class="field-container">
       <div :style="{ flex: 1 }" />
       <FieldArea>
-        <GameCard v-for="fieldCard in gameState.fieldCards" size="large" :key="fieldCard.id">
+        <GameCard
+          v-for="fieldCard in gameState.fieldCards"
+          size="large"
+          :key="fieldCard.id"
+          :onClick="() => pickCard(fieldCard.id)"
+        >
           {{ fieldCard.value }}
         </GameCard>
       </FieldArea>
       <div class="turn-timer-container" :style="{ flex: 1 }">
         <TurnTimer
-          :max_value="15"
+          :max_value="gameState.currentTurnTimeLimit"
           :now_value="gameState.turnTimeRemaining"
-          :turn="10 - gameState.turn + 1"
+          :turn="gameState.turnTotal - gameState.turn + 1"
+          :theme="gameState.currentPlayerId == myPlayer.id ? 'primary' : 'danger'"
         />
       </div>
     </div>
@@ -168,12 +162,22 @@ watchEffect(() => {
           <CommonButton @click="clearHandCards" theme="danger">Clear ( -3pt )</CommonButton>
         </div>
       </div>
-      <HandCards :cards="myPlayer.cards" card-size="medium" />
+      <HandCards :cards="myPlayer.cards" card-size="medium">
+        <GameCard
+          v-for="handCard in myPlayer.cards"
+          size="medium"
+          :key="handCard.id"
+          :onClick="() => useCard(handCard.id)"
+          :selected="myPlayer.expressionCards.includes(handCard)"
+        >
+          {{ handCard.value }}
+        </GameCard>
+      </HandCards>
       <div :style="{ flex: 1 }" />
     </div>
 
     <div class="my-expression-container">
-      <ParenthesisButtons />
+      <ParenthesisButtons @left="addOperator('(')" @right="addOperator(')')"></ParenthesisButtons>
       <div class="my-expression">
         <ExpressionCards @delete="deleteExpression" @submit="submitExpression">
           <GameCard v-for="card in myPlayer.expression" :key="card">

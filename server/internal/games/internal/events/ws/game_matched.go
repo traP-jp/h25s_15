@@ -28,11 +28,11 @@ func (e *Event) GameMatched(ctx context.Context, userNames [2]string, gameID uui
 		return fmt.Errorf("failed to marshal event1: %w", err)
 	}
 
-	if err = e.m.BroadcastBinaryFilter(event0JSON, corews.FilterUserName(userNames[0])); err != nil {
+	if err = e.m.BroadcastFilter(event0JSON, corews.FilterUserName(userNames[0])); err != nil {
 		return fmt.Errorf("broadcast event0: %w", err)
 	}
 
-	if err = e.m.BroadcastBinaryFilter(event1JSON, corews.FilterUserName(userNames[1])); err != nil {
+	if err = e.m.BroadcastFilter(event1JSON, corews.FilterUserName(userNames[1])); err != nil {
 		return fmt.Errorf("broadcast event1: %w", err)
 	}
 

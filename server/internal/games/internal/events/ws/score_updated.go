@@ -15,7 +15,7 @@ func (e *Event) ScoreUpdated(ctx context.Context, gameID uuid.UUID, event events
 		return fmt.Errorf("failed to marshal event to JSON: %w", err)
 	}
 
-	err = e.m.BroadcastBinaryFilter(eventJSON, corews.FilterGameID(gameID))
+	err = e.m.BroadcastFilter(eventJSON, corews.FilterGameID(gameID))
 	if err != nil {
 		return fmt.Errorf("broadcast score updated event: %w", err)
 	}
