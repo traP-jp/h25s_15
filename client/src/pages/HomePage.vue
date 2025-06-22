@@ -3,8 +3,8 @@ import CommonButton from '@/components/CommonButton.vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-const httpBaseUrl = import.meta.env.VUE_APP_HTTP_BASEURL || 'http://localhost:8080'
-const wsBaseUrl = import.meta.env.VUE_APP_WS_BASEURL || 'ws://localhost:8080'
+const httpBaseUrl = import.meta.env.VITE_HTTP_BASEURL || 'http://localhost:8080'
+const wsBaseUrl = import.meta.env.VITE_WS_BASEURL || 'ws://localhost:8080'
 const router = useRouter()
 
 const wating_matching = ref(false)
