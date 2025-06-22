@@ -25,6 +25,8 @@ export class GameInfo {
   turnTimeRemaining: number
   turnTotal: number
 
+  currentTurnTimeLimit: number
+
   constructor(gameId: string) {
     this.gameId = gameId
     this.myPlayerId = 0
@@ -37,6 +39,7 @@ export class GameInfo {
     this.turn = 0
     this.turnTotal = 0
     this.turnTimeRemaining = 0
+    this.currentTurnTimeLimit = 0
   }
 
   useCard(cardId: string): void {
@@ -119,6 +122,7 @@ export class GameInfo {
     this.currentPlayerId = event.currentPlayerId
     this.turn = event.turn
     this.turnTimeRemaining = event.turnTimeRemaining
+    this.currentTurnTimeLimit = event.turnTimeRemaining
   }
 
   private handleCardsUpdated(event: CardsUpdated): void {
@@ -154,6 +158,7 @@ export class GameInfo {
   private handleTurnEnded(event: TurnEnded): void {
     this.currentPlayerId = event.nextPlayerId
     this.turn = event.nextTurn ?? this.turn + 1
+    this.turnTimeRemaining = 0
   }
 
   private handleGameEnded(event: GameEnded): void {
