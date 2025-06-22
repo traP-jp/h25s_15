@@ -100,3 +100,12 @@ func (r *Repo) GetPlayer(ctx context.Context, gameID uuid.UUID, userName string)
 	}
 	return domain.GamePlayer(player), nil
 }
+
+func (r *Repo) IncreaseHandCardsLimit(c context.Context, gameID uuid.UUID, playerID int) error {
+	_, err := r.db.DB(c).ExecContext(c, "UPDATE hand_cards_limits SET hand_cards = (hand_cards + 1) WHERE game_id = ? and player_id = ?",
+		gameID, playerID)
+	if err != nil {
+		return fmt.Errorf("failed to increase hand cards limit: %w", err)
+	}
+	return nil
+}
