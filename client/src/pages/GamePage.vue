@@ -126,9 +126,6 @@ watchEffect(() => {
   gameState.value.fieldCards.push(
     ...new Array(4).fill(undefined).map((_, i) => ({ id: `${i}`, type: 'num', value: `${i}` }))
   )
-  myPlayer.value.expressionCards.push(
-    ...new Array(5).fill(undefined).map((_, i) => ({ id: `${i}`, type: 'num', value: `${i}` }))
-  )
   opponentPlayer.value.expressionCards.push(
     ...new Array(5).fill(undefined).map((_, i) => ({ id: `${i}`, type: 'num', value: `${i}` }))
   )
@@ -149,7 +146,12 @@ watchEffect(() => {
     <div class="field-container">
       <div :style="{ flex: 1 }" />
       <FieldArea>
-        <GameCard v-for="fieldCard in gameState.fieldCards" size="large" :key="fieldCard.id">
+        <GameCard
+          v-for="fieldCard in gameState.fieldCards"
+          size="large"
+          :key="fieldCard.id"
+          :onClick="() => pickCard(fieldCard.id)"
+        >
           {{ fieldCard.value }}
         </GameCard>
       </FieldArea>
@@ -169,7 +171,7 @@ watchEffect(() => {
           <CommonButton theme="danger">Clear ( -3pt )</CommonButton>
         </div>
       </div>
-      <HandCards :cards="myPlayer.cards" card-size="medium" />
+      <HandCards :cards="myPlayer.cards" card-size="medium" @click="(card) => useCard(card.id)" />
       <div :style="{ flex: 1 }" />
     </div>
 
