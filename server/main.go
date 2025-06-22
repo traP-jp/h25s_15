@@ -42,15 +42,15 @@ func main() {
 	gameApi := e.Group("/games")
 	gameApi.POST("", game.CreateGame)
 	gameApi.GET("/ws", game.WaitGameWS)
-	gameApi.GET("/:gameID/ws", game.GameWS)
-	gameApi.POST("/:gameID/submissions", expr.Post,
+	gameApi.GET("/:gameID/ws", game.GameWS, game.GamePlayerAuth)
+	gameApi.POST("/:gameID/submissions", expr.Post, game.GamePlayerAuth,
 		card.CardsUpdatedEvent, game.ScoreUpdatedEvent,
 	)
 
-	e.POST("/games/:gameID/clear", card.ClearHandCards,
+	e.POST("/games/:gameID/clear", card.ClearHandCards, game.GamePlayerAuth,
 		card.CardsUpdatedEvent, game.ScoreUpdatedEvent)
 
-	e.POST("/games/:gameID/picks", card.PickFieldCards,
+	e.POST("/games/:gameID/picks", card.PickFieldCards, game.GamePlayerAuth,
 		card.CardsUpdatedEvent)
 
 	game.StartGameMatchLoop(context.Background())
