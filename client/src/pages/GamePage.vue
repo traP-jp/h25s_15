@@ -11,6 +11,7 @@ import TurnTimer from '@/components/TurnTimer.vue'
 import ExpressionCards from '@/components/ExpressionCards.vue'
 import ScoreBoard from '@/components/ScoreBoard.vue'
 import HandCardCounter from '@/components/HandCardCounter.vue'
+import { useGameEvent } from '@/composables/useGameEvent'
 
 const routes = useRoute()
 const gameId = routes.params.gameId as string
@@ -18,12 +19,9 @@ const gameState = ref(new GameInfo(gameId))
 
 const httpBaseUrl = import.meta.env.VUE_APP_HTTP_BASEURL || 'http://localhost:8080'
 const wsBaseUrl = import.meta.env.VUE_APP_WS_BASEURL || 'ws://localhost:8080'
+const gameWsUrl = `${wsBaseUrl}/games/${gameId}/ws`
 
-// const ws = new WebSocket(`${wsBaseUrl}/${gameId}`);
-// ws.onmessage = (event) => {
-//   const data = JSON.parse(event.data);
-//   gameinfo.value.onEvent(data);
-// };
+useGameEvent(gameWsUrl, gameState.value.onEvent)
 
 function pickCard(cardId: string) {
   fetch(`${httpBaseUrl}/game/${gameId}/field/${cardId}`, {
@@ -96,7 +94,7 @@ function submitExpression() {
 
 // 使ってる風
 pickCard('')
-useCard(wsBaseUrl)
+useCard('')
 clearHandCards()
 deleteExpression()
 addOperator('(')
