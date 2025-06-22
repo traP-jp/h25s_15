@@ -51,6 +51,9 @@ func (h Handler) PickFieldCards(c echo.Context) error {
 			return echo.NewHTTPError(http.StatusInternalServerError)
 		}
 
+		if player.PlayerID < 0 || player.PlayerID >= len(limits) {
+			return echo.NewHTTPError(http.StatusBadRequest, "invalid player ID")
+		}
 		if len(cards) >= limits[player.PlayerID] {
 			return echo.NewHTTPError(http.StatusBadRequest, "too many cards in hand")
 		}
