@@ -23,15 +23,21 @@ func New(db *coredb.DB) *Repo {
 
 // func (r *Repo) CreateCard(ctx context.Context, gameID, cardID, cardType, value) error
 
-func (r *Repo) GetCard(ctx context.Context, cardID uuid.UUID, gameID uuid.UUID) (Card, error) {
-	var card Card
-	err := r.db.DB(ctx).GetContext(ctx, &card, "SELECT * FROM cards WHERE id = ? and game_id = ?", cardID, gameID)
+func (r *Repo) GetCard(ctx context.Context, cardID uuid.UUID, gameID uuid.UUID) (domain.Card, error) {
+	var cardDB Card
+	err := r.db.DB(ctx).GetContext(ctx, &cardDB, "SELECT * FROM cards WHERE id = ? and game_id = ?", cardID, gameID)
 	if errors.Is(err, sql.ErrNoRows) {
-		return Card{}, coredb.ErrRecordNotFound
+		return domain.Card{}, coredb.ErrRecordNotFound
 	}
 	if err != nil {
-		return Card{}, fmt.Errorf("get card infomation: %w", err)
+		return domain.Card{}, fmt.Errorf("get card infomation: %w", err)
 	}
+	var value *int
+	if cardDB.OwnerPlayerID.Valid {
+		tmp := int(cardDB.OwnerPlayerID.Int16)
+		value = &tmp
+	}
+	card := domain.Card{ID: cardDB.ID, Type: domain.CardType(cardDB.Type), Value: cardDB.Value, OwnerPlayerID: value, Location: domain.CardLocation(cardDB.Location)}
 	return card, nil
 }
 
