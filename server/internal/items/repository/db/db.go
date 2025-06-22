@@ -75,7 +75,7 @@ func (r *Repo) ClearAllCards(ctx context.Context, gameID uuid.UUID, ownerPlayerI
 	}
 	ok, _ := result.RowsAffected()
 	clearedNumber = int(ok)
-	return clearedNumber, err
+	return clearedNumber, nil
 }
 
 func (r *Repo) GetPlayer(ctx context.Context, gameID uuid.UUID, userName string) (domain.GamePlayer, error) {

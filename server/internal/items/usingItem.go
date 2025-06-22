@@ -5,13 +5,8 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
-	"github.com/traP-jp/h25s_15/internal/core/coredb"
 	"github.com/traP-jp/h25s_15/internal/items/domain"
 )
-
-type Repo struct {
-	db *coredb.DB
-}
 
 func (h Handler) UsingItem(c echo.Context) error {
 	var item domain.Card
