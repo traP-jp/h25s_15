@@ -137,6 +137,7 @@ const opponentPlayer = computed(() => {
           size="large"
           :key="fieldCard.id"
           :onClick="() => pickCard(fieldCard.id)"
+          :disabled="gameState.currentPlayerId == opponentPlayer.id"
         >
           <GameCardContent :card="fieldCard"></GameCardContent>
         </GameCard>
