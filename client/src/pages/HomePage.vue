@@ -26,10 +26,11 @@ function gameMatching() {
         const data = JSON.parse(event.data) as { gameId: string; playerId: number }
         router.push({ name: 'game', params: { gameId: data.gameId } })
       }
-      onUnmounted(() => {
-        ws.close()
-      })
     }
+  })
+  .catch((error) => {
+    console.error('ゲームの開始に失敗しました:', error)
+    wating_matching.value = false
   })
 }
 </script>
