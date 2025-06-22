@@ -4,6 +4,7 @@ const props = defineProps<{
   max_value: number
   now_value: number
   turn: number
+  theme: 'primary' | 'danger'
 }>()
 
 const percent = computed(() => {
@@ -25,7 +26,7 @@ const dashOffset = computed(() => {
   <div class="progress-container">
     <svg class="progress-ring" width="100%" height="100%" viewBox="0 0 120 120">
       <circle
-        class="progress-ring__progress"
+        :class="['progress-ring__progress', props.theme]"
         :r="radius"
         :cx="center"
         :cy="center"
@@ -53,9 +54,16 @@ const dashOffset = computed(() => {
 
 .progress-ring__progress {
   fill: none;
-  stroke: var(--theme-primary);
   stroke-width: 10;
   transition: stroke-dashoffset 0.4s ease;
+}
+
+.progress-ring__progress.primary {
+  stroke: var(--theme-primary);
+}
+
+.progress-ring__progress.danger {
+  stroke: var(--theme-danger);
 }
 
 .progress-text {

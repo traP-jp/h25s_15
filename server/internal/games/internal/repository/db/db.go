@@ -310,3 +310,15 @@ func (r *Repo) GetSuccessExpressions(ctx context.Context, gameID uuid.UUID) ([]d
 
 	return result, nil
 }
+
+func (r *Repo) CreateCard(ctx context.Context, cardID uuid.UUID, gameID uuid.UUID, cardType string, value string) error {
+	_, err := r.db.DB(ctx).ExecContext(ctx,
+		"INSERT INTO cards (id, game_id, type, value, location) VALUES (?, ?, ?, ?, ?)",
+		cardID, gameID, cardType, value, domain.CardLocationField,
+	)
+	if err != nil {
+		return fmt.Errorf("create card: %w", err)
+	}
+
+	return nil
+}
