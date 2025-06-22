@@ -12,7 +12,7 @@ import (
 	"github.com/traP-jp/h25s_15/internal/core/corews"
 )
 
-func (e *Event) CardUpdated(ctx context.Context, gameID uuid.UUID, event events.CardUpdatedEvent) error {
+func (e *Event) CardsUpdated(ctx context.Context, gameID uuid.UUID, event events.CardsUpdatedEvent) error {
 	var eventJSON bytes.Buffer
 	err := json.NewEncoder(&eventJSON).Encode(event)
 	if err != nil {
