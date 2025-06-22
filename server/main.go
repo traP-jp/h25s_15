@@ -45,17 +45,17 @@ func main() {
 	gameApi.POST("", game.CreateGame)
 	gameApi.GET("/ws", game.WaitGameWS)
 	gameApi.GET("/:gameID/ws", game.GameWS, game.GamePlayerAuth)
-	gameApi.POST("/:gameID/submissions", expr.Post, game.GamePlayerAuth,
+	gameApi.POST("/:gameID/submissions", expr.Post, game.GamePlayerAuth, game.GameTurnAuth,
 		card.CardsUpdatedEvent, game.ScoreUpdatedEvent,
 	)
 
-	e.POST("/games/:gameID/clear", card.ClearHandCards, game.GamePlayerAuth,
+	e.POST("/games/:gameID/clear", card.ClearHandCards, game.GamePlayerAuth, game.GameTurnAuth,
 		card.CardsUpdatedEvent, game.ScoreUpdatedEvent)
 
-	e.POST("/games/:gameID/picks", card.PickFieldCards, game.GamePlayerAuth,
+	e.POST("/games/:gameID/picks", card.PickFieldCards, game.GamePlayerAuth, game.GameTurnAuth,
 		card.CardsUpdatedEvent)
 
-	e.POST("/games/:gameID/items", item.UsingItem, game.GamePlayerAuth,
+	e.POST("/games/:gameID/items", item.UsingItem, game.GamePlayerAuth, game.GameTurnAuth,
 		card.CardsUpdatedEvent)
 
 	e.GET("/games/:gameID/results", game.GetResult, game.GamePlayerAuth)
