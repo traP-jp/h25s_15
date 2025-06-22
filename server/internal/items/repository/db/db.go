@@ -111,7 +111,7 @@ func (r *Repo) IncreaseHandCardsLimitDB(c context.Context, gameID uuid.UUID, pla
 	return nil
 }
 
-func (r *Repo) IncreaseTurnTime(c context.Context, gameID uuid.UUID, playerID int) error {
+func (r *Repo) IncreaseTurnTimeDB(c context.Context, gameID uuid.UUID, playerID int) error {
 	_, err := r.db.DB(c).ExecContext(c, "UPDATE turns SET end_at = (end_at + ?) WHERE game_id = ? and player_id = ?",
 		gameID, 3*time.Second, playerID)
 	if err != nil {
