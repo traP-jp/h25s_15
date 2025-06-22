@@ -5,9 +5,7 @@ defineProps<{ rank: number; name: string }>()
 <template>
   <div class="ranking-row">
     <span class="ranking-number">- {{ rank }} -</span>
-    <span class="ranking-name"
-      ><slot>{{ name }}</slot></span
-    >
+    <span class="ranking-name">{{ name }}</span>
   </div>
 </template>
 
@@ -19,7 +17,7 @@ defineProps<{ rank: number; name: string }>()
 }
 
 .ranking-number {
-  color: var(--theme-danger);
+  color: var(--theme-text-white);
   font-size: 4rem;
   width: 17rem;
   text-align: left;

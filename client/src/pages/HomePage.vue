@@ -68,61 +68,6 @@ const findMyRanking = () => {
   }
 }
 
-rankingInfo.value = {
-  count: 6,
-  ranking: [
-    {
-      name: 'ikura-hamu',
-      iconUrl: 'https://q.trap.jp/api/v3/public/icon/ikura-hamu',
-      wins: 5,
-      losses: 2,
-      totalScore: 100,
-    },
-    {
-      name: 'player1',
-      iconUrl: 'https://q.trap.jp/api/v3/public/icon/player1',
-      wins: 3,
-      losses: 4,
-      totalScore: 80,
-    },
-    {
-      name: 'player2',
-      iconUrl: 'https://q.trap.jp/api/v3/public/icon/player2',
-      wins: 5,
-      losses: 2,
-      totalScore: 100,
-    },
-    {
-      name: 'player3',
-      iconUrl: 'https://q.trap.jp/api/v3/public/icon/player3',
-      wins: 3,
-      losses: 4,
-      totalScore: 80,
-    },
-    {
-      name: 'player4',
-      iconUrl: 'https://q.trap.jp/api/v3/public/icon/player4',
-      wins: 5,
-      losses: 2,
-      totalScore: 100,
-    },
-    {
-      name: 'irinoirino',
-      iconUrl: 'https://q.trap.jp/api/v3/public/icon/irinoirino',
-      wins: 3,
-      losses: 4,
-      totalScore: 80,
-    },
-  ],
-}
-
-myInfo.value = {
-  name: 'irinoirino',
-  iconUrl: 'https://q.trap.jp/api/v3/public/icon/irinoirino',
-}
-
-findMyRanking()
-
 onMounted(async () => {
   try {
     //自分のnameを取得
