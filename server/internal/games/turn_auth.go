@@ -31,7 +31,6 @@ func (h *Handler) GameTurnAuth(next echo.HandlerFunc) echo.HandlerFunc {
 		var player domain.Player
 		idx := slices.IndexFunc(players, func(p domain.Player) bool {
 			if p.UserName == userName {
-				player = p
 				return true
 			}
 			return false
