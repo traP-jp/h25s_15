@@ -55,7 +55,10 @@ func main() {
 	e.POST("/games/:gameID/picks", card.PickFieldCards, game.GamePlayerAuth,
 		card.CardsUpdatedEvent)
 
-	e.POST("/games/:gameID/items", item.UsingItem)
+	e.POST("/games/:gameID/items", item.UsingItem, game.GamePlayerAuth,
+		card.CardsUpdatedEvent)
+
+	e.GET("/games/:gameID/results", game.GetResult, game.GamePlayerAuth)
 
 	game.StartGameMatchLoop(context.Background())
 
