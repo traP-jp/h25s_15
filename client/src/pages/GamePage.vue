@@ -34,6 +34,8 @@ useGameEvent(gameWsUrl, (event) => {
 })
 
 function pickCard(cardId: string) {
+  if (myPlayer.value.cards.length == myPlayer.value.handsLimit) return; // これ以上Handを増やせない
+
   fetch(`${httpBaseUrl}/games/${gameId}/picks`, {
     method: 'POST',
     headers: {
