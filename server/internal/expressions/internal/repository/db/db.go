@@ -125,9 +125,9 @@ func (r *Repo) UpdatePlayerScore(ctx context.Context, gameID uuid.UUID, playerID
 	return nil
 }
 
-func (r *Repo) CreateExpression(ctx context.Context, id uuid.UUID, gameID uuid.UUID, playerID int, expression string, value string, point int, success bool) error {
+func (r *Repo) CreateExpression(ctx context.Context, id uuid.UUID, gameID uuid.UUID, playerID int, expression string, value string, points int, success bool) error {
 	query := `
-		INSERT INTO expressions (id, game_id, player_id, expression, value, point, success, submitted_at)
+		INSERT INTO expressions (id, game_id, player_id, expression, value, points, success, submitted_at)
 		VALUES (?, ?, ?, ?, ?, ?, ?, ?)
 	`
 	_, err := r.db.DB(ctx).ExecContext(ctx, query,
