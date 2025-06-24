@@ -134,10 +134,10 @@ export class GameInfo {
     this.players[1].cards = event.player1
     this.players[1].handsLimit = event.player1HandsLimit
 
-    if (this.players[0].cards.length == 0) {
-      // Hand cardsがclearされたらexpressionもclearする
-      this.players[0].expression = ''
-      this.players[0].expressionCards = []
+    if (this.players[this.myPlayerId].cards.length == 0) {
+      // My playerのHand cardsがclearされたら, expressionもclearする
+      this.players[this.myPlayerId].expression = ''
+      this.players[this.myPlayerId].expressionCards = []
     }
   }
 
