@@ -67,7 +67,7 @@ func (r *Repo) GetRanking(ctx context.Context, limit int) ([]domain.RankingItem,
 		WHERE wins > 0 OR losses > 0 OR draws > 0  -- 1回以上プレイしたプレイヤーのみ
 		ORDER BY 
 			wins DESC,           -- 勝利数が多い順
-			average_score DESC     -- 同じ勝利数の場合は合計得点が多い順
+			total_score DESC     -- 同じ勝利数の場合は合計得点が多い順
 		LIMIT ?
 	`, limit)
 	if err != nil {
