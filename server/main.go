@@ -60,6 +60,8 @@ func main() {
 	e.POST("/games/:gameID/items", item.UsingItem, game.GamePlayerAuth, game.GameTurnAuth,
 		card.CardsUpdatedEvent)
 
+	e.GET("/ranking", game.Ranking)
+
 	game.StartGameMatchLoop(context.Background())
 
 	e.Logger.Fatal(e.Start(":8080"))
