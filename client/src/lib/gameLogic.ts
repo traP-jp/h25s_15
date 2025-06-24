@@ -133,6 +133,12 @@ export class GameInfo {
 
     this.players[1].cards = event.player1
     this.players[1].handsLimit = event.player1HandsLimit
+
+    if (this.players[0].cards.length == 0) {
+      // Hand cardsがclearされたらexpressionもclearする
+      this.players[0].expression = ''
+      this.players[0].expressionCards = []
+    }
   }
 
   private handleTurnTimeRemainingChanged(event: TurnTimeRemainingChanged): void {
