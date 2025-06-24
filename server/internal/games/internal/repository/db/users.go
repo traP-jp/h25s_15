@@ -1,6 +1,9 @@
 package db
 
-import "context"
+import (
+	"context"
+	"fmt"
+)
 
 func (r *Repo) GetUsersCount(ctx context.Context) (int, error) {
 	var count int
@@ -14,7 +17,7 @@ func (r *Repo) GetUsersCount(ctx context.Context) (int, error) {
 		SELECT COUNT(user_name) FROM users
 	`)
 	if err != nil {
-		return 0, err
+		return 0, fmt.Errorf("get users count: %w", err)
 	}
 	return count, nil
 }
