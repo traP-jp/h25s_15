@@ -62,6 +62,12 @@ type Repo interface {
 
 	// GetSuccessExpressions は、指定されたゲームIDの成功した式を取得する。
 	GetSuccessExpressions(ctx context.Context, gameID uuid.UUID) ([]domain.Expression, error)
+
+	// GetRanking は、ランキング情報を取得する。
+	// ランキングは、勝利数が多い順に並べられ、同じ勝利数の場合は合計得点が多い方が上位になる。
+	GetRanking(ctx context.Context, limit int) ([]domain.RankingItem, error)
+
+	GetUsersCount(ctx context.Context) (int, error)
 }
 
 type CreatePlayersArg struct {
