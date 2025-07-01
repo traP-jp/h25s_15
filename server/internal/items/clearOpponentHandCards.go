@@ -37,5 +37,5 @@ func (h Handler) ClearOpponentHandCards(c echo.Context, gameID uuid.UUID) error 
 		log.Printf("failed to clear hand cards: %v\n", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
-	return c.NoContent(http.StatusNoContent)
+	return nil
 }
